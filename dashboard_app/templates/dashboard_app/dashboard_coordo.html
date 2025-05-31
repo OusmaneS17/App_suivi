@@ -1,0 +1,3003 @@
+{% extends "dashboard_app/base.html" %}
+
+
+{% block titre%} Dashboard Coordonnateur {% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+  
+
+  <!-- Navbar -->
+    <br>
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-sm border-radius-xl position-sticky blur border-radius-lg" id="navbarBlur" data-scroll="true" style="backdrop-filter: blur(10px); z-index: 1030;">
+      <div class="container-fluid py-1 px-3">
+        <div class="navbar-brand d-flex align-items-center">
+          <span class="font-weight-bold text-lg" style="color: #004600;">Bonjour, <span  style="color: #004600;"> {{ request.user.username }}</span></span>
+        </div>
+        
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 justify-content-end" id="navbar">
+          <ul class="navbar-nav d-flex align-items-center">
+            
+            <!-- Notification Dropdown -->
+            <li class="nav-item dropdown pe-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0 position-relative" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="material-symbols-rounded cursor-pointer transition-all hover:text-success">notifications</i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4 animate__animated animate__fadeIn animate__faster" aria-labelledby="dropdownMenuButton" style="min-width: 360px;">
+                <li class="mb-2">
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="javascript:;">
+                    <div class="d-flex py-1">
+                      <div class="my-auto">
+                        <img src="#" class="avatar avatar-sm me-3 bg-gradient-faded-info">
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="text-sm font-weight-normal mb-1">
+                          <span class="font-weight-bold text-dark">New message</span> from Laur
+                        </h6>
+                        <p class="text-xs text-muted mb-0">
+                          <i class="fa fa-clock me-1 opacity-6"></i>
+                          13 minutes ago
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li class="mb-2">
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="javascript:;">
+                    <div class="d-flex py-1">
+                      <div class="my-auto">
+                        <img src="#" class="avatar avatar-sm bg-gradient-dark me-3">
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="text-sm font-weight-normal mb-1">
+                          <span class="font-weight-bold text-dark">New album</span> by Travis Scott
+                        </h6>
+                        <p class="text-xs text-muted mb-0">
+                          <i class="fa fa-clock me-1 opacity-6"></i>
+                          1 day
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="javascript:;">
+                    <div class="d-flex py-1">
+                      <div class="avatar avatar-sm bg-gradient-secondary me-3 my-auto">
+                        <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1">
+                          <title>credit-card</title>
+                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                              <g transform="translate(1716.000000, 291.000000)">
+                                <g transform="translate(453.000000, 454.000000)">
+                                  <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
+                                  <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+                                </g>
+                              </g>
+                            </g>
+                          </g>
+                        </svg>
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="text-sm font-weight-normal mb-1">
+                          <span class="text-dark">Payment</span> successfully completed
+                        </h6>
+                        <p class="text-xs text-muted mb-0">
+                          <i class="fa fa-clock me-1 opacity-6"></i>
+                          2 days
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            
+            <!-- User Profile Dropdown -->
+            <li class="nav-item dropdown d-flex align-items-center ps-2">
+              <a href="javascript:;" class="nav-link text-body font-weight-bold px-0 d-flex align-items-center" id="userProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="material-symbols-rounded me-2 text-dark cursor-pointer transition-all hover:text-success">account_circle</i>
+                <span class="d-none d-sm-inline text-sm text-dark">{{ request.user.username }}</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4 animate__animated animate__fadeIn animate__faster" aria-labelledby="userProfileDropdown">
+                <li class="mb-2">
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="{% url 'profile' %}">
+                    <div class="d-flex py-1 align-items-center" >
+                      <i class="material-symbols-rounded text-primary me-3">person</i>
+                      <h6 class="text-sm font-weight-normal mb-0 text-dark">
+                        Mon Profil
+                      </h6>
+                    </div>
+                  </a>
+                </li>
+                <!-- <li class="mb-2">
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="javascript:;">
+                    <div class="d-flex py-1 align-items-center">
+                      <i class="material-symbols-rounded text-success me-3">settings</i>
+                      <h6 class="text-sm font-weight-normal mb-0 text-dark">
+                        Paramètres
+                      </h6>
+                    </div>
+                  </a>
+                </li> -->
+                <li>
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="{% url 'log_out' %}">
+                    <div class="d-flex py-1 align-items-center">
+                      <i class="material-symbols-rounded text-success me-3">logout</i>
+                      <h6 class="text-sm font-weight-normal mb-0 text-dark">
+                        Déconnexion
+                      </h6>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-2">
+      <!-- premier ligne -->
+      <div class="row">
+        <div class="row g-1">
+          <!-- Carte 1 - Ministère -->
+          <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-1">
+            <div class="card h-100 mb-0 shadow-sm border-0" style="background-color: #f8f9fa;">
+              <div class="card-header p-2" style="background: linear-gradient(135deg, #004600, #007a00); font-weight: 600; color: white; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="dropdown">
+                      <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" type="button" id="dropdownL1Button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span id="selectedL1">Tous</span>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownL1Button" id="l1DropdownMenu">
+                          <li><a class="dropdown-item" href="#" onclick="updateL1Filter('all', 'Tous'); return false;">Tous</a></li>
+                          <li><a class="dropdown-item" href="#" onclick="updateL1Filter('axe', 'Axe'); return false;">Axe</a></li>
+                          <li><a class="dropdown-item" href="#" onclick="updateL1Filter('portefeuille', 'Portefeuille'); return false;">Portefeuille</a></li>
+                          <li><a class="dropdown-item" href="#" onclick="updateL1Filter('ministere', 'Ministère responsable'); return false;">Ministère responsable</a></li>
+                      </ul>
+                  </div>
+                  <div class="icon icon-sm icon-shape bg-white shadow-sm text-center rounded-circle" style="color: #004600;">
+                    <i class="material-symbols-rounded opacity-10" style="color: #004600;">widgets</i>
+                  </div>
+                </div>
+              </div>
+              <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+              <script>
+                $(document).ready(function() {
+                  $(".dropdown-item").click(function(e) {
+                    e.preventDefault();
+                    var modalite = $(this).text();
+                    $("#selectedModalite").text(modalite);
+                    $(".dropdown-toggle").dropdown('hide');
+                  });
+                });
+              </script>
+          
+              <hr class="my-1 mx-3" style="border-top: 1px solid #004600;">
+          
+              <div class="dropdown card-footer p-2 border-top-0">
+                <button class="btn btn-outline-success dropdown-toggle w-100 d-flex align-items-center justify-content-between" style="min-height: 46px; border-color: #004600; color: #004600;" type="button" id="dropdownL2Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                    <span id="selectedL2">Sélectionnez d'abord le niveau 1</span>
+                </button>
+                <ul class="dropdown-menu w-100" aria-labelledby="dropdownL2Button" id="l2DropdownMenu">
+                    <li><a class="dropdown-item" href="#">Sélectionnez d'abord le niveau 1</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Carte 3 - Nbre programmes -->
+          <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-1">
+            <div class="card h-100 mb-0 shadow-sm border-0" style="background-color: #f8f9fa;">
+              <div class="card-header p-2" style="background: linear-gradient(135deg, #004600, #007a00); font-weight: 600; color: white; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0 fw-bold" style="color: #ffffff">Nbre programmes</h6>
+                  <div class="icon icon-sm icon-shape bg-white shadow-sm text-center rounded-circle" style="color: #004600;">
+                    <i class="material-symbols-rounded opacity-10"  style="color: #004600;">leaderboard</i>
+                  </div>
+                </div>
+              </div>
+          
+              <hr class="my-1 mx-3" style="border-top: 1px solid #004600;">
+          
+              <div class="card-footer p-2 border-top-0">
+                <h1 class="mb-0 fw-bold text-center" style="color: #004600;font-size: 3rem;" id="program-count">
+                  
+                </h1>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Carte 4 - Nbre projets -->
+          <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-1">
+            <div class="card h-100 mb-0 shadow-sm border-0" style="background-color: #f8f9fa;">
+              <div class="card-header p-2" style="background: linear-gradient(135deg, #004600, #007a00); font-weight: 600; color: white; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0 fw-bold" style="color: #ffffff">Nombre de projets</h6>
+                  <div class="icon icon-sm icon-shape bg-white shadow-sm text-center rounded-circle" style="color: #004600;">
+                    <i class="material-symbols-rounded opacity-10" style="color: #004600;">leaderboard</i>
+                  </div>
+                </div>
+              </div>
+          
+              <hr class="my-1 mx-3" style="border-top: 1px solid #004600;">
+          
+              <div class="card-footer p-2 border-top-0">
+                <h1 class="mb-0 fw-bold text-center" style="color: #004600;font-size: 3rem;" id="project-count"> </h1>
+              </div>
+            </div>
+          </div>
+          
+        
+          <!-- Carte 5 - Projets démarrés -->
+          <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-1">
+            <div class="card h-100 mb-0 shadow-sm border-0" style="background-color: #f8f9fa;">
+              <div class="card-header p-2" style="background: linear-gradient(135deg, #004600, #007a00); font-weight: 600; color: white; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0 fw-bold" style="color: #ffffff">Projets démarrés</h6>
+                  <div class="icon icon-sm icon-shape bg-white shadow-sm text-center rounded-circle" style="color: #004600;">
+                    <i class="material-symbols-rounded opacity-10" style="color: #004600;">leaderboard</i>
+                  </div>
+                </div>
+              </div>
+          
+              <hr class="my-1 mx-3" style="border-top: 1px solid #004600;">
+          
+              <div class="card-footer p-2 border-top-0">
+                <h1 class="mb-0 fw-bold text-center" style="color: #004600;font-size: 3rem;" id="started-project-count"></h1>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carte 2 - Nombre de composante démarrés -->
+          <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-1">
+            <div class="card h-100 mb-0 shadow-sm border-0" style="background-color: #f8f9fa;">
+              <div class="card-header p-2" style="background: linear-gradient(135deg, #004600, #007a00); font-weight: 600; color: white; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0 fw-bold" style="color: #ffffff">Composantes démarées</h6>
+                  <div class="icon icon-sm icon-shape bg-white shadow-sm text-center rounded-circle" style="color: #004600;">
+                    <i class="material-symbols-rounded opacity-10" style="color: #004600;">leaderboard</i>
+                  </div>
+                </div>
+              </div>
+          
+              <hr class="my-1 mx-3" style="border-top: 1px solid #004600;">
+          
+              <div class="card-footer p-2 border-top-0">
+                <h6 class="mb-0 text-truncate text-center" style="color: #004600;font-size: 3rem;" id="started-composante-count">
+                </h6>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carte 6 - États des projets -->
+          <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-1">
+            <div class="card h-100 mb-0 shadow-sm border-0" style="background-color: #f8f9fa;">          
+              <div class="card-body p-2">
+                <table class="table table-sm table-borderless mb-0 h-100">
+                  <tbody>
+                    <tr class="align-middle">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <i class="material-symbols-rounded me-2" style="color: #198754;">check_circle</i>
+                          <span class="fw-bold text-dark">Satisfaisant</span>
+                        </div>
+                      </td>
+                      <td class="text-end fw-bold text-dark" id="satisfaisant-composante-count">0</td>
+                    </tr>
+                    <tr class="align-middle">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <i class="material-symbols-rounded me-2" style="color: #ffc107;">warning</i>
+                          <span class="fw-bold text-dark">Alerte</span>
+                        </div>
+                      </td>
+                      <td class="text-end fw-bold text-dark" id="alerte-composante-count">0</td>
+                    </tr>
+                    <tr class="align-middle">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <i class="material-symbols-rounded me-2" style="color: #dc3545;">block</i>
+                          <span class="fw-bold text-dark">Bloqué</span>
+                        </div>
+                      </td>
+                      <td class="text-end fw-bold text-dark" id="bloque-composante-count">0</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      <!-- Deuxième ligne -->
+      <br>
+      <ul class="nav nav-tabs mb-4 border-bottom border-2" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active fw-bold" style="color: #004600;" id="ex1-tab-1" data-bs-toggle="tab" href="#ex1-tabs-1" role="tab" aria-controls="ex1-tabs-1" aria-selected="true">
+            1 message dans la semaine
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link fw-bold" style="color: #004600;" id="ex1-tab-2" data-bs-toggle="tab" href="#ex1-tabs-2" role="tab" aria-controls="ex1-tabs-2" aria-selected="True">
+            2 messages dans la semaine
+          </a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="ex1-content">
+        <!-- 1 message dans la semaine-->
+        <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel" aria-labelledby="ex1-tab-1">
+          <div class="row">
+            <div class="col-lg-12 col-md-6 mt-3">
+              <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                  <style>
+                    .label-title {
+                      color: #004600;
+                      font-weight: bold;
+                    }
+                    .value-card {
+                      background-color: #f1f5f1;
+                      border-left: 4px solid #004600;
+                      border-radius: 0.5rem;
+                    }
+                    .value-text {
+                      color: #004600;
+                      font-weight: bold;
+                      font-size: 1rem;
+                    }
+                    .action-btn {
+                      background-color: #004600;
+                      color: white;
+                      border: none;
+                      border-radius: 0.375rem;
+                      padding: 0.5rem 1rem;
+                      font-size: 0.875rem;
+                      transition: all 0.2s;
+                      white-space: nowrap;
+                      height: fit-content;
+                    }
+                    .action-btn:hover {
+                      background-color: #007a00;
+                    }
+                  </style>
+                  <div class="row">
+                    <!-- Colonne de gauche (Composante + Statut) -->
+                    <div class="col-md-8">
+                      <!-- Composante -->
+                      <div class="row align-items-center mb-2">
+                        <div class="col-md-2">
+                          <h6 class="mb-0 label-title">
+                            <i class="bi bi-diagram-3-fill me-2"></i>Axe
+                          </h6>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="card value-card border-0">
+                            <div class="card-body p-2">
+                              <div class="dropdown">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <h6 class="mb-0 label-title">
+                            <i class="bi bi-diagram-3-fill me-2"></i>Trimestre
+                          </h6>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="card value-card border-0">
+                            <div class="card-body p-1">
+                              <div class="d-flex gap-1 mb-1">
+                                <div class="form-check" role="group" aria-label="Choix du trimestre">
+                                    <input type="radio" name="trimestre" id="trimestre_t1" value="1" style="background-color: #004600">
+                                    <label for="trimestre_t1" class="form-check-label fw-bold">T1</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="trimestre" id="trimestre_t2" value="2" checked>
+                                    <label for="trimestre_t2" class="form-check-label fw-bold">T2</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="trimestre" id="trimestre_t3"  value="3">
+                                    <label for="trimestre_t3" class="form-check-label fw-bold">T3</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="trimestre" id="trimestre_t4"  value="4">
+                                    <label for="trimestre_t4" class="form-check-label fw-bold">T4</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <hr class="dark horizontal">
+
+                  <div class="row g-3">
+                  <!-- Colonne 1 - Filtres -->
+                  <div class="col-xl-3 col-md-12">
+                    <style>
+                      .filter-section {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
+                      }
+                      
+                      .filter-card {
+                        border: none;
+                        background-color: #f8fdf8;
+                        color: #004600;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                        height: 120px;
+                      }
+                      
+                      .filter-header {
+                        background: linear-gradient(135deg, #004600, #007a00);
+                        font-weight: 600;
+                        color: white;
+                        font-size: 0.9rem;
+                        padding: 0.75rem 1rem;
+                        border: none;
+                      }
+                      
+                      .filter-body {
+                        padding: 0.75rem;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        height: calc(100% - 56px);
+                      }
+                      
+                      .dropdown-filter {
+                        width: 100%;
+                        border: 1px solid #004600;
+                        color: #004600;
+                        text-align: left;
+                        padding: 0.5rem 1rem;
+                        border-radius: 8px;
+                        transition: all 0.2s;
+                      }
+                      
+                      .dropdown-filter:hover {
+                        background-color: rgba(0, 70, 0, 0.05);
+                      }
+                      
+                      .dropdown-filter:focus {
+                        box-shadow: 0 0 0 0.25rem rgba(0, 70, 0, 0.25);
+                      }
+                      
+                      .problem-text {
+                        color: #004600;
+                        padding: 0.5rem;
+                        text-align: center;
+                        font-size: 0.9rem;
+                      }
+                    </style>
+
+                    <div class="filter-section">
+                      <!-- Carte Programme -->
+                      <div class="card" >
+                        <div class="card-header filter-header">Programme</div>
+                        <div class="card-body">
+                          <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle dropdown-filter d-flex justify-content-between align-items-center"
+                                    type="button" id="dropdownL3Button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <span id="selectedL3">Sélectionnez d'abord le niveau 2</span>
+                            </button>
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownL3Button"  id="l3DropdownMenu">
+                              <!-- Options du menu déroulant -->
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Carte Projet -->
+                      <div class="card">
+                        <div class="card-header filter-header">Projet</div>
+                        <div class="card-body">
+                          <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle dropdown-filter d-flex justify-content-between align-items-center"
+                                    type="button" id="dropdownL4Button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <span id="selectedL4">Sélectionnez d'abord le niveau 2</span>
+                            </button>
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownL4Button"  id="l4DropdownMenu">
+                              <!-- Options du menu déroulant -->
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Colonne 2 - Informations projet -->
+                  <div class="col-xl-3 col-md-6">
+                    <style>
+                      .info-card {
+                        border: 1px solid #004600;
+                        background-color: #f8fdf8;
+                        color: #004600;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                        margin-bottom: 1rem;
+                      }
+                      
+                      .info-header {
+                        background: linear-gradient(135deg, #004600, #007a00);
+                        font-weight: 600;
+                        color: white;
+                        font-size: 0.9rem;
+                        padding: 0.75rem 1rem;
+                        border: none;
+                      }
+                      
+                      .info-body {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 1rem;
+                        height: calc(100% - 56px);
+                      }
+                      
+                      .info-logo {
+                        max-height: 80px;
+                        max-width: 100%;
+                        object-fit: contain;
+                      }
+                    </style>
+                    <div class="filter-section">
+                    <!-- Carte Composante -->
+                    <div class="card" style="height: 120px;">
+                      <div class="card-header filter-header">Composante</div>
+                      <div class="card-body">
+                          <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle dropdown-filter d-flex justify-content-between align-items-center"
+                                    type="button" id="dropdownL5Button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <span id="selectedL5">Sélectionnez d'abord le niveau 2</span>
+                            </button>
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownL5Button"  id="l5DropdownMenu">
+                              <!-- Options du menu déroulant -->
+                            </ul>
+                          </div>
+                      </div>
+                    </div>
+
+                    <!-- Carte Mise en oeuvre -->
+                    <div class="card filter-card" style="height: 120px;">
+                      <div class="card-header filter-header">Mise en oeuvre</div>
+                      <div class="card-body filter-body" id="composante-tutelle">
+                        <img id="logoMise" 
+                            src="{% static '/assets/img/ministere_mise_en_oeuvre.png' %}"
+                            class="info-logo" 
+                            alt="Logo principal">
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+
+                  <!-- Colonne 3 - Indicateurs de progression -->
+                  <div class="col-xl-3 col-md-6">
+                    <style>
+                      .metrics-grid {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 1rem;
+                      }
+                      
+                      .metric-card {
+                        background-color: white;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                        padding: 1rem;
+                        height: 120px;
+                        display: flex;
+                        flex-direction: column;
+                      }
+                      
+                      .metric-title {
+                        font-size: 0.9rem;
+                        font-weight: 600;
+                        color: #004600;
+                        text-align: center;
+                        margin-bottom: 0.5rem;
+                      }
+                      
+                      .progress-container {
+                        flex: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                      }
+                      
+                      .progress-circle-container {
+                        width: 80px;
+                        height: 80px;
+                        position: relative;
+                      }
+                      
+                      .progress-circle {
+                        width: 100%;
+                        height: 100%;
+                        transform: rotate(-90deg);
+                      }
+                      
+                      .progress-circle-bg {
+                        fill: none;
+                        stroke: #e0f0e0;
+                        stroke-width: 8;
+                      }
+                      
+                      .progress-circle-fill {
+                        fill: none;
+                        stroke: #004600;
+                        stroke-width: 8;
+                        stroke-linecap: round;
+                        stroke-dasharray: 251;
+                        stroke-dashoffset: 251;
+                        transition: stroke-dashoffset 0.5s ease;
+                      }
+                      
+                      .progress-text {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        font-size: 1rem;
+                        font-weight: 600;
+                        color: #004600;
+                      }
+                      
+                      @media (max-width: 768px) {
+                        .metrics-grid {
+                          grid-template-columns: 1fr;
+                        }
+                      }
+                    </style>
+
+                    <div class="metrics-grid">
+                      <!-- Avancement -->
+                      <div class="metric-card">
+                        <div class="metric-title">Avancement</div>
+                        <div class="progress-container">
+                          <div class="progress-circle-container">
+                            <svg class="progress-circle" viewBox="0 0 100 100">
+                              <circle class="progress-circle-bg" cx="50" cy="50" r="40"/>
+                              <circle class="progress-circle-fill" cx="50" cy="50" r="40"/>
+                            </svg>
+                            <div class="progress-text" id="phy-reel">0%</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Cible trim -->
+                      <div class="metric-card">
+                        <div class="metric-title">Cible trim</div>
+                        <div class="progress-container">
+                          <div class="progress-circle-container">
+                            <svg class="progress-circle" viewBox="0 0 100 100">
+                              <circle class="progress-circle-bg" cx="50" cy="50" r="40"/>
+                              <circle class="progress-circle-fill" cx="50" cy="50" r="40"/>
+                            </svg>
+                            <div class="progress-text" id="phy-prev">0%</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Décaissement -->
+                      <div class="metric-card">
+                        <div class="metric-title">Décaissement</div>
+                        <div class="progress-container">
+                          <div class="progress-circle-container">
+                            <svg class="progress-circle" viewBox="0 0 100 100">
+                              <circle class="progress-circle-bg" cx="50" cy="50" r="40"/>
+                              <circle class="progress-circle-fill" cx="50" cy="50" r="40"/>
+                            </svg>
+                            <div class="progress-text" id="decaissement-reel">0%</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Cible trim dec -->
+                      <div class="metric-card">
+                        <div class="metric-title">Cible trim dec</div>
+                        <div class="progress-container">
+                          <div class="progress-circle-container">
+                            <svg class="progress-circle" viewBox="0 0 100 100">
+                              <circle class="progress-circle-bg" cx="50" cy="50" r="40"/>
+                              <circle class="progress-circle-fill" cx="50" cy="50" r="40"/>
+                            </svg>
+                            <div class="progress-text" id="decaissement-prev">0%</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-md-6">
+                      <!-- Carte Problème -->
+                      <div class="card filter-card" style="height: 250px;">
+                        <div class="card-header filter-header">Message de la semaine</div>
+                        <div class="card-body filter-body">
+                          <div class="problem-text" id="messages-container">
+                            lecture du problème
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 2 message dans la semaine-->
+        <div class="tab-pane fade show" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+          <div class="row">
+            <div class="col-lg-12 col-md-6 mt-3">
+              <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                  <style>
+                    .label-title {
+                      color: #004600;
+                      font-weight: bold;
+                    }
+                    .value-card {
+                      background-color: #f1f5f1;
+                      border-left: 4px solid #004600;
+                      border-radius: 0.5rem;
+                    }
+                    .value-text {
+                      color: #004600;
+                      font-weight: bold;
+                      font-size: 1rem;
+                    }
+                    .action-btn {
+                      background-color: #004600;
+                      color: white;
+                      border: none;
+                      border-radius: 0.375rem;
+                      padding: 0.5rem 1rem;
+                      font-size: 0.875rem;
+                      transition: all 0.2s;
+                      white-space: nowrap;
+                      height: fit-content;
+                    }
+                    .action-btn:hover {
+                      background-color: #007a00;
+                    }
+                  </style>
+                  <!-- Entete avec Axe et trimestre -->
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="row align-items-center mb-2">
+                        <div class="col-md-2">
+                          <h6 class="mb-0 label-title">
+                            <i class="bi bi-diagram-3-fill me-2"></i>Axe
+                          </h6>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="card value-card border-0">
+                            <div class="card-body p-2">
+                              <div class="dropdown">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <h6 class="mb-0 label-title">
+                            <i class="bi bi-diagram-3-fill me-2"></i>Trimestre
+                          </h6>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="card value-card border-0">
+                            <div class="card-body p-1">
+                              <div class="d-flex gap-1 mb-1">
+                                <div class="form-check">
+                                    <input type="radio" name="trimestre_2" id="t1" value="1" style="background-color: #004600">
+                                    <label for="t1" class="form-check-label fw-bold">T1</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="trimestre_2" id="t2" value="2" checked>
+                                    <label for="t2" class="form-check-label fw-bold">T2</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="trimestre_2" id="t3" value="3">
+                                    <label for="t3" class="form-check-label fw-bold">T3</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="trimestre_2" id="t4" value="4">
+                                    <label for="t4" class="form-check-label fw-bold">T4</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <hr class="dark horizontal">
+
+                  <div class="row g-3">
+                    <div class="col-xl-2 col-md-12">
+                      <style>
+                        .filter-section {
+                          display: flex;
+                          flex-direction: column;
+                          gap: 1rem;
+                        }
+                        
+                        .filter-card {
+                          border: none;
+                          background-color: #f8fdf8;
+                          color: #004600;
+                          border-radius: 12px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                          height: 120px;
+                        }
+                        
+                        .filter-header {
+                          background: linear-gradient(135deg, #004600, #007a00);
+                          font-weight: 600;
+                          color: white;
+                          font-size: 0.9rem;
+                          padding: 0.75rem 1rem;
+                          border: none;
+                        }
+                        
+                        .filter-body {
+                          padding: 0.75rem;
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                          height: calc(100% - 56px);
+                        }
+                        
+                        .dropdown-filter {
+                          width: 100%;
+                          border: 1px solid #004600;
+                          color: #004600;
+                          text-align: left;
+                          padding: 0.5rem 1rem;
+                          border-radius: 8px;
+                          transition: all 0.2s;
+                        }
+                        
+                        .dropdown-filter:hover {
+                          background-color: rgba(0, 70, 0, 0.05);
+                        }
+                        
+                        .dropdown-filter:focus {
+                          box-shadow: 0 0 0 0.25rem rgba(0, 70, 0, 0.25);
+                        }
+                        
+                        .problem-text {
+                          color: #004600;
+                          padding: 0.5rem;
+                          text-align: center;
+                          font-size: 0.9rem;
+                        }
+                      </style>
+                      <div class="filter-section">
+                        <!-- Carte Programme -->
+                        <div class="card" >
+                          <div class="card-header filter-header">Programme</div>
+                          <div class="card-body">
+                            <div class="dropdown">
+                              <button class="btn btn-outline-success dropdown-toggle dropdown-filter d-flex justify-content-between align-items-center"
+                                      type="button" id="dropdownL3Button_1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="selectedL3_1">Sélectionnez d'abord le niveau 2</span>
+                              </button>
+                              <ul class="dropdown-menu w-100" aria-labelledby="dropdownL3Button_1"  id="l3DropdownMenu_1">
+                                <!-- Options du menu déroulant -->
+                              </ul>
+                            </div>
+                          </div>
+                        </div>  
+
+                        <!-- Carte Projet -->
+                        <div class="card">
+                          <div class="card-header filter-header">Projet</div>
+                          <div class="card-body">
+                            <div class="dropdown">
+                              <button class="btn btn-outline-success dropdown-toggle dropdown-filter d-flex justify-content-between align-items-center"
+                                      type="button" id="dropdownL4Button_1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="selectedL4_1">Sélectionnez d'abord le niveau 2</span>
+                              </button>
+                              <ul class="dropdown-menu w-100" aria-labelledby="dropdownL4Button_1"  id="l4DropdownMenu_1">
+                                <!-- Options du menu déroulant -->
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Colonne 2 - Informations projet -->
+                    <div class="col-xl-2 col-md-6">
+                      <style>
+                        .info-card {
+                          border: 1px solid #004600;
+                          background-color: #f8fdf8;
+                          color: #004600;
+                          border-radius: 12px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                          margin-bottom: 1rem;
+                        }
+                        
+                        .info-header {
+                          background: linear-gradient(135deg, #004600, #007a00);
+                          font-weight: 600;
+                          color: white;
+                          font-size: 0.9rem;
+                          padding: 0.75rem 1rem;
+                          border: none;
+                        }
+                        
+                        .info-body {
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          padding: 1rem;
+                          height: calc(100% - 56px);
+                        }
+                        
+                        .info-logo {
+                          max-height: 80px;
+                          max-width: 100%;
+                          object-fit: contain;
+                        }
+                      </style>
+                      <div class="filter-section">
+                      <!-- Carte Composante -->
+                      <div class="card" style="height: 120px;">
+                        <div class="card-header filter-header">Composante</div>
+                        <div class="card-body">
+                          <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle dropdown-filter d-flex justify-content-between align-items-center"
+                                    type="button" id="dropdownL5Button_1" data-bs-toggle="dropdown" aria-expanded="false">
+                              <span id="selectedL5_1">Sélectionnez d'abord le niveau 2</span>
+                            </button>
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownL5Button_1"  id="l5DropdownMenu_1">
+                              <!-- Options du menu déroulant -->
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Carte Mise en oeuvre -->
+                      <div class="card filter-card" style="height: 120px;">
+                        <div class="card-header filter-header">Mise en oeuvre</div>
+                        <div class="card-body filter-body" id="composante-tutelle">
+                          <img id="logoMise" 
+                              src="{% static '/assets/img/ministere_mise_en_oeuvre.png' %}"
+                              class="info-logo" 
+                              alt="Logo principal">
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+
+                    <!-- Colonne 3 - Indicateurs de progression -->
+                    <div class="col-xl-2 col-md-6">
+                      <style>
+                        .metrics-grid {
+                          display: grid;
+                          grid-template-columns: repeat(2, 1fr);
+                          gap: 1rem;
+                        }
+                        
+                        .metric-card {
+                          background-color: white;
+                          border-radius: 12px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                          padding: 1rem;
+                          height: 120px;
+                          display: flex;
+                          flex-direction: column;
+                        }
+                        
+                        .metric-title {
+                          font-size: 0.9rem;
+                          font-weight: 600;
+                          color: #004600;
+                          text-align: center;
+                          margin-bottom: 0.5rem;
+                        }
+                        
+                        .progress-container {
+                          flex: 1;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                        }
+                        
+                        .progress-circle-container {
+                          width: 80px;
+                          height: 80px;
+                          position: relative;
+                        }
+                        
+                        .progress-circle {
+                          width: 100%;
+                          height: 100%;
+                          transform: rotate(-90deg);
+                        }
+                        
+                        .progress-circle-bg {
+                          fill: none;
+                          stroke: #e0f0e0;
+                          stroke-width: 8;
+                        }
+                        
+                        .progress-circle-fill {
+                          fill: none;
+                          stroke: #004600;
+                          stroke-width: 8;
+                          stroke-linecap: round;
+                          stroke-dasharray: 251;
+                          stroke-dashoffset: 251;
+                          transition: stroke-dashoffset 0.5s ease;
+                        }
+                        
+                        .progress-text {
+                          position: absolute;
+                          top: 50%;
+                          left: 50%;
+                          transform: translate(-50%, -50%);
+                          font-size: 1rem;
+                          font-weight: 600;
+                          color: #004600;
+                        }
+                        
+                        @media (max-width: 768px) {
+                          .metrics-grid {
+                            grid-template-columns: 1fr;
+                          }
+                        }
+                      </style>
+
+                      <style>
+                        .metrics-grid2 {
+                          display: grid;
+                          grid-template-columns: repeat(1, 1fr);
+                          gap: 0.5rem;
+                          width: 100%;
+                          max-width: 400px;
+                          margin: 0 auto;
+                        }
+                        
+                        .metric-card2 {
+                          background-color: white;
+                          border-radius: 12px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                          padding: 1rem;
+                          height: 60px;
+                          display: flex;
+                          flex-direction: column;
+                          position: relative;
+                        }
+                        
+                        .metric-title2 {
+                          font-size: 0.9rem;
+                          font-weight: 600;
+                          color: #004600;
+                          text-align: center;
+                          margin-bottom: 0.1rem;
+                        }
+                        
+                        
+                        .progress-value {
+                          position: absolute;
+                          right: 0;
+                          top: 50%;
+                          transform: translateY(-50%);
+                          font-size: 0.7rem;
+                          font-weight: 600;
+                          color: #004600;
+                          margin-right: 5px;
+                          white-space: nowrap;
+                        }
+                        
+                        @media (max-width: 768px) {
+                          .metrics-grid2 {
+                            grid-template-columns: 1fr;
+                          }
+                        }
+                      </style>
+
+                      <div class="metrics-grid2">
+                        <!-- Avancement -->
+                        <div class="metric-card2">
+                          <div class="metric-title2">Avancement</div>
+                            <div class="progress mt-2" style="height: 6px;">
+                              <div class="progress-bar" id="phy-reel-bar1" style="background-color: #004600; width: 0%">
+                                <span class="progress-value" id="phy-reel-val1">0%</span>
+                              </div>
+                            </div>  
+                        </div>
+
+                        <!-- Cible trim -->
+                        <div class="metric-card2">
+                          <div class="metric-title2">Cible trim</div>
+                            <div class="progress mt-2" style="height: 6px;">
+                              <div class="progress-bar" id="phy-prev-bar1" style="background-color: #004600; width: 0%"> 
+                                <span class="progress-value" id="phy-prev-val1">0%</span></div>
+                            </div>  
+                        </div>
+
+                        <!-- Décaissement -->
+                        <div class="metric-card2">
+                          <div class="metric-title2">Décaissement</div>
+                            <div class="progress mt-2" style="height: 6px;">
+                              <div class="progress-bar" id="dec-reel-bar1" style="background-color: #004600; width: 0%">
+                                <span class="progress-value"  id="dec-reel-val1">0%</span></div>
+                            </div>  
+                        </div>
+
+                        <!-- Cible trim dec -->
+                        <div class="metric-card2">
+                          <div class="metric-title2">Cible trim dec</div>
+                            <div class="progress mt-2" style="height: 6px;">
+                              <div class="progress-bar" id="dec-prev-bar1" style="background-color: #004600; width: 0%">
+                                <span class="progress-value" id="dec-prev-val1">0%</span></div>
+                            </div>  
+                        </div>
+                      </div>
+                    </div>
+
+                    
+                    <div class="col-xl-2 col-md-12">
+                      <style>
+                        .filter-section {
+                          display: flex;
+                          flex-direction: column;
+                          gap: 1rem;
+                        }
+                        
+                        .filter-card {
+                          border: none;
+                          background-color: #f8fdf8;
+                          color: #004600;
+                          border-radius: 12px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                          height: 120px;
+                        }
+                        
+                        .filter-header {
+                          background: linear-gradient(135deg, #004600, #007a00);
+                          font-weight: 600;
+                          color: white;
+                          font-size: 0.9rem;
+                          padding: 0.75rem 1rem;
+                          border: none;
+                        }
+                        
+                        .filter-body {
+                          padding: 0.75rem;
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                          height: calc(100% - 56px);
+                        }
+                        
+                        .dropdown-filter {
+                          width: 100%;
+                          border: 1px solid #004600;
+                          color: #004600;
+                          text-align: left;
+                          padding: 0.5rem 1rem;
+                          border-radius: 8px;
+                          transition: all 0.2s;
+                        }
+                        
+                        .dropdown-filter:hover {
+                          background-color: rgba(0, 70, 0, 0.05);
+                        }
+                        
+                        .dropdown-filter:focus {
+                          box-shadow: 0 0 0 0.25rem rgba(0, 70, 0, 0.25);
+                        }
+                        
+                        .problem-text {
+                          color: #004600;
+                          padding: 0.5rem;
+                          text-align: center;
+                          font-size: 0.9rem;
+                        }
+                      </style>
+                      <div class="filter-section">
+                        <!-- Carte Programme -->
+                        <div class="card">
+                          <div class="card-header filter-header">Programme</div>
+                          <div class="card-body">
+                          <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle dropdown-filter d-flex justify-content-between align-items-center"
+                                    type="button" id="dropdownL3Button_2" data-bs-toggle="dropdown" aria-expanded="false">
+                              <span id="selectedL3_2">Sélectionnez d'abord le niveau 2</span>
+                            </button>
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownL3Button_2"  id="l3DropdownMenu_2">
+                              <!-- Options du menu déroulant -->
+                            </ul>
+                          </div>
+                          </div>
+                        </div>
+
+                        <!-- Carte Projet -->
+                        <div class="card">
+                          <div class="card-header filter-header">Projet</div>
+                          <div class="card-body">
+                            <div class="dropdown">
+                              <button class="btn btn-outline-success dropdown-toggle dropdown-filter d-flex justify-content-between align-items-center"
+                                      type="button" id="dropdownL4Button_2" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="selectedL4_2">Sélectionnez d'abord le niveau 2</span>
+                              </button>
+                              <ul class="dropdown-menu w-100" aria-labelledby="dropdownL4Button_2"  id="l4DropdownMenu_2">
+                                <!-- Options du menu déroulant -->
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Colonne 2 - Informations projet -->
+                    <div class="col-xl-2 col-md-6">
+                      <style>
+                        .info-card {
+                          border: 1px solid #004600;
+                          background-color: #f8fdf8;
+                          color: #004600;
+                          border-radius: 12px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                          margin-bottom: 1rem;
+                        }
+                        
+                        .info-header {
+                          background: linear-gradient(135deg, #004600, #007a00);
+                          font-weight: 600;
+                          color: white;
+                          font-size: 0.9rem;
+                          padding: 0.75rem 1rem;
+                          border: none;
+                        }
+                        
+                        .info-body {
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          padding: 1rem;
+                          height: calc(100% - 56px);
+                        }
+                        
+                        .info-logo {
+                          max-height: 80px;
+                          max-width: 100%;
+                          object-fit: contain;
+                        }
+                      </style>
+                      <div class="filter-section">
+                      <!-- Carte Composante -->
+                      <div class="card" style="height: 120px;">
+                        <div class="card-header filter-header">Composante</div>
+                        <div class="card-body">
+                          <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle dropdown-filter d-flex justify-content-between align-items-center"
+                                    type="button" id="dropdownL5Button_2" data-bs-toggle="dropdown" aria-expanded="false">
+                              <span id="selectedL5_2">Sélectionnez d'abord le niveau 2</span>
+                            </button>
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownL5Button_2"  id="l5DropdownMenu_2">
+                              <!-- Options du menu déroulant -->
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Carte Mise en oeuvre -->
+                      <div class="card filter-card" style="height: 120px;">
+                        <div class="card-header filter-header">Mise en oeuvre</div>
+                        <div class="card-body filter-body" id="composante-tutelle">
+                          <img id="logoMise" 
+                              src="{% static '/assets/img/ministere_mise_en_oeuvre.png' %}"
+                              class="info-logo" 
+                              alt="Logo principal">
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+
+                    <!-- Colonne 3 - Indicateurs de progression -->
+                    <div class="col-xl-2 col-md-6">
+                      <style>
+                        .metrics-grid {
+                          display: grid;
+                          grid-template-columns: repeat(2, 1fr);
+                          gap: 1rem;
+                        }
+                        
+                        .metric-card {
+                          background-color: white;
+                          border-radius: 12px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                          padding: 1rem;
+                          height: 120px;
+                          display: flex;
+                          flex-direction: column;
+                        }
+                        
+                        .metric-title {
+                          font-size: 0.9rem;
+                          font-weight: 600;
+                          color: #004600;
+                          text-align: center;
+                          margin-bottom: 0.5rem;
+                        }
+                        
+                        .progress-container {
+                          flex: 1;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                        }
+                        
+                        .progress-circle-container {
+                          width: 80px;
+                          height: 80px;
+                          position: relative;
+                        }
+                        
+                        .progress-circle {
+                          width: 100%;
+                          height: 100%;
+                          transform: rotate(-90deg);
+                        }
+                        
+                        .progress-circle-bg {
+                          fill: none;
+                          stroke: #e0f0e0;
+                          stroke-width: 8;
+                        }
+                        
+                        .progress-circle-fill {
+                          fill: none;
+                          stroke: #004600;
+                          stroke-width: 8;
+                          stroke-linecap: round;
+                          stroke-dasharray: 251;
+                          stroke-dashoffset: 251;
+                          transition: stroke-dashoffset 0.5s ease;
+                        }
+                        
+                        .progress-text {
+                          position: absolute;
+                          top: 50%;
+                          left: 50%;
+                          transform: translate(-50%, -50%);
+                          font-size: 1rem;
+                          font-weight: 600;
+                          color: #004600;
+                        }
+                        
+                        @media (max-width: 768px) {
+                          .metrics-grid {
+                            grid-template-columns: 1fr;
+                          }
+                        }
+                      </style>
+
+                      <style>
+                        .metrics-grid2 {
+                          display: grid;
+                          grid-template-columns: repeat(1, 1fr);
+                          gap: 0.5rem;
+                          width: 100%;
+                          max-width: 400px;
+                          margin: 0 auto;
+                        }
+                        
+                        .metric-card2 {
+                          background-color: white;
+                          border-radius: 12px;
+                          overflow: hidden;
+                          box-shadow: 0 4px 6px rgba(0, 70, 0, 0.1);
+                          padding: 1rem;
+                          height: 60px;
+                          display: flex;
+                          flex-direction: column;
+                          position: relative;
+                        }
+                        
+                        .metric-title2 {
+                          font-size: 0.9rem;
+                          font-weight: 600;
+                          color: #004600;
+                          text-align: center;
+                          margin-bottom: 0.1rem;
+                        }
+                        
+                        
+                        .progress-value {
+                          position: absolute;
+                          right: 0;
+                          top: 50%;
+                          transform: translateY(-50%);
+                          font-size: 0.7rem;
+                          font-weight: 600;
+                          color: #004600;
+                          margin-right: 5px;
+                          white-space: nowrap;
+                        }
+                        
+                        @media (max-width: 768px) {
+                          .metrics-grid2 {
+                            grid-template-columns: 1fr;
+                          }
+                        }
+                      </style>
+
+                      <div class="metrics-grid2">
+                        <!-- Avancement -->
+                        <div class="metric-card2">
+                          <div class="metric-title2">Avancement</div>
+                            <div class="progress mt-2" style="height: 6px;">
+                              <div class="progress-bar" id="phy-reel-bar2" style="background-color: #004600; width: 0%">
+                                <span class="progress-value" id="phy-reel-val2">0%</span>
+                              </div>
+                            </div>  
+                        </div>
+
+                        <!-- Cible trim -->
+                        <div class="metric-card2">
+                          <div class="metric-title2">Cible trim</div>
+                            <div class="progress mt-2" style="height: 6px;">
+                              <div class="progress-bar" id="phy-prev-bar2" style="background-color: #004600; width: 0%"> 
+                                <span class="progress-value" id="phy-prev-val2">0%</span></div>
+                            </div>  
+                        </div>
+
+                        <!-- Décaissement -->
+                        <div class="metric-card2">
+                          <div class="metric-title2">Décaissement</div>
+                            <div class="progress mt-2" style="height: 6px;">
+                              <div class="progress-bar" id="dec-reel-bar2" style="background-color: #004600; width: 0%">
+                                <span class="progress-value" id="dec-reel-val2">0%</span></div>
+                            </div>  
+                        </div>
+
+                        <!-- Cible trim dec -->
+                        <div class="metric-card2">
+                          <div class="metric-title2">Cible trim dec</div>
+                            <div class="progress mt-2" style="height: 6px;">
+                              <div class="progress-bar" id="dec-prev-bar2" style="background-color: #004600; width: 0%">
+                                <span class="progress-value"  id="dec-prev-val2">0%</span></div>
+                            </div>  
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <hr class="dark horizontal">
+                    <!--1er message-->
+                    <div class="col-xl-6 col-md-6">
+                      <div class="card filter-card" style="height: 250px;">
+                        <div class="card-header filter-header">Message de la semaine</div>
+                        <div class="card-body filter-body">
+                          <div class="problem-text" id="messages-container1">
+                            lecture du problème
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--2ème message-->
+                    <div class="col-xl-6 col-md-6">
+                      <div class="card filter-card" style="height: 250px;">
+                        <div class="card-header filter-header">Message de la semaine</div>
+                        <div class="card-body filter-body">
+                          <div class="problem-text" id="messages-container2">
+                            lecture du problème
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+      
+      <!-- Troisième ligne-->
+      
+
+<div class="row">
+  <div class="col-lg-12 col-md-6 mt-4 mb-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        
+        <div class="row g-4">
+          <!-- Colonne Top Performances -->
+          <div class="col-xl-6 col-md-6">
+            <div class="section-header bg-success bg-opacity-10 p-3 rounded-3 mb-3 d-flex align-items-center">
+              <i class="fas fa-trophy text-success fs-4 me-3"></i>
+              <div>
+                <h3 class="h5 mb-0 text-success fw-bold">Top Performances</h3>
+                <p class="small text-muted mb-0">Les projets les plus performants ce trimestre</p>
+              </div>
+            </div>
+            
+            <!-- Carte 1_1 -->
+            <div class="card border-0 shadow-sm mb-3 hover-scale" style="border-radius: 10px; transition: all 0.3s ease;">
+              <div class="card-header py-2 px-3 text-white" style="border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #004600, #007a00);">
+                <div class="d-flex justify-content-between align-items-center  flex-wrap gap-2">
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100"  id="selectionL1" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Sélectionnez un projet</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante1">
+                    </ul>
+                  </div>
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100" id="selectionL2" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Composante</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante2">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body p-3">
+                <div class="row text-center g-2">
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Cible trimestre T</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="prev_tn_total_0">-</span></div>
+                      <!--<div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success progress-bar-striped" style="width: 78%"></div>
+                      </div>-->
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre précédent</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_1_total_0">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre actuel</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_total_0">-</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer bg-white py-2 px-3" style="border-radius: 0 0 10px 10px;">
+                <div class="alert alert-success alert-light mb-0 py-1 px-2 d-flex align-items-center">
+                  
+                  <div>
+                  <span class="fw-semibold">Facteurs explicatifs:</span>
+                   <small class="small" id="facteurs_explication_value_0"> </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Carte 1_2 -->
+            <div class="card border-0 shadow-sm mb-3 hover-scale" style="border-radius: 10px; transition: all 0.3s ease;">
+              <div class="card-header py-2 px-3 text-white" style="border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #004600, #007a00);">
+                <div class="d-flex justify-content-between align-items-center  flex-wrap gap-2">
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100"  id="selectionL1_1" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Sélectionnez un projet</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante1_1">
+                    </ul>
+                  </div>
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100" id="selectionL2_1" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Composante</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante2_1">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body p-3">
+                <div class="row text-center g-2">
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Cible trimestre T</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="prev_tn_total_1">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre précédent</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_1_total_1">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre actuel</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_total_1">-</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer bg-white py-2 px-3" style="border-radius: 0 0 10px 10px;">
+                <div class="alert alert-success alert-light mb-0 py-1 px-2 d-flex align-items-center">
+                  
+                  <div>
+                  <span class="fw-semibold">Facteurs explicatifs:</span>
+                   <small class="small" id="facteurs_explication_value_1"> </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Carte 1_3 -->
+            <div class="card border-0 shadow-sm mb-3 hover-scale" style="border-radius: 10px; transition: all 0.3s ease;">
+              <div class="card-header py-2 px-3 text-white" style="border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #004600, #007a00);">
+                <div class="d-flex justify-content-between align-items-center  flex-wrap gap-2">
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100"  id="selectionL1_2" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Sélectionnez un projet</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante1_2">
+                    </ul>
+                  </div>
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100" id="selectionL2_2" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Composante</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante2_2">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body p-3">
+                <div class="row text-center g-2">
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Cible trimestre T</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="prev_tn_total_2">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre précédent</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_1_total_2">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre actuel</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_total_2">-</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer bg-white py-2 px-3" style="border-radius: 0 0 10px 10px;">
+                <div class="alert alert-success alert-light mb-0 py-1 px-2 d-flex align-items-center">
+                  
+                  <div>
+                  <span class="fw-semibold">Facteurs explicatifs:</span>
+                   <small class="small" id="facteurs_explication_value_2"> </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Colonne À Surveiller -->
+          <div class="col-xl-6 col-md-6">
+            <div class="section-header bg-danger bg-opacity-10 p-3 rounded-3 mb-3 d-flex align-items-center">
+              <i class="fas fa-exclamation-triangle text-danger fs-4 me-3"></i>
+              <div>
+                <h3 class="h5 mb-0 text-danger fw-bold">À Surveiller</h3>
+                <p class="small text-muted mb-0">Projets nécessitant une attention particulière</p>
+              </div>
+            </div>
+            
+            <!-- Carte 2_1 -->
+            <div class="card border-0 shadow-sm mb-3 hover-scale" style="border-radius: 10px; transition: all 0.3s ease;">
+              <div class="card-header py-2 px-3 text-white" style="border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #8b0000, #c00000);">
+                <div class="d-flex justify-content-between align-items-center  flex-wrap gap-2">
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100"  id="selectionL1_3" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Sélectionnez un projet</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante1_3">
+                    </ul>
+                  </div>
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100" id="selectionL2_3" style="background: rgba(255, 255, 255, 0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Composante</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante2_3">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body p-3">
+                <div class="row text-center g-2">
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Cible trimestre T</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="prev_tn_total_3">-</span>%</div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre précédent</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_1_total_3">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre actuel</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_total_3">-</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer bg-white py-2 px-3" style="border-radius: 0 0 10px 10px;">
+                <div class="alert alert-danger alert-light mb-0 py-1 px-2 d-flex align-items-center">
+                  
+                  <div>
+                  <span class="fw-semibold">Facteurs explicatifs:</span>
+                   <small class="small" id="facteurs_explication_value_3"> </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Carte 2_2 -->
+            <div class="card border-0 shadow-sm mb-3 hover-scale" style="border-radius: 10px; transition: all 0.3s ease;">
+              <div class="card-header py-2 px-3 text-white" style="border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #8b0000, #c00000);">
+                <div class="d-flex justify-content-between align-items-center  flex-wrap gap-2">
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100"  id="selectionL1_4" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Sélectionnez un projet</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante1_4">
+                    </ul>
+                  </div>
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100" id="selectionL2_4" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Composante</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante2_4">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body p-3">
+                <div class="row text-center g-2">
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Cible trimestre T</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="prev_tn_total_4">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre précédent</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_1_total_4">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre actuel</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_total_4">-</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer bg-white py-2 px-3" style="border-radius: 0 0 10px 10px;">
+                <div class="alert alert-danger alert-light mb-0 py-1 px-2 d-flex align-items-center">
+                  
+                  <div>
+                  <span class="fw-semibold">Facteurs explicatifs:</span>
+                   <small class="small" id="facteurs_explication_value_4"> </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Carte 2_3 -->
+            <div class="card border-0 shadow-sm mb-3 hover-scale" style="border-radius: 10px; transition: all 0.3s ease;">
+              <div class="card-header py-2 px-3 text-white" style="border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #8b0000, #c00000);">
+                <div class="d-flex justify-content-between align-items-center  flex-wrap gap-2">
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100"  id="selectionL1_5" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Sélectionnez un projet</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante1_5">
+                    </ul>
+                  </div>
+                  <div class="dropdown flex-grow-1">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-between align-items-center w-100" id="selectionL2_5" style="background: rgba(255,255,255,0.92); border: none; color: black;" type="button" data-bs-toggle="dropdown">
+                      <span>Composante</span>
+                    </button>
+                    <ul class="dropdown-menu" id="listDeroulante2_5">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body p-3">
+                <div class="row text-center g-2">
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Cible trimestre T</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="prev_tn_total_5">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre précédent</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_1_total_5">-</span></div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light bg-opacity-50 rounded-3 h-100">
+                      <small class="text-muted d-block">Trimestre actuel</small>
+                      <div class="fw-bold text-success mb-2 fs-5"><span id="realise_tn_total_5">-</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer bg-white py-2 px-3" style="border-radius: 0 0 10px 10px;">
+                <div class="alert alert-danger alert-light mb-0 py-1 px-2 d-flex align-items-center">
+                  
+                  <div>
+                  <span class="fw-semibold">Facteurs explicatifs:</span>
+                   <small class="small" id="facteurs_explication_value_5"> </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+      
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Réinitialiser la vue de la carte
+            document.getElementById('reset-map-view')?.addEventListener('click', function() {
+                if (window.map) {
+                    window.map.setView([14.4974, -14.4524], 7);
+                }
+            });
+        });
+      </script>
+      <footer class="footer py-4  ">
+        <div class="container-fluid">
+          <div class="row align-items-center justify-content-lg-between">
+            <div class="col-lg-6 mb-lg-0 mb-4">
+              <div class="copyright text-center text-sm text-muted text-lg-start">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>, BOCS-primature
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+  
+  <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Variables pour les dropdowns
+            const dropdownL1Button = document.getElementById('dropdownL1Button');
+            const dropdownL2Button = document.getElementById('dropdownL2Button');
+            const dropdownL3Button = document.getElementById('dropdownL3Button');
+            const dropdownL3Button_1 = document.getElementById('dropdownL3Button_1');
+            const dropdownL3Button_2 = document.getElementById('dropdownL3Button_2');
+            const dropdownL4Button = document.getElementById('dropdownL4Button');
+            const dropdownL4Button_1 = document.getElementById('dropdownL4Button_1');
+            const dropdownL4Button_2 = document.getElementById('dropdownL4Button_2');
+            const dropdownL5Button = document.getElementById('dropdownL5Button');
+            const dropdownL5Button_1 = document.getElementById('dropdownL5Button_1');
+            const dropdownL5Button_2 = document.getElementById('dropdownL5Button_2');
+
+            const l2DropdownMenu = document.getElementById('l2DropdownMenu');
+            const l3DropdownMenu = document.getElementById('l3DropdownMenu');
+            const l3DropdownMenu_1 = document.getElementById('l3DropdownMenu_1');
+            const l3DropdownMenu_2 = document.getElementById('l3DropdownMenu_2');
+            const l4DropdownMenu = document.getElementById('l4DropdownMenu');
+            const l4DropdownMenu_1 = document.getElementById('l4DropdownMenu_1');
+            const l4DropdownMenu_2 = document.getElementById('l4DropdownMenu_2');
+            const l5DropdownMenu = document.getElementById('l5DropdownMenu');
+            const l5DropdownMenu_1 = document.getElementById('l5DropdownMenu_1');
+            const l5DropdownMenu_2 = document.getElementById('l5DropdownMenu_2');
+
+            // Variables pour stocker les valeurs sélectionnées
+            let l1Value = 'all';
+            let l2Value = null;
+            let l3Value = null;
+            let l3Value_1 = null;
+            let l3Value_2 = null;
+            let l4Value = null;
+            let l4Value_1 = null;
+            let l4Value_2 = null;
+            let l5Value = null;
+            let l5Value_1 = null;
+            let l5Value_2 = null;
+
+            // Fonction pour mettre à jour le filtre L1
+            window.updateL1Filter = function(value, displayText) {
+                l1Value = value;
+                document.getElementById('selectedL1').textContent = displayText;
+                resetFilters([dropdownL2Button, dropdownL3Button, dropdownL4Button, dropdownL5Button]);
+                
+                if (value !== 'all') {
+                    fetchL2Options(value);
+                } else {
+                    fetchGlobalStats();
+                }
+            };
+            
+            // Fonction pour mettre à jour le filtre L2
+            window.updateL2Filter = function(value, displayText) {
+                l2Value = value;
+                document.getElementById('selectedL2').textContent = displayText;
+                resetFilters([dropdownL3Button, dropdownL4Button, dropdownL5Button]);
+                
+                if (value) {
+                    fetchL3Options(l1Value, value);
+                    fetchL3Options_1(l1Value, value);
+                    fetchL3Options_2(l1Value, value);
+                    fetchStats(l1Value, value);
+                }
+            };
+            
+            // Fonction pour mettre à jour le filtre L3
+            window.updateL3Filter = function(value, displayText) {
+                l3Value = value;
+                document.getElementById('selectedL3').textContent = displayText;
+                resetFilters([dropdownL4Button, dropdownL5Button]);
+                
+                if (value) {
+                    fetchL4Options(value);
+                }
+
+            };
+            
+            window.updateL3Filter_1 = function(value, displayText) {
+                l3Value_1 = value;
+                document.getElementById('selectedL3_1').textContent = displayText;
+                resetFilters([dropdownL4Button_1, dropdownL5Button_1]);
+                
+                if (value) {
+                    fetchL4Options_1(value);
+                }
+                
+            };
+
+            window.updateL3Filter_2 = function(value, displayText) {
+                l3Value_2 = value;
+                document.getElementById('selectedL3_2').textContent = displayText;
+                resetFilters([dropdownL4Button_2, dropdownL5Button_2]);
+                
+                if (value) {
+                    fetchL4Options_2(value);
+                }
+                
+            };
+            // Fonction pour mettre à jour le filtre L4
+            window.updateL4Filter = function(value, displayText) {
+                l4Value = value;
+                document.getElementById('selectedL4').textContent = displayText;
+                resetFilters([dropdownL5Button]);
+                
+                if (value) {
+                    fetchL5Options(value);
+                }
+            };
+
+            window.updateL4Filter_1 = function(value, displayText) {
+                l4Value_1 = value;
+                document.getElementById('selectedL4_1').textContent = displayText;
+                resetFilters([dropdownL5Button_1]);
+
+                if (value) {
+                    fetchL5Options_1(value);
+                }
+            };
+            
+            
+            window.updateL4Filter_2 = function(value, displayText) {
+                l4Value_2 = value;
+                document.getElementById('selectedL4_2').textContent = displayText;
+                resetFilters([dropdownL5Button_2]);
+
+                if (value) {
+                    fetchL5Options_2(value);
+                }
+            };
+            
+
+            // Fonction pour mettre à jour le filtre L5
+            window.updateL5Filter = function(value, displayText) {
+                l5Value = value;
+                document.getElementById('selectedL5').textContent = displayText;
+                
+                if (value) {
+                    fetchComposanteDetails(value);
+                    fetchMessages(value);
+                }
+            };
+
+            window.updateL5Filter_1 = function(value, displayText) {
+                l5Value_1 = value;
+                document.getElementById('selectedL5_1').textContent = displayText;
+
+                if (value) {
+                    fetchComposanteDetails_1(value);
+                    fetchMessages_1(value);
+                }
+            };
+
+            window.updateL5Filter_2 = function(value, displayText) {
+                l5Value_2 = value;
+                document.getElementById('selectedL5_2').textContent = displayText;
+
+                if (value) {
+                    fetchComposanteDetails_2(value);
+                    fetchMessages_2(value);
+                }
+            };
+            
+            // Fonctions utilitaires
+            function resetFilters(filters) {
+                filters.forEach(filter => {
+                    if (!filter) return; // Vérification si l'élément existe
+                    
+                    filter.disabled = true;
+                    const spanId = filter.id.replace('dropdown', 'selected').replace('Button', '');
+                    const spanElement = document.getElementById(spanId);
+                    if (spanElement) {
+                        spanElement.textContent = 'Sélectionnez d\'abord le niveau précédent';
+                    }
+                    
+                    const menuId = filter.id.replace('Button', 'Menu');
+                    const menu = document.getElementById(menuId);
+                    if (menu) {
+                        menu.innerHTML = '<li><a class="dropdown-item" href="#">Sélectionnez d\'abord le niveau précédent</a></li>';
+                    }
+                });
+            }
+            
+            function fetchL2Options(l1Value) {
+                const url = `/api/filters/l2/?l1=${l1Value}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        dropdownL2Button.disabled = false;
+                        document.getElementById('selectedL2').textContent = 'Sélectionnez une option';
+                        
+                        if (l2DropdownMenu) {
+                            l2DropdownMenu.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    updateL2Filter(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l2DropdownMenu.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L2 options:', error);
+                    });
+            }
+            
+            function fetchL3Options(l1Value, l2Value) {
+                const url = `/api/filters/l3/?l1=${l1Value}&l2=${l2Value}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (dropdownL3Button) {
+                            dropdownL3Button.disabled = false;
+                        }
+                        const selectedL3 = document.getElementById('selectedL3');
+                        if (selectedL3) {
+                            selectedL3.textContent = 'Sélectionnez un programme';
+                        }
+                        
+                        if (l3DropdownMenu) {
+                            l3DropdownMenu.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    updateL3Filter(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l3DropdownMenu.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L3 options:', error);
+                    });
+            }
+
+            function fetchL3Options_1(l1Value, l2Value) {
+                const url = `/api/filters/l3/?l1=${l1Value}&l2=${l2Value}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (dropdownL3Button_1) {
+                            dropdownL3Button_1.disabled = false;
+                        }
+                        const selectedL3_1 = document.getElementById('selectedL3_1');
+                        if (selectedL3_1) {
+                            selectedL3_1.textContent = 'Sélectionnez un programme';
+                        }
+
+                        if (l3DropdownMenu_1) {
+                            l3DropdownMenu_1.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    window.updateL3Filter_1(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l3DropdownMenu_1.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L3 options:', error);
+                    });
+            }
+
+            function fetchL3Options_2(l1Value, l2Value) {
+                const url = `/api/filters/l3/?l1=${l1Value}&l2=${l2Value}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (dropdownL3Button_2) {
+                            dropdownL3Button_2.disabled = false;
+                        }
+                        const selectedL3_2 = document.getElementById('selectedL3_2');
+                        if (selectedL3_2) {
+                            selectedL3_2.textContent = 'Sélectionnez un programme';
+                        }
+
+                        if (l3DropdownMenu_2) {
+                            l3DropdownMenu_2.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    window.updateL3Filter_2(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l3DropdownMenu_2.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L3 options:', error);
+                    });
+            }
+
+
+            
+            function fetchL4Options(l3Value) {
+                const url = `/api/filters/l4/?l3=${l3Value}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        dropdownL4Button.disabled = false;
+                        document.getElementById('selectedL4').textContent = 'Sélectionnez un projet';
+                        
+                        if (l4DropdownMenu) {
+                            l4DropdownMenu.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    updateL4Filter(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l4DropdownMenu.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L4 options:', error);
+                    });
+            }
+
+            function fetchL4Options_1(l3Value_1) {
+                const url = `/api/filters/l4/?l3=${l3Value_1}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        dropdownL4Button_1.disabled = false;
+                        document.getElementById('selectedL4_1').textContent = 'Sélectionnez un projet';
+                        
+                        if (l4DropdownMenu_1) {
+                            l4DropdownMenu_1.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    updateL4Filter_1(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l4DropdownMenu_1.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L4 options:', error);
+                    });
+            }
+
+            function fetchL4Options_2(l3Value_2) {
+                const url = `/api/filters/l4/?l3=${l3Value_2}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        dropdownL4Button_2.disabled = false;
+                        document.getElementById('selectedL4_2').textContent = 'Sélectionnez un projet';
+
+                        if (l4DropdownMenu_2) {
+                            l4DropdownMenu_2.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    updateL4Filter_2(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l4DropdownMenu_2.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L4 options:', error);
+                    });
+            }
+
+            
+            function fetchL5Options(l4Value) {
+                const url = `/api/filters/l5/?l4=${l4Value}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        dropdownL5Button.disabled = false;
+                        document.getElementById('selectedL5').textContent = 'Sélectionnez une composante';
+                        
+                        if (l5DropdownMenu) {
+                            l5DropdownMenu.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    updateL5Filter(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l5DropdownMenu.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L5 options:', error);
+                        
+                    });
+            }
+
+            function fetchL5Options_1(l4Value_1) {
+                const url = `/api/filters/l5/?l4=${l4Value_1}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        dropdownL5Button_1.disabled = false;
+                        document.getElementById('selectedL5_1').textContent = 'Sélectionnez une composante';
+
+                        if (l5DropdownMenu_1) {
+                            l5DropdownMenu_1.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    updateL5Filter_1(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l5DropdownMenu_1.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L5 options:', error);
+                        return response.json();
+                    });
+            }
+
+            function fetchL5Options_2(l4Value_2) {
+                const url = `/api/filters/l5/?l4=${l4Value_2}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        dropdownL5Button_2.disabled = false;
+                        document.getElementById('selectedL5_2').textContent = 'Sélectionnez une composante';
+
+                        if (l5DropdownMenu_2) {
+                            l5DropdownMenu_2.innerHTML = '';
+                            data.options.forEach(option => {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.className = 'dropdown-item';
+                                a.href = '#';
+                                a.textContent = option.name;
+                                a.onclick = function() {
+                                    updateL5Filter_2(option.id, option.name);
+                                    return false;
+                                };
+                                li.appendChild(a);
+                                l5DropdownMenu_2.appendChild(li);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching L5 options:', error);
+                        return response.json();
+                    });
+            }
+            // Les fonctions fetchStats, fetchGlobalStats, fetchComposanteDetails et fetchMessages restent inchangées
+            // Fonction pour les statistiques filtrées
+            function fetchStats(l1Value, l2Value) {
+                const url = `/api/stats/?l1=${l1Value}&l2=${l2Value}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.program_count !== undefined) {
+                            const programCountEl = document.getElementById('program-count');
+                            if (programCountEl) programCountEl.textContent = data.program_count;
+                        }
+
+                        if (data.project_count !== undefined) {
+                            const projectCountEl = document.getElementById('project-count');
+                            if (projectCountEl) projectCountEl.textContent = data.project_count;
+                        }
+
+                        if (data.started_project_count !== undefined) {
+                            const startedProjectCountEl = document.getElementById('started-project-count');
+                            if (startedProjectCountEl) startedProjectCountEl.textContent = data.started_project_count;
+                        }
+
+                        const startedcomposanteCount = document.getElementById('started-composante-count');
+                        if (startedcomposanteCount && data.started_composante_count !== undefined) {
+                            startedcomposanteCount.textContent = data.started_composante_count;
+                        }
+
+                        const SatisfaisantCount = document.getElementById('satisfaisant-composante-count');
+                        if (SatisfaisantCount && data.satisfaisant_composante_count !== undefined) {
+                            SatisfaisantCount.textContent = data.satisfaisant_composante_count;
+                        }
+
+                        const alertCount = document.getElementById('alerte-composante-count');
+                        if (alertCount && data.alerte_composante_count !== undefined) {
+                            alertCount.textContent = data.alerte_composante_count;
+                        }
+
+                        const bloqueCount = document.getElementById('bloque-composante-count');
+                        if (bloqueCount && data.bloque_composante_count !== undefined) {
+                            bloqueCount.textContent = data.bloque_composante_count;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching stats:', error);
+                    });
+            }
+
+
+            // Fonction pour les statistiques globales
+            function fetchGlobalStats() {
+                const url = `/api/stats/global/`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Injection des valeurs globales
+                        if (data.axe_count !== undefined) {
+                            const axeCountEl = document.getElementById('axe-count');
+                            if (axeCountEl) axeCountEl.textContent = data.axe_count;
+                        }
+                        
+                        if (data.portefeuille_count !== undefined) {
+                            const portefeuilleCountEl = document.getElementById('portefeuille-count');
+                            if (portefeuilleCountEl) portefeuilleCountEl.textContent = data.portefeuille_count;
+                        }
+                        
+                        if (data.program_count !== undefined) {
+                            const programCountEl = document.getElementById('program-count');
+                            if (programCountEl) programCountEl.textContent = data.program_count;
+                        }
+                        
+                        if (data.project_count !== undefined) {
+                            const projectCountEl = document.getElementById('project-count');
+                            if (projectCountEl) projectCountEl.textContent = data.project_count;
+                        }
+
+                        if (data.started_composante_count !== undefined) {
+                        const countElement = document.getElementById('started-composante-count');
+                        if (countElement) countElement.textContent = data.started_composante_count;
+                        } 
+
+                        if (data.satisfaisant_composante_count !== undefined) {
+                            const countElement = document.getElementById('satisfaisant-composante-count');
+                            if (countElement) countElement.textContent = data.satisfaisant_composante_count;
+                        }
+
+                        if (data.alerte_composante_count !== undefined) {
+                            const countElement = document.getElementById('alerte-composante-count');
+                            if (countElement) countElement.textContent = data.alerte_composante_count;
+                        }
+
+                        if (data.bloque_composante_count !== undefined) {
+                            const countElement = document.getElementById('bloque-composante-count');
+                            if (countElement) countElement.textContent = data.bloque_composante_count;
+                        }
+
+                    })
+                    .catch(error => {
+                        console.error('Error fetching global stats:', error);
+                    });
+            }
+
+
+            let composanteData = null;
+
+            function fetchComposanteDetails(composanteId) {
+                fetch(`/api/composantes/${composanteId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        composanteData = data;
+                        // Afficher les infos générales
+                        document.getElementById('composante-nom').textContent = data.nom || '';
+                        document.getElementById('composante-localisation').textContent = data.localisation || '';
+                        document.getElementById('composante-tutelle').textContent = data.tutelle || '';
+                        document.getElementById('composante-statut').textContent = data.statut || '';
+                        // Afficher le trimestre sélectionné par défaut
+                        updateTrimestreView(getSelectedTrimestre());
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors du chargement des détails de la composante:', error);
+                    });
+            }
+
+
+            function getSelectedTrimestre() {
+                const selected = document.querySelector('input[name="trimestre"]:checked');
+                return selected ? selected.value : '1';  // T1 par défaut
+            }
+
+            function updateTrimestreView(trimestre) {
+                if (!composanteData) return;
+
+                document.getElementById('phy-reel').textContent = composanteData[`realise_t${trimestre}_total`] + '%' || '0%';
+                document.getElementById('phy-prev').textContent = composanteData[`prev_t${trimestre}_total`] + '%' || '0%';
+                document.getElementById('decaissement-reel').textContent = composanteData[`dec_reel_t${trimestre}`] + '%' || '0%';
+                document.getElementById('decaissement-prev').textContent = composanteData[`dec_prev_t${trimestre}`] + '%' || '0%';
+            }
+
+            // Ajouter un écouteur sur tous les boutons radio
+            document.querySelectorAll('input[name="trimestre"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    updateTrimestreView(radio.value);
+                });
+            });
+
+            
+
+
+
+
+
+
+
+            function getSelectedTrimestre_2() {
+                const selected = document.querySelector('input[name="trimestre_2"]:checked');
+                return selected ? selected.value : '1';  // T1 par défaut
+            } 
+            let currentData = {}; // les données de la composante à stocker après fetch
+
+            function fetchComposanteDetails_1(composanteId) {
+                const url = `/api/composantes/${composanteId}/`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        currentData = data;
+                        updateDisplayForTrim(getSelectedTrimestre_2()); // par défaut T2 est sélectionné
+                    })
+                    .catch(error => {
+                        console.error('Erreur fetch composante :', error);
+                    });
+            }
+
+            function updateDisplayForTrim(trim) {
+                if (!currentData) return;
+
+                const suffix = `t${trim}`;
+
+                // Récupérer les valeurs
+                const phyVal = currentData[`realise_${suffix}_total`] || 0;
+                const prevVal = currentData[`prev_${suffix}_total`] || 0;
+                const decReel = currentData[`dec_reel_${suffix}`] || 0;
+                const decPrev = currentData[`dec_prev_${suffix}`] || 0;
+
+                // Mise à jour du texte
+                document.getElementById('phy-reel').textContent = `${phyVal}%`;
+                document.getElementById('phy-prev').textContent = `${prevVal}%`;
+                document.getElementById('decaissement-reel').textContent = `${decReel}%`;
+                document.getElementById('decaissement-prev').textContent = `${decPrev}%`;
+
+                // Mise à jour de la barre
+                const phyReelBar = document.getElementById('phy-reel-bar1');
+                const phyReelVal = document.getElementById('phy-reel-val1');
+
+                if (phyReelBar && phyReelVal) {
+                    phyReelBar.style.width = `${phyVal}%`;
+                    phyReelVal.textContent = `${phyVal}%`;
+                } else {
+                    console.error('Éléments DOM non trouvés');
+                }
+                
+                const phyPrevBar = document.getElementById('phy-prev-bar1');
+                const phyPrevVal = document.getElementById('phy-prev-val1');
+
+                if (phyPrevBar && phyPrevVal) {
+                    phyPrevBar.style.width = `${prevVal}%`;
+                    phyPrevVal.textContent = `${prevVal}%`;
+                } else {
+                    console.error('Éléments DOM non trouvés');
+                }
+                
+                const decReelBar = document.getElementById('dec-reel-bar1');
+                const decReelVal = document.getElementById('dec-reel-val1');
+
+                if (decReelBar && decReelVal) {
+                    decReelBar.style.width = `${decReel}%`;
+                    decReelVal.textContent = `${decReel}%`;
+                } else {
+                    console.error('Éléments DOM non trouvés');
+                }
+                
+                const decPrevBar = document.getElementById('dec-prev-bar1');
+                const decPrevVal = document.getElementById('dec-prev-val1');
+
+                if (decPrevBar && decPrevVal) {
+                    decPrevBar.style.width = `${decPrev}%`;
+                    decPrevVal.textContent = `${decPrev}%`;
+                } else {
+                    console.error('Éléments DOM non trouvés');
+                }
+
+
+            }
+
+            // Initialisation des radios
+            document.querySelectorAll('input[name="trimestre_2"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateDisplayForTrim(this.value);
+                });
+            });
+
+
+            let currentData2 = {};
+            function fetchComposanteDetails_2(composanteId) {
+                const url = `/api/composantes/${composanteId}/`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        currentData2 = data;
+                        updateDisplayForTrim2(getSelectedTrimestre_2()); // par défaut T2 est sélectionné
+                    })
+                    .catch(error => {
+                        console.error('Erreur fetch composante :', error);
+                    });
+            }
+
+            function updateDisplayForTrim2(trim) {
+                if (!currentData2) return;
+
+                const suffix = `t${trim}`;
+
+                // Récupérer les valeurs
+                const phyVal = currentData2[`realise_${suffix}_total`] || 0;
+                const prevVal = currentData2[`prev_${suffix}_total`] || 0;
+                const decReel = currentData2[`dec_reel_${suffix}`] || 0;
+                const decPrev = currentData2[`dec_prev_${suffix}`] || 0;
+
+                // Mise à jour du texte
+                document.getElementById('phy-reel').textContent = `${phyVal}%`;
+                document.getElementById('phy-prev').textContent = `${prevVal}%`;
+                document.getElementById('decaissement-reel').textContent = `${decReel}%`;
+                document.getElementById('decaissement-prev').textContent = `${decPrev}%`;
+
+                // Mise à jour de la barre
+                const phyReelBar = document.getElementById('phy-reel-bar2');
+                const phyReelVal = document.getElementById('phy-reel-val2');
+
+                if (phyReelBar && phyReelVal) {
+                    phyReelBar.style.width = `${phyVal}%`;
+                    phyReelVal.textContent = `${phyVal}%`;
+                } else {
+                    console.error('Éléments DOM non trouvés');
+                }
+                
+                const phyPrevBar = document.getElementById('phy-prev-bar2');
+                const phyPrevVal = document.getElementById('phy-prev-val2');
+
+                if (phyPrevBar && phyPrevVal) {
+                    phyPrevBar.style.width = `${prevVal}%`;
+                    phyPrevVal.textContent = `${prevVal}%`;
+                } else {
+                    console.error('Éléments DOM non trouvés');
+                }
+                
+                const decReelBar = document.getElementById('dec-reel-bar2');
+                const decReelVal = document.getElementById('dec-reel-val2');
+
+                if (decReelBar && decReelVal) {
+                    decReelBar.style.width = `${decReel}%`;
+                    decReelVal.textContent = `${decReel}%`;
+                } else {
+                    console.error('Éléments DOM non trouvés');
+                }
+                
+                const decPrevBar = document.getElementById('dec-prev-bar2');
+                const decPrevVal = document.getElementById('dec-prev-val2');
+
+                if (decPrevBar && decPrevVal) {
+                    decPrevBar.style.width = `${decPrev}%`;
+                    decPrevVal.textContent = `${decPrev}%`;
+                } else {
+                    console.error('Éléments DOM non trouvés');
+                }
+
+
+            }
+
+            // Initialisation des radios
+            document.querySelectorAll('input[name="trimestre_2"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateDisplayForTrim2(this.value);
+                });
+            });
+
+            // Fonction pour les messages
+            function fetchMessages(composanteId) {
+                const url = `/api/messages/?composante=${composanteId}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const messagesContainer = document.getElementById('messages-container');
+                        
+                        if (!messagesContainer) return;
+                        
+                        if (data.length === 0) {
+                            messagesContainer.innerHTML = '<p>Aucun message associé à cette composante</p>';
+                            return;
+                        }
+                        
+                        let html = '<div class="list-group">';
+                        data.forEach(message => {
+                            html += `
+                                    <p class="mb-1">${message.contenu}</p>
+                            `;
+                        });
+                        html += '</div>';
+                        
+                        messagesContainer.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching messages:', error);
+                    });
+            }
+
+            function fetchMessages_1(composanteId) {
+                const url = `/api/messages/?composante=${composanteId}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const messagesContainer_1 = document.getElementById('messages-container1');
+                        
+                        if (!messagesContainer_1) return;
+                        
+                        if (data.length === 0) {
+                            messagesContainer_1.innerHTML = '<p>Aucun message associé à cette composante</p>';
+                            return;
+                        }
+                        
+                        let html = '<div class="list-group">';
+                        data.forEach(message => {
+                            html += `
+                                    <p class="mb-1">${message.contenu}</p>
+                            `;
+                        });
+                        html += '</div>';
+                        
+                        messagesContainer_1.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching messages:', error);
+                    });
+            }
+
+            function fetchMessages_2(composanteId) {
+                const url = `/api/messages/?composante=${composanteId}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const messagesContainer_2 = document.getElementById('messages-container2');
+                        
+                        if (!messagesContainer_2) return;
+                        
+                        if (data.length === 0) {
+                            messagesContainer_2.innerHTML = '<p>Aucun message associé à cette composante</p>';
+                            return;
+                        }
+                        
+                        let html = '<div class="list-group">';
+                        data.forEach(message => {
+                            html += `
+                                    <p class="mb-1">${message.contenu}</p>
+                            `;
+                        });
+                        html += '</div>';
+
+                        messagesContainer_2.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching messages:', error);
+                    });
+            }
+        });
+  </script>
+
+
+<script>
+  $(document).ready(function() {
+    var projets = [];
+    var composantes = [];
+    let trimestreSelectionne = $('input[name="trimestre"]:checked').val();
+
+    // Charger les données des projets et composantes depuis le backend
+  function loadData() {
+    $.ajax({
+      url: "{% url 'data_get_view' %}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        projets = data.Projets;
+        composantes = data.Composantes;
+
+        var nomsProjets = [];
+        for (var i = 0; i < projets.length; i++) {
+          if (projets[i].nom && !nomsProjets.includes(projets[i].nom)) {
+            nomsProjets.push(projets[i].nom);
+          }
+        }
+        nomsProjets.sort();
+
+        for (let idx = 0; idx < 6; idx++) {
+          let listDeroulante1 = document.getElementById('listDeroulante1' + (idx === 0 ? '' : '_' + idx));
+          let listDeroulante2 = document.getElementById('listDeroulante2' + (idx === 0 ? '' : '_' + idx));
+          let selectionL1 = document.getElementById('selectionL1' + (idx === 0 ? '' : '_' + idx));
+          let selectionL2 = document.getElementById('selectionL2' + (idx === 0 ? '' : '_' + idx));
+
+          if (listDeroulante1 && listDeroulante2 && selectionL1 && selectionL2) {
+            listDeroulante1.innerHTML = '';
+            nomsProjets.forEach(function(nomProjet) {
+              var li = document.createElement('li');
+              var a = document.createElement('a');
+              a.className = 'dropdown-item';
+              a.href = '#';
+              a.textContent = nomProjet;
+
+              // Récupérer l'objet projet correspondant
+              var projetObj = projets.find(p => p.nom === nomProjet);
+
+              a.onclick = function(e) {
+                e.preventDefault();
+
+                // Affichage bouton projet
+                selectionL1.querySelector('span') 
+                  ? selectionL1.querySelector('span').textContent = nomProjet 
+                  : selectionL1.textContent = nomProjet;
+
+                var composantesProjet = composantes.filter(c => c.projet_id === projetObj.id);
+
+                listDeroulante2.innerHTML = '';
+                composantesProjet.forEach(function(comp) {
+                  var liComp = document.createElement('li');
+                  var aComp = document.createElement('a');
+                  aComp.className = 'dropdown-item';
+                  aComp.href = '#';
+                  aComp.textContent = comp.nom;
+
+                  aComp.onclick = function(e) {
+                    e.preventDefault();
+
+                    // Affichage bouton composante
+                    selectionL2.querySelector('span') 
+                      ? selectionL2.querySelector('span').textContent = comp.nom 
+                      : selectionL2.textContent = comp.nom;
+
+                    // Récupération des valeurs
+                    var decPrevT1 = comp.dec_prev_t1 || 'N/A';
+                    var decPrevT2 = comp.dec_prev_t2 || 'N/A';
+                    var facteursExplication = comp.facteurs_explication || 'N/A';
+
+                    updateTrimestreDisplay();
+
+                  };
+
+                  liComp.appendChild(aComp);
+                  listDeroulante2.appendChild(liComp);
+                });
+
+                // Réinitialisation du bouton composante
+                selectionL2.querySelector('span') 
+                  ? selectionL2.querySelector('span').textContent = "Sélectionnez une composante"
+                  : selectionL2.textContent = "Sélectionnez une composante";
+              };
+              li.appendChild(a);
+              listDeroulante1.appendChild(li);
+            });
+          }
+        }
+      }
+    });
+  }
+
+  function updateTrimestreDisplay() {
+    for (let idx = 0; idx < 6; idx++) {
+      let compNom = $("#selectionL2" + (idx === 0 ? '' : '_' + idx)).text().trim();
+
+      if (!compNom || compNom === "Composante" || compNom === "Sélectionnez une composante") {
+        continue; // si composante non sélectionnée
+      }
+
+      let comp = composantes.find(c => c.nom === compNom);
+
+      if (comp) {
+        let trimestre = trimestreSelectionne;
+        let decPrev = comp[`prev_t${trimestre}_total`] || 'N/A';
+        let realisePrec = comp[`realise_t${trimestre - 1}_total`] || 'N/A';
+        let realiseActu = comp[`realise_t${trimestre}_total`] || 'N/A';
+        let facteurs = comp.facteurs_explication || 'N/A';
+
+        $("#prev_tn_total_" + idx).text(decPrev);
+        $("#realise_tn_1_total_" + idx).text(realisePrec);
+        $("#realise_tn_total_" + idx).text(realiseActu);
+        $("#facteurs_explication_value_" + idx).text(facteurs);
+      }
+    }
+  }
+
+    // Appel initial
+    loadData();
+    $('input[name="trimestre"]').on('change', function () {
+      trimestreSelectionne = $(this).val();
+      updateTrimestreDisplay(); // Met à jour l’affichage
+    });
+    $('input[name="trimestre_2"]').on('change', function () {
+      trimestreSelectionne = $(this).val();
+      updateTrimestreDisplay(); // Met à jour l’affichage
+    });
+  });
+
+</script>
+
+  {% endblock%}

@@ -1,0 +1,712 @@
+{% extends "dashboard_app/base.html" %}
+{% block titre%} Tables {% endblock %}
+{% block content %}
+
+{% load static %}
+<style>
+  :root {
+      --primary: #006400; /* Vert foncé pour correspondre à l'image */
+      --primary-light: #008000;
+      --secondary: #2c3e50;
+      --light: #ecf0f1;
+      --success: #2ecc71;
+      --error: #e74c3c;
+  }  
+  /* Style pour la modal */
+  .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+      padding: 20px;
+  }
+  
+  .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.3s forwards;
+  }
+  
+  .modal-container {
+      background-color: white;
+      border-radius: 8px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1001;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s forwards;
+  }
+  
+  .modal-header {
+      background-color: var(--primary);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  
+  .modal-header h2 {
+      color: white;
+      margin: 0;
+  }
+  
+  .modal-close {
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      background: none;
+      border: none;
+  }
+  
+  .modal-content {
+      padding: 30px;
+  }
+  
+  .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 24px;
+  }
+  
+  @media (max-width: 768px) {
+      .form-grid {
+          grid-template-columns: 1fr;
+      }
+  }
+  
+  .form-group {
+      margin-bottom: 24px;
+      position: relative;
+  }
+  
+  .form-group.full-width {
+      grid-column: 1 / -1;
+  }
+  
+  label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--secondary);
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.3s ease;
+  }
+  
+  input, select {
+      width: 100%;
+      padding: 10px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #eaeaea;
+      border-radius: 0;
+      font-size: 16px;
+      transition: all 0.3s ease;
+  }
+  
+  input:focus, select:focus {
+      outline: none;
+      border-bottom-color: var(--primary);
+      box-shadow: none;
+  }
+  
+  input::placeholder, select::placeholder {
+      color: #bbb;
+      opacity: 1;
+  }
+  
+  .checkbox-group {
+      display: flex;
+      align-items: center;
+      padding-top: 12px;
+  }
+  
+  .checkbox-group input {
+      width: auto;
+      margin-right: 10px;
+      cursor: pointer;
+  }
+  
+  .checkbox-group label {
+      margin-bottom: 0;
+      cursor: pointer;
+  }
+  
+  
+  
+  
+  
+  .required:after {
+      content: " *";
+      color: var(--error);
+  }
+  
+  .message {
+      padding: 16px 20px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      position: relative;
+      animation: fadeIn 0.5s ease;
+  }
+  
+  .message::before {
+      font-family: sans-serif;
+      margin-right: 12px;
+      font-size: 18px;
+  }
+  
+  .success {
+      background-color: rgba(46, 204, 113, 0.08);
+      color: #16a34a;
+      border-left: none;
+  }
+  
+  .success::before {
+      content: "✓";
+      color: #16a34a;
+  }
+  
+  .error {
+      background-color: rgba(231, 76, 60, 0.08);
+      color: #dc2626;
+      border-left: none;
+  }
+  
+  .error::before {
+      content: "!";
+      color: #dc2626;
+      font-weight: bold;
+  }
+  
+  @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+  }
+  
+  @media (max-width: 768px) {
+      .main-container {
+          padding: 20px;
+          margin: 15px;
+      }
+      
+      .modal-container {
+          max-height: 100vh;
+          margin: 0;
+          border-radius: 0;
+      }
+  }
+</style>
+    
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+  <!-- Navbar -->
+  <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+    <div class="container-fluid py-1 px-3">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
+          <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tables</li>
+        </ol>
+      </nav>
+    </div>
+  </nav>
+  <!-- End Navbar -->
+
+  <div class="container-fluid py-4">
+    <!-- Première ligne divisée en 3 cartes -->
+    <div class="row">
+      <!-- Carte 1 : Projets -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card shadow-sm border-0" style="background-color: #f2fdf4;">
+          <div class="card-header text-center" style="background-color: #004600; color: white;">
+            <h6 class="mb-0" style="color: #FFFFFF">Projets</h6>
+          </div>
+          <div class="card-body d-flex flex-column align-items-center">
+            <button class="btn btn-success mb-2 w-75 add" style="background-color: #004600;" onclick="showForm('add')">Ajouter un Projet</button>
+            <button class="btn btn-outline-success w-75" style="border-color: #004600; color: #004600;" onclick="showForm('update')">Mettre à jour un Projet</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Modal pour le formulaire -->
+      <div id="form-modal" class="modal-overlay">
+          <div class="modal-container">
+              <div class="modal-header">
+                  <h2 id="form-title">Gestion de Projet</h2>
+                  <button class="modal-close" onclick="closeModal()">&times;</button>
+              </div>
+              <div class="modal-content">
+                  <div id="success-message" class="message success" style="display: none;">
+                      Projet enregistré avec succès!
+                  </div>
+                  
+                  <div id="error-message" class="message error" style="display: none;">
+                      Une erreur s'est produite. Veuillez vérifier les champs du formulaire.
+                  </div>
+                  
+                  <form id="projet-form">
+                      <div id="update-form-fields" style="display: none;" class="form-group full-width">
+                          <label for="projet-select" class="required">Sélectionner un projet</label>
+                          <select id="projet-select" required>
+                              <option value="">-- Choisir un projet --</option>
+                              <!-- Les options seront chargées dynamiquement -->
+                          </select>
+                      </div>
+                      
+                      <div class="form-grid">
+                          <div class="form-group">
+                              <label for="programme" class="required">Programme</label>
+                              <select id="programme" name="programme" required>
+                                  <option value="">-- Sélectionner un programme --</option>
+                                  <!-- Les options seront chargées dynamiquement -->
+                              </select>
+                          </div>
+                          
+                          <div class="form-group">
+                              <label for="identifiant" class="required">Identifiant</label>
+                              <input type="text" id="identifiant" name="identifiant" placeholder="Identifiant unique du projet" required>
+                          </div>
+                          
+                          <div class="form-group full-width">
+                              <label for="nom" class="required">Nom du projet</label>
+                              <input type="text" id="nom" name="nom" placeholder="Nom complet du projet" required>
+                          </div>
+                          
+                          <div class="form-group">
+                              <label for="ministere_responsable" class="required">Ministère responsable</label>
+                              <input type="text" id="ministere_responsable" name="ministere_responsable" placeholder="Ministère en charge du projet" required>
+                          </div>
+                          
+                          <div class="form-group">
+                              <div class="checkbox-group">
+                                  <input type="checkbox" id="est_lance" name="est_lance">
+                                  <label for="est_lance">Projet lancé</label>
+                              </div>
+                          </div>
+                          
+                          <div class="form-group">
+                              <label for="chef_projet" class="required">Chef de projet</label>
+                              <input type="text" id="chef_projet" name="chef_projet" placeholder="Nom du chef de projet" required>
+                          </div>
+                          
+                          <div class="form-group">
+                              <label for="email" class="required">Email</label>
+                              <input type="email" id="email" name="email" placeholder="Email du chef de projet" required>
+                          </div>
+                          
+                          <div class="form-group">
+                              <label for="tel">Téléphone</label>
+                              <input type="tel" id="tel" name="tel" placeholder="Numéro de téléphone du chef de projet">
+                          </div>
+                      </div>
+                      
+                      <div class="form-buttons">
+                          <button type="button" class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                          <button type="submit" class="btn" id="submit-btn">Enregistrer</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+
+      <script>
+        // Variables globales
+        let currentMode = 'add'; // 'add' ou 'update'
+        var projets = [];
+          var ministeres = [];
+          var portefeuilles = [];
+          var programmes = [];
+          var axes = [];
+          var composantes = [];
+          var problemes = [];
+
+          // Charger les données depuis l'API
+          function loadData() {
+            $.ajax({
+              url: "{% url 'data_get_view' %}",  // Assurez-vous que l'URL est correcte
+              type: "GET",
+              dataType: "json",
+              success: function(data) {
+                projets = data.Projets;
+                programmes = data.Programmes;
+                portefeuilles = data.Portefeuilles;
+                axes = data.Axes;
+                composantes = data.Composantes;
+                problemes = data.Problemes;
+
+                // Extraire les ministères uniques
+                ministeres = [];
+                for (var i = 0; i < projets.length; i++) {
+                  if (projets[i].ministere_responsable && 
+                      !ministeres.includes(projets[i].ministere_responsable)) {
+                    ministeres.push(projets[i].ministere_responsable);
+                  }
+                }
+
+                ministeres.sort();
+                $("#ministere-dropdown-list").empty();
+                for (var i = 0; i < ministeres.length; i++) {
+                  var ministereItem = `
+                    <li>
+                      <a class="dropdown-item py-2 ministere-item" href="javascript:void(0);" data-ministere="${ministeres[i]}">
+                        ${ministeres[i]}
+                      </a>
+                    </li>
+                  `;
+                  $("#ministere-dropdown-list").append(ministereItem);
+                }
+              },
+              error: function(xhr, status, error) {
+                console.error("Erreur lors du chargement des données:", error);
+                $("#ministere-dropdown-list").html("<li><a class='dropdown-item'>Erreur de chargement</a></li>");
+              }
+            });
+          }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProgrammes();
+            document.getElementById('projet-form').addEventListener('submit', handleSubmit);
+        });
+        
+        // Afficher le formulaire modal
+        function showForm(mode) {
+            currentMode = mode;
+            
+            // Afficher la modal
+            document.getElementById('form-modal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Empêcher le défilement du body
+            
+            // Afficher/masquer le sélecteur de projet
+            document.getElementById('update-form-fields').style.display = mode === 'update' ? 'block' : 'none';
+            
+            // Mise à jour du titre et bouton
+            document.getElementById('form-title').textContent = mode === 'add' ? 'Ajouter un Nouveau Projet' : 'Mettre à Jour un Projet';
+            document.getElementById('submit-btn').textContent = mode === 'add' ? 'Créer le Projet' : 'Mettre à Jour';
+            
+            // Réinitialiser le formulaire
+            resetForm();
+            
+            // Si mode mise à jour, charger les projets
+            if (mode === 'update') {
+                loadProjets();
+            }
+        }
+        
+        // Fermer la modal
+        function closeModal() {
+            document.getElementById('form-modal').classList.remove('active');
+            document.body.style.overflow = ''; // Restaurer le défilement
+            resetForm();
+        }
+
+        // Chargement des programmes dans le sélecteur
+        function loadProgrammes() {
+            const select = document.getElementById('programme');
+            
+            // Conserver l'option par défaut
+            const defaultOption = select.options[0];
+            select.innerHTML = '';
+            select.appendChild(defaultOption);
+            
+            // Ajouter chaque programme
+            programmes.forEach(programme => {
+                const option = document.createElement('option');
+                option.value = programme.id;
+                option.textContent = programme.nom;
+                select.appendChild(option);
+            });
+        }
+
+        // Chargement des projets dans le sélecteur (pour la mise à jour)
+        function loadProjets() {
+            const select = document.getElementById('projet-select');
+            
+            // Conserver l'option par défaut
+            const defaultOption = select.options[0];
+            select.innerHTML = '';
+            select.appendChild(defaultOption);
+            
+            // Simuler la récupération des projets depuis le backend
+            // Normalement, cela serait fait via une requête AJAX
+            /*const mockProjets = [
+                { id: 1, identifiant: "PROJ001", nom: "Rénovation urbaine centre-ville" },
+                { id: 2, identifiant: "PROJ002", nom: "Développement plateforme e-services" },
+                { id: 3, identifiant: "PROJ003", nom: "Protection biodiversité marine" }
+            ];*/
+            
+            // Ajouter chaque projet
+            projets.forEach(projet => {
+                const option = document.createElement('option');
+                option.value = projet.id;
+                option.textContent = `${projet.identifiant} - ${projet.nom}`;
+                select.appendChild(option);
+            });
+            
+            // Écouter les changements de sélection
+            select.addEventListener('change', loadProjetDetails);
+        }
+
+        // Chargement des détails d'un projet sélectionné
+        function loadProjetDetails() {
+            const projetId = document.getElementById('projet-select').value;
+            
+            if (!projetId) return;
+            
+            // Simuler la récupération des détails du projet depuis le backend
+            // Normalement, cela serait fait via une requête AJAX
+            /*const mockProjetDetails = {
+                id: 2,
+                programme: 3,
+                identifiant: "PROJ002",
+                nom: "Développement plateforme e-services",
+                est_lance: true,
+                ministere_responsable: "Ministère de la Transformation Numérique",
+                chef_projet: "Marie Dupont",
+                email: "marie.dupont@admin.gouv.fr",
+                tel: "01 23 45 67 89"
+            };*/
+            
+            // Remplir le formulaire avec les détails
+            document.getElementById('programme').value = projets.programme;
+            document.getElementById('identifiant').value = projets.identifiant;
+            document.getElementById('nom').value = projets.nom;
+            document.getElementById('est_lance').checked = projets.est_lance;
+            document.getElementById('ministere_responsable').value = projets.ministere_responsable;
+            document.getElementById('chef_projet').value = projets.chef_projet;
+            document.getElementById('email').value = projets.email;
+            document.getElementById('tel').value = projets.tel;
+        }
+
+        // Gestion de la soumission du formulaire
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            // Validation simple
+            const requiredFields = ['programme', 'identifiant', 'nom', 'ministere_responsable', 'chef_projet', 'email'];
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field);
+                if (!input.value.trim()) {
+                    input.style.borderColor = 'var(--error)';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '#ddd';
+                }
+            });
+            
+            // Validation email
+            const emailInput = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailInput.value && !emailRegex.test(emailInput.value)) {
+                emailInput.style.borderColor = 'var(--error)';
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                showMessage('error', 'Veuillez remplir tous les champs obligatoires correctement.');
+                return;
+            }
+            
+            // Récupération des données du formulaire
+            const formData = {
+                programme: document.getElementById('programme').value,
+                identifiant: document.getElementById('identifiant').value,
+                nom: document.getElementById('nom').value,
+                est_lance: document.getElementById('est_lance').checked,
+                ministere_responsable: document.getElementById('ministere_responsable').value,
+                chef_projet: document.getElementById('chef_projet').value,
+                email: document.getElementById('email').value,
+                tel: document.getElementById('tel').value
+            };
+            
+            // Dans un cas réel, on enverrait ces données au backend
+            console.log("Données à envoyer:", formData);
+            console.log("Mode:", currentMode);
+            
+            // Simuler une requête réussie
+            setTimeout(() => {
+                showMessage('success', currentMode === 'add' ? 
+                    'Projet créé avec succès!' : 
+                    'Projet mis à jour avec succès!');
+                resetForm();
+                
+                // Fermer la modal après un succès
+                setTimeout(() => {
+                    closeModal();
+                }, 1500);
+            }, 500);
+        }
+
+        // Afficher un message de succès ou d'erreur
+        function showMessage(type, text) {
+            const successMsg = document.getElementById('success-message');
+            const errorMsg = document.getElementById('error-message');
+            
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            if (type === 'success') {
+                successMsg.textContent = text;
+                successMsg.style.display = 'block';
+            } else {
+                errorMsg.textContent = text;
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // Réinitialiser le formulaire
+        function resetForm() {
+            document.getElementById('projet-form').reset();
+            
+            // Masquer les messages
+            document.getElementById('success-message').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+            
+            // Réinitialiser les bordures
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.style.borderColor = '#ddd';
+            });
+            
+            // Si en mode mise à jour, réinitialiser également le sélecteur de projet
+            if (currentMode === 'update') {
+                document.getElementById('projet-select').value = '';
+            }
+        }
+      </script>
+
+
+      <!-- Carte 2 : Composantes -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card shadow-sm border-0" style="background-color: #f2fdf4;">
+          <div class="card-header text-center" style="background-color: #004600; color: white;">
+            <h6 class="mb-0" style="color: #FFFFFF">Composantes</h6>
+          </div>
+          <div class="card-body d-flex flex-column align-items-center">
+            <button class="btn btn-success mb-2 w-75" style="background-color: #004600;">Ajouter une Composante</button>
+            <button class="btn btn-outline-success w-75" style="border-color: #004600; color: #004600;">Mettre à jour une Composante</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carte 3 : Activités -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card shadow-sm border-0" style="background-color: #f2fdf4;">
+          <div class="card-header text-center" style="background-color: #004600; color: white;">
+            <h6 class="mb-0" style="color: #FFFFFF">Activités</h6>
+          </div>
+          <div class="card-body d-flex flex-column align-items-center">
+            <button class="btn btn-success mb-2 w-75" style="background-color: #004600;">Ajouter une Activité</button>
+            <button class="btn btn-outline-success w-75" style="border-color: #004600; color: #004600;">Mettre à jour une Activité</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<div class="fixed-plugin">
+  <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+    <i class="material-symbols-rounded py-2">settings</i>
+  </a>
+  <div class="card shadow-lg">
+    <div class="card-header pb-0 pt-3">
+      <div class="float-start">
+        <h5 class="mt-3 mb-0">Material UI Configurator</h5>
+        <p>See our dashboard options.</p>
+      </div>
+      <div class="float-end mt-4">
+        <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
+          <i class="material-symbols-rounded">clear</i>
+        </button>
+      </div>
+      <!-- End Toggle Button -->
+    </div>
+    <hr class="horizontal dark my-1">
+    <div class="card-body pt-sm-3 pt-0">
+      <!-- Sidebar Backgrounds -->
+      <div>
+        <h6 class="mb-0">Sidebar Colors</h6>
+      </div>
+      <a href="javascript:void(0)" class="switch-trigger background-color">
+        <div class="badge-colors my-2 text-start">
+          <span class="badge filter bg-gradient-primary" data-color="primary" onclick="sidebarColor(this)"></span>
+          <span class="badge filter bg-gradient-dark active" data-color="dark" onclick="sidebarColor(this)"></span>
+          <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
+          <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
+          <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
+          <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
+        </div>
+      </a>
+      <!-- Sidenav Type -->
+      <div class="mt-3">
+        <h6 class="mb-0">Sidenav Type</h6>
+        <p class="text-sm">Choose between different sidenav types.</p>
+      </div>
+      <div class="d-flex">
+        <button class="btn bg-gradient-dark px-3 mb-2" data-class="bg-gradient-dark" onclick="sidebarType(this)">Dark</button>
+        <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
+        <button class="btn bg-gradient-dark px-3 mb-2  active ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
+      </div>
+      <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
+      <!-- Navbar Fixed -->
+      <div class="mt-3 d-flex">
+        <h6 class="mb-0">Navbar Fixed</h6>
+        <div class="form-check form-switch ps-0 ms-auto my-auto">
+          <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
+        </div>
+      </div>
+      <hr class="horizontal dark my-3">
+      <div class="mt-2 d-flex">
+        <h6 class="mb-0">Light / Dark</h6>
+        <div class="form-check form-switch ps-0 ms-auto my-auto">
+          <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)">
+        </div>
+      </div>
+      <hr class="horizontal dark my-sm-4">
+      <a class="btn bg-gradient-info w-100" href="https://www.creative-tim.com/product/material-dashboard-pro">Free Download</a>
+      <a class="btn btn-outline-dark w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard">View documentation</a>
+      <div class="w-100 text-center">
+        <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
+        <h6 class="mt-3">Thank you for sharing!</h6>
+        <a href="https://twitter.com/intent/tweet?text=Check%20Material%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
+          <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/material-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
+          <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> Share
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock%}

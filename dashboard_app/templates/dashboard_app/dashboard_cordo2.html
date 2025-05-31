@@ -1,0 +1,537 @@
+{% extends "dashboard_app/base.html" %}
+
+{% block titre%} Dashboard Coordonnateur {% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Filtres hiérarchiques</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Niveau 1</label>
+                            <div class="dropdown">
+                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" type="button" id="dropdownL1Button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span id="selectedL1">Tous</span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownL1Button" id="l1DropdownMenu">
+                                    <li><a class="dropdown-item" href="#" onclick="updateL1Filter('all', 'Tous'); return false;">Tous</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="updateL1Filter('axe', 'Axe'); return false;">Axe</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="updateL1Filter('portefeuille', 'Portefeuille'); return false;">Portefeuille</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="updateL1Filter('ministere', 'Ministère responsable'); return false;">Ministère responsable</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Niveau 2</label>
+                            <div class="dropdown">
+                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" type="button" id="dropdownL2Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                                    <span id="selectedL2">Sélectionnez d'abord le niveau 1</span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownL2Button" id="l2DropdownMenu">
+                                    <li><a class="dropdown-item" href="#">Sélectionnez d'abord le niveau 1</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Programme</label>
+                            <div class="dropdown">
+                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" 
+                                style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" 
+                                type="button" id="dropdownL3Button" data-bs-toggle="dropdown" 
+                                aria-expanded="false" disabled>
+                                    <span id="selectedL3">Sélectionnez d'abord le niveau 2</span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownL3Button" id="l3DropdownMenu">
+                                    <li><a class="dropdown-item" href="#">Sélectionnez d'abord le niveau 2</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Projet</label>
+                            <div class="dropdown">
+                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" type="button" id="dropdownL4Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                                    <span id="selectedL4">Sélectionnez d'abord le programme</span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownL4Button" id="l4DropdownMenu">
+                                    <li><a class="dropdown-item" href="#">Sélectionnez d'abord le programme</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">Composante</label>
+                            <div class="dropdown">
+                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" type="button" id="dropdownL5Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                                    <span id="selectedL5">Sélectionnez d'abord le projet</span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownL5Button" id="l5DropdownMenu">
+                                    <li><a class="dropdown-item" href="#">Sélectionnez d'abord le projet</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Le reste de votre code reste inchangé -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Statistiques</h4>
+                </div>
+                <div class="card-body" id="stats-container">
+                    <p>Sélectionnez un filtre pour voir les statistiques</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Détails de la composante</h4>
+                </div>
+                <div class="card-body" id="composante-details">
+                    <p>Sélectionnez une composante pour voir les détails</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Messages associés</h4>
+                </div>
+                <div class="card-body" id="messages-container">
+                    <p>Sélectionnez une composante pour voir les messages associés</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Variables pour les dropdowns
+    const dropdownL1Button = document.getElementById('dropdownL1Button');
+    const dropdownL2Button = document.getElementById('dropdownL2Button');
+    const dropdownL3Button = document.getElementById('dropdownL3Button');
+    const dropdownL4Button = document.getElementById('dropdownL4Button');
+    const dropdownL5Button = document.getElementById('dropdownL5Button');
+    
+    const l2DropdownMenu = document.getElementById('l2DropdownMenu');
+    const l3DropdownMenu = document.getElementById('l3DropdownMenu');
+    const l4DropdownMenu = document.getElementById('l4DropdownMenu');
+    const l5DropdownMenu = document.getElementById('l5DropdownMenu');
+    
+    // Variables pour stocker les valeurs sélectionnées
+    let l1Value = 'all';
+    let l2Value = null;
+    let l3Value = null;
+    let l4Value = null;
+    let l5Value = null;
+    
+    // Fonction pour mettre à jour le filtre L1
+    window.updateL1Filter = function(value, displayText) {
+        l1Value = value;
+        document.getElementById('selectedL1').textContent = displayText;
+        resetFilters([dropdownL2Button, dropdownL3Button, dropdownL4Button, dropdownL5Button]);
+        
+        if (value !== 'all') {
+            fetchL2Options(value);
+        } else {
+            fetchGlobalStats();
+        }
+    };
+    
+    // Fonction pour mettre à jour le filtre L2
+    window.updateL2Filter = function(value, displayText) {
+        l2Value = value;
+        document.getElementById('selectedL2').textContent = displayText;
+        resetFilters([dropdownL3Button, dropdownL4Button, dropdownL5Button]);
+        
+        if (value) {
+            fetchL3Options(l1Value, value);
+            fetchStats(l1Value, value);
+        }
+    };
+    
+    // Fonction pour mettre à jour le filtre L3
+    window.updateL3Filter = function(value, displayText) {
+        l3Value = value;
+        document.getElementById('selectedL3').textContent = displayText;
+        resetFilters([dropdownL4Button, dropdownL5Button]);
+        
+        if (value) {
+            fetchL4Options(value);
+        }
+    };
+    
+    // Fonction pour mettre à jour le filtre L4
+    window.updateL4Filter = function(value, displayText) {
+        l4Value = value;
+        document.getElementById('selectedL4').textContent = displayText;
+        resetFilters([dropdownL5Button]);
+        
+        if (value) {
+            fetchL5Options(value);
+        }
+    };
+    
+    // Fonction pour mettre à jour le filtre L5
+    window.updateL5Filter = function(value, displayText) {
+        l5Value = value;
+        document.getElementById('selectedL5').textContent = displayText;
+        
+        if (value) {
+            fetchComposanteDetails(value);
+            fetchMessages(value);
+        }
+    };
+    
+    // Fonctions utilitaires
+    function resetFilters(filters) {
+        filters.forEach(filter => {
+            if (!filter) return; // Vérification si l'élément existe
+            
+            filter.disabled = true;
+            const spanId = filter.id.replace('dropdown', 'selected').replace('Button', '');
+            const spanElement = document.getElementById(spanId);
+            if (spanElement) {
+                spanElement.textContent = 'Sélectionnez d\'abord le niveau précédent';
+            }
+            
+            const menuId = filter.id.replace('Button', 'Menu');
+            const menu = document.getElementById(menuId);
+            if (menu) {
+                menu.innerHTML = '<li><a class="dropdown-item" href="#">Sélectionnez d\'abord le niveau précédent</a></li>';
+            }
+        });
+    }
+    
+    function fetchL2Options(l1Value) {
+        const url = `/api/filters/l2/?l1=${l1Value}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                dropdownL2Button.disabled = false;
+                document.getElementById('selectedL2').textContent = 'Sélectionnez une option';
+                
+                if (l2DropdownMenu) {
+                    l2DropdownMenu.innerHTML = '';
+                    data.options.forEach(option => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.className = 'dropdown-item';
+                        a.href = '#';
+                        a.textContent = option.name;
+                        a.onclick = function() {
+                            updateL2Filter(option.id, option.name);
+                            return false;
+                        };
+                        li.appendChild(a);
+                        l2DropdownMenu.appendChild(li);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching L2 options:', error);
+            });
+    }
+    
+    function fetchL3Options(l1Value, l2Value) {
+        const url = `/api/filters/l3/?l1=${l1Value}&l2=${l2Value}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                dropdownL3Button.disabled = false;
+                document.getElementById('selectedL3').textContent = 'Sélectionnez un programme';
+                
+                if (l3DropdownMenu) {
+                    l3DropdownMenu.innerHTML = '';
+                    data.options.forEach(option => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.className = 'dropdown-item';
+                        a.href = '#';
+                        a.textContent = option.name;
+                        a.onclick = function() {
+                            updateL3Filter(option.id, option.name);
+                            return false;
+                        };
+                        li.appendChild(a);
+                        l3DropdownMenu.appendChild(li);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching L3 options:', error);
+            });
+    }
+    
+    function fetchL4Options(l3Value) {
+        const url = `/api/filters/l4/?l3=${l3Value}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                dropdownL4Button.disabled = false;
+                document.getElementById('selectedL4').textContent = 'Sélectionnez un projet';
+                
+                if (l4DropdownMenu) {
+                    l4DropdownMenu.innerHTML = '';
+                    data.options.forEach(option => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.className = 'dropdown-item';
+                        a.href = '#';
+                        a.textContent = option.name;
+                        a.onclick = function() {
+                            updateL4Filter(option.id, option.name);
+                            return false;
+                        };
+                        li.appendChild(a);
+                        l4DropdownMenu.appendChild(li);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching L4 options:', error);
+            });
+    }
+    
+    function fetchL5Options(l4Value) {
+        const url = `/api/filters/l5/?l4=${l4Value}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                dropdownL5Button.disabled = false;
+                document.getElementById('selectedL5').textContent = 'Sélectionnez une composante';
+                
+                if (l5DropdownMenu) {
+                    l5DropdownMenu.innerHTML = '';
+                    data.options.forEach(option => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.className = 'dropdown-item';
+                        a.href = '#';
+                        a.textContent = option.name;
+                        a.onclick = function() {
+                            updateL5Filter(option.id, option.name);
+                            return false;
+                        };
+                        li.appendChild(a);
+                        l5DropdownMenu.appendChild(li);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching L5 options:', error);
+            });
+    }
+    
+    // Les fonctions fetchStats, fetchGlobalStats, fetchComposanteDetails et fetchMessages restent inchangées
+    function fetchStats(l1Value, l2Value) {
+        const url = `/api/stats/?l1=${l1Value}&l2=${l2Value}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const statsContainer = document.getElementById('stats-container');
+                if (statsContainer) {
+                    statsContainer.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Programmes</h5>
+                                        <p class="card-text display-4">${data.program_count}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Projets</h5>
+                                        <p class="card-text display-4">${data.project_count}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Projets démarrés</h5>
+                                        <p class="card-text display-4">${data.started_project_count}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Responsable</h5>
+                                        <p class="card-text">${data.responsable || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching stats:', error);
+            });
+    }
+    
+    function fetchGlobalStats() {
+        const url = `/api/stats/global/`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const statsContainer = document.getElementById('stats-container');
+                if (statsContainer) {
+                    statsContainer.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Axes</h5>
+                                        <p class="card-text display-4">${data.axe_count}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Portefeuilles</h5>
+                                        <p class="card-text display-4">${data.portefeuille_count}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Programmes</h5>
+                                        <p class="card-text display-4">${data.program_count}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Projets</h5>
+                                        <p class="card-text display-4">${data.project_count}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching global stats:', error);
+            });
+    }
+    
+    function fetchComposanteDetails(composanteId) {
+        const url = `/api/composantes/${composanteId}/`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const detailsContainer = document.getElementById('composante-details');
+                if (detailsContainer) {
+                    detailsContainer.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>${data.nom}</h5>
+                                <p><strong>Localisation:</strong> ${data.localisation}</p>
+                                <p><strong>Tutelle:</strong> ${data.tutelle}</p>
+                                <p><strong>Statut:</strong> ${data.statut}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6>Financement</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Cible fin d'année:</strong> ${data.cible_fin_annee}%</p>
+                                        <p><strong>Décaissement:</strong> ${data.taux_decaissement}%</p>
+                                        <div class="progress mt-2">
+                                            <div class="progress-bar" role="progressbar" style="width: ${data.taux_decaissement}%" 
+                                                aria-valuenow="${data.taux_decaissement}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching composante details:', error);
+            });
+    }
+    
+    function fetchMessages(composanteId) {
+        const url = `/api/messages/?composante=${composanteId}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const messagesContainer = document.getElementById('messages-container');
+                
+                if (!messagesContainer) return;
+                
+                if (data.length === 0) {
+                    messagesContainer.innerHTML = '<p>Aucun message associé à cette composante</p>';
+                    return;
+                }
+                
+                let html = '<div class="list-group">';
+                data.forEach(message => {
+                    html += `
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">${message.probleme || 'Message général'}</h6>
+                                <small>${message.date_creation}</small>
+                            </div>
+                            <p class="mb-1">${message.contenu}</p>
+                            ${message.remonter_message_tdb ? '<span class="badge bg-warning">Tableau de bord</span>' : ''}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                
+                messagesContainer.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error fetching messages:', error);
+            });
+    }
+});
+</script>
+
+</main>
+
+{% endblock%}

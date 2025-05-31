@@ -1,0 +1,511 @@
+{% extends "dashboard_app/base.html" %}
+{% block titre%} Table activités {% endblock %}
+{% block content %}
+
+{% load static %}
+
+
+
+
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" style="background: #f8f9fa;">
+  
+    
+  <!-- Navbar -->
+    <br>
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-sm border-radius-xl position-sticky blur border-radius-lg" id="navbarBlur" data-scroll="true" style="backdrop-filter: blur(10px); z-index: 1030;">
+      <div class="container-fluid py-1 px-3">
+        <div class="navbar-brand d-flex align-items-center">
+          <span class="font-weight-bold text-lg" style="color: #004600;">Bonjour, <span  style="color: #004600;"> {{ request.user.username }}</span></span>
+        </div>
+        
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 justify-content-end" id="navbar">
+          <ul class="navbar-nav d-flex align-items-center">
+            
+            <!-- Notification Dropdown -->
+            <li class="nav-item dropdown pe-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0 position-relative" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="material-symbols-rounded cursor-pointer transition-all hover:text-primary">notifications</i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4 animate__animated animate__fadeIn animate__faster" aria-labelledby="dropdownMenuButton" style="min-width: 360px;">
+                <li class="mb-2">
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="javascript:;">
+                    <div class="d-flex py-1">
+                      <div class="my-auto">
+                        <img src="#" class="avatar avatar-sm me-3 bg-gradient-faded-info">
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="text-sm font-weight-normal mb-1">
+                          <span class="font-weight-bold text-dark">New message</span> from Laur
+                        </h6>
+                        <p class="text-xs text-muted mb-0">
+                          <i class="fa fa-clock me-1 opacity-6"></i>
+                          13 minutes ago
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li class="mb-2">
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="javascript:;">
+                    <div class="d-flex py-1">
+                      <div class="my-auto">
+                        <img src="#" class="avatar avatar-sm bg-gradient-dark me-3">
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="text-sm font-weight-normal mb-1">
+                          <span class="font-weight-bold text-dark">New album</span> by Travis Scott
+                        </h6>
+                        <p class="text-xs text-muted mb-0">
+                          <i class="fa fa-clock me-1 opacity-6"></i>
+                          1 day
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="javascript:;">
+                    <div class="d-flex py-1">
+                      <div class="avatar avatar-sm bg-gradient-secondary me-3 my-auto">
+                        <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1">
+                          <title>credit-card</title>
+                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                              <g transform="translate(1716.000000, 291.000000)">
+                                <g transform="translate(453.000000, 454.000000)">
+                                  <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
+                                  <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+                                </g>
+                              </g>
+                            </g>
+                          </g>
+                        </svg>
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="text-sm font-weight-normal mb-1">
+                          <span class="text-dark">Payment</span> successfully completed
+                        </h6>
+                        <p class="text-xs text-muted mb-0">
+                          <i class="fa fa-clock me-1 opacity-6"></i>
+                          2 days
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            
+            <!-- User Profile Dropdown -->
+            <li class="nav-item dropdown d-flex align-items-center ps-2">
+              <a href="javascript:;" class="nav-link text-body font-weight-bold px-0 d-flex align-items-center" id="userProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="material-symbols-rounded me-2 text-dark cursor-pointer transition-all hover:text-primary">account_circle</i>
+                <span class="d-none d-sm-inline text-sm text-dark">{{ request.user.username }}</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4 animate__animated animate__fadeIn animate__faster" aria-labelledby="userProfileDropdown">
+                <li class="mb-2">
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="{% url 'profile' %}">
+                    <div class="d-flex py-1 align-items-center" >
+                      <i class="material-symbols-rounded text-primary me-3">person</i>
+                      <h6 class="text-sm font-weight-normal mb-0 text-dark">
+                        Mon Profil
+                      </h6>
+                    </div>
+                  </a>
+                </li>
+                <!-- <li class="mb-2">
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="javascript:;">
+                    <div class="d-flex py-1 align-items-center">
+                      <i class="material-symbols-rounded text-primary me-3">settings</i>
+                      <h6 class="text-sm font-weight-normal mb-0 text-dark">
+                        Paramètres
+                      </h6>
+                    </div>
+                  </a>
+                </li> -->
+                <li>
+                  <a class="dropdown-item border-radius-md transition-all hover:bg-gray-100" href="{% url 'log_out' %}">
+                    <div class="d-flex py-1 align-items-center">
+                      <i class="material-symbols-rounded text-danger me-3">logout</i>
+                      <h6 class="text-sm font-weight-normal mb-0 text-dark">
+                        Déconnexion
+                      </h6>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+  <!-- Header avec titre et boutons d'actions -->
+  <div class="d-flex justify-content-between align-items-center mb-4 px-4 pt-4">
+    <h1 class=" mb-0" style="font-weight: 600; color: #004600;">Gestion des activités</h1>
+    <div>
+      <a href="{% url 'ajout_activite'%}" class="btn btn-sm btn-primary" id="add-row-btn" style="background: linear-gradient(135deg, #004600, #007a00);">
+        <i class="fas fa-plus me-1"></i> Nouvelle activité
+      </a>
+    <a href="{% url 'import_activite' %}" class="btn btn-sm btn-primary" id="import-btn" style="background: linear-gradient(135deg, #004600, #007a00);">
+      <i class="fas fa-upload me-1"></i> Importer un CSV
+    </a>
+    </div>
+  </div>
+
+  <!-- Barre de recherche globale -->
+    <div class="px-4 mb-4">
+      <div class="card shadow rounded-4 border-0">
+          <div class="card-body p-4">
+          <div class="row align-items-center g-3">
+              <!-- Champ de recherche -->
+              <div class="col-md-7">
+              <div class="input-group input-group-lg">
+                  <span class="input-group-text bg-white border-end-0 rounded-start-3">
+                  <i class="fas fa-search text-muted"></i>
+                  </span>
+                  <input type="text" id="global-search" class="form-control border-start-0 rounded-end-0" placeholder="Rechercher dans tous les activités...">
+                  <button class="btn btn-success px-4 rounded-end-3" type="button" id="search-button" style="background: linear-gradient(135deg, #004600, #007a00);">
+                  <i class="fas fa-search me-2"></i> Rechercher
+                  </button>
+              </div>
+              </div>
+
+              <!-- Bouton réinitialiser -->
+              <div class="col-md-5">
+              <button class="btn btn-outline-dark w-100 btn-lg rounded-3" type="button" id="reset-filters">
+                  <i class="fas fa-undo me-2"></i> Réinitialiser
+              </button>
+              </div>
+          </div>
+          </div>
+      </div>
+    </div>
+
+
+  <!-- Tableau -->
+    <div class="px-4">
+      <div class="card shadow-sm">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0" id="projets-table">
+            <thead style="background: linear-gradient(135deg, #004600, #007a00);">
+              <tr>
+                <th scope="col" class="text-white py-3">Composante</th>
+                <th scope="col" class="text-white py-3">Identifiant</th>
+                <th scope="col" class="text-white py-3">Nom de l'activité</th>
+                <th scope="col" class="text-white py-3 text-center">Pondération</th>
+                <th scope="col" class="text-white py-3">P. prév T1</th>
+                <th scope="col" class="text-white py-3">P. prév T2</th>
+                <th scope="col" class="text-white py-3">P. prév T3</th>
+                <th scope="col" class="text-white py-3">P. prév T4</th>
+                <th scope="col" class="text-white py-3">P. Cible en fin d'année</th>
+                <th scope="col" class="text-white py-3">P. réalisé T1</th>
+                <th scope="col" class="text-white py-3">P. réalisé T2</th>
+                <th scope="col" class="text-white py-3">P. réalisé T3</th>
+                <th scope="col" class="text-white py-3">P. réalisé T4</th>
+                <th scope="col" class="text-white py-3">Avancement physique</th>
+                <th scope="col" class="text-white py-3 text-center">Actions</th>
+              </tr>
+              <tr id="filter-row" style="background-color: #e9ecef;">
+                <td>
+                  <select class="form-select form-select-sm filter-select" data-column="0">
+                    <option value="">Tous</option>
+                    {% for composante in Composantes %}
+                    <option value="{{ composante.nom }}">{{ composante.nom }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="1" placeholder="Filtrer..."></td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="2" placeholder="Filtrer..."></td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="3" placeholder="Filtrer..."></td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="4" placeholder="Filtrer..."></td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="5" placeholder="Filtrer..."></td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="6" placeholder="Filtrer..."></td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="7" placeholder="Filtrer..."></td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="8" placeholder="Filtrer..."></td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="9" placeholder="Filtrer..."></td>
+                <td><input type="text" class="form-control form-control-sm filter-input" data-column="10" placeholder="Filtrer..."></td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              {% for activite in Activites %}
+              <tr>
+                <td class="align-middle">{{ activite.composante.nom }}</td>
+                <td class="align-middle">{{ activite.identifiant }}</td>
+                <td class="align-middle">{{ activite.nom }}</td>
+                <td class="align-middle text-center">{{ activite.ponderation }}</td>
+                <td class="align-middle">{{ activite.prev_t1 }}</td>
+                <td class="align-middle">{{ activite.prev_t2 }}</td>
+                <td class="align-middle">{{ activite.prev_t3 }}</td>
+                <td class="align-middle">{{ activite.prev_t4 }}</td>
+                <td class="align-middle text-center">{{ activite.cible_fin_annee }}</td>
+                <td class="align-middle">{{ activite.realise_t1 }}</td>
+                <td class="align-middle">{{ activite.realise_t2 }}</td>
+                <td class="align-middle">{{ activite.realise_t3 }}</td>
+                <td class="align-middle">{{ activite.realise_t4 }}</td>
+                <td class="align-middle">{{ activite.avancement_physique }}</td>
+                <td class="align-middle text-center">
+                  <a href="{% url 'modifie_activite'  activite.id %}" class="btn btn-sm btn-outline-primary me-1">
+                    <i class="fas fa-edit"> Modifier</i>
+                  </a>
+                  <a href="" class="btn btn-sm btn-outline-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce projet?');">
+                    <i class="fas fa-trash"> Supprimer</i>
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="9" class="text-center py-4">Aucun projet trouvé</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="card-footer bg-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="text-muted">
+              Affichage de <span id="start-row">1</span> à <span id="end-row">{{ Activites|length }}</span> sur <span id="total-rows">{{ Activites|length }}</span> activités
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  
+<br>
+
+
+<div class="px-4">
+        <h2 class="mt-4 mb-4" style="font-weight: 600; color: #004600;">Historique de toutes les activités</h2>
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0" id="projets-table">
+        <thead style="background: linear-gradient(135deg, #004600, #007a00);">
+          <tr>
+            <th scope="col" class="text-white py-3">Date</th>
+            <th scope="col" class="text-white py-3">Type</th>
+            <th scope="col" class="text-white py-3">Utilisateur</th>
+            <th scope="col" class="text-white py-3 text-center">Nom de l'activité</th>
+            <th scope="col" class="text-white py-3">Raison du changement</th>
+            <th scope="col" class="text-white py-3">changement</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          {% for h, changements in historiques_activite %}
+          <tr>
+            <td class="align-middle">{{ h.history_date|date:"d/m/Y H:i" }}</td>
+            <td class="align-middle">
+              {% if h.history_type == '+' %} Création
+              {% elif h.history_type == '~' %} Modification
+              {% elif h.history_type == '-' %} Suppression
+              {% endif %}
+            </td>
+            <td class="align-middle">{{ h.history_user|default:"Système" }}</td>
+            <td class="align-middle text-center">{{ h.nom }} </td>
+            <td class="align-middle">{{ h.history_change_reason }}</td>
+            <td>
+              {% if changements %}
+                <ul>
+                  {% for c in changements %}
+                    <li><strong>{{ c.field }}</strong> : {{ c.old }} → {{ c.new }}</li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                Aucun changement détecté
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="9" class="text-center py-4">Aucune historique pour le moment</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<br>
+<br>
+<br>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const rows = document.querySelectorAll("#projets-table tbody tr");
+  const rowsPerPage = 10;
+  const totalRows = rows.length;
+  const pageCount = Math.ceil(totalRows / rowsPerPage);
+  const footer = document.querySelector(".card-footer .d-flex");
+
+  // Crée les boutons de pagination
+  const pagination = document.createElement("div");
+  pagination.classList.add("pagination");
+
+  for (let i = 1; i <= pageCount; i++) {
+    const btn = document.createElement("button");
+    btn.innerText = i;
+    btn.className = "btn btn-sm btn-outline-secondary mx-1";
+    btn.addEventListener("click", () => showPage(i));
+    pagination.appendChild(btn);
+  }
+
+  footer.appendChild(pagination);
+
+  function showPage(page) {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    rows.forEach((row, index) => {
+      row.style.display = index >= start && index < end ? "" : "none";
+    });
+
+    // Met à jour le compteur de lignes affichées
+    document.getElementById("start-row").innerText = start + 1;
+    document.getElementById("end-row").innerText = Math.min(end, totalRows);
+  }
+
+  // Affiche la première page par défaut
+  showPage(1);
+});
+</script>
+
+<script>
+$(document).ready(function() {
+  // Bouton de recherche
+  $('#search-button').on('click', function() {
+    applyFilters();
+  });
+  
+  // Permettre la recherche en appuyant sur Entrée dans le champ de recherche
+  $('#global-search').on('keypress', function(e) {
+    if (e.which === 13) { // Code touche Entrée
+      applyFilters();
+    }
+  });
+
+  // Écouteurs pour les filtres individuels par colonne
+  $('.filter-input').on('keypress', function(e) {
+    if (e.which === 13) { // Appliquer le filtre quand on appuie sur Entrée
+      applyFilters();
+    }
+  });
+  
+  // Application directe des filtres lorsqu'on change un select
+  $('.filter-select').on('change', function() {
+    applyFilters();
+  });
+  
+  // Réinitialisation des filtres
+  $('#reset-filters').on('click', function() {
+    // Réinitialiser la recherche globale
+    $('#global-search').val('');
+    
+    // Réinitialiser les filtres par colonne
+    $('.filter-input').val('');
+    $('.filter-select').val('');
+    
+    // Réafficher toutes les lignes
+    $('#projets-table tbody tr').show();
+    
+    // Mettre à jour les compteurs
+    const rowCount = $('#projets-table tbody tr').length;
+    $('#end-row').text(rowCount);
+    $('span#total-rows').text(rowCount);
+    
+    // Masquer le message "Aucun résultat"
+    $('#no-results-row').remove();
+  });
+  
+  function applyFilters() {
+    const globalSearch = $('#global-search').val().toLowerCase().trim();
+    const filters = [];
+    
+    // Récupération des filtres par colonne
+    $('.filter-input').each(function() {
+      const col = $(this).data('column');
+      const val = $(this).val().toLowerCase().trim();
+      if (val) filters.push({col, val, type: 'text'});
+    });
+    
+    $('.filter-select').each(function() {
+      const col = $(this).data('column');
+      const val = $(this).val();
+      if (val) filters.push({col, val, type: 'exact'});
+    });
+
+    let visibleCount = 0;
+    
+    // Application des filtres
+    $('#projets-table tbody tr').each(function() {
+      // Ignorer la ligne "Aucun projet trouvé" ou les lignes de message
+      if ($(this).find('td').length === 1) return;
+      
+      const row = $(this);
+      const cells = row.find('td');
+      let showRow = true;
+      
+      // Filtre global
+      if (globalSearch) {
+        let rowMatch = false;
+        cells.each(function() {
+          const cellText = $(this).text().toLowerCase();
+          if (cellText.includes(globalSearch)) {
+            rowMatch = true;
+            return false; // Sortir de la boucle si correspondance trouvée
+          }
+        });
+        if (!rowMatch) showRow = false;
+      }
+      
+      // Filtres par colonne
+      filters.forEach(filter => {
+        const cell = cells.eq(filter.col);
+        let cellContent = cell.text().toLowerCase().trim();
+        
+        // Pour les badges (statut)
+        if (filter.col === 3) {
+          cellContent = cell.find('.badge').text().toLowerCase().includes('lancé') ? 'true' : 'false';
+        }
+        
+        switch(filter.type) {
+          case 'text':
+            if (!cellContent.includes(filter.val.toLowerCase())) showRow = false;
+            break;
+          case 'exact':
+            if (cellContent !== filter.val.toLowerCase()) showRow = false;
+            break;
+        }
+      });
+      
+      if (showRow) visibleCount++;
+      row.toggle(showRow);
+    });
+    
+    // Mettre à jour le compteur
+    $('#end-row').text(visibleCount);
+    $('span#total-rows').text(visibleCount);
+    
+    // Si aucun résultat, afficher un message
+    if (visibleCount === 0) {
+      if ($('#no-results-row').length === 0) {
+        $('#projets-table tbody').append('<tr id="no-results-row"><td colspan="9" class="text-center py-4">Aucun projet ne correspond à votre recherche</td></tr>');
+      } else {
+        $('#no-results-row').show();
+      }
+    } else {
+      $('#no-results-row').hide();
+    }
+  }
+});
+</script>
+ 
+
+{% endblock %}

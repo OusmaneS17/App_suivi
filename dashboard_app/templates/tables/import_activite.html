@@ -1,0 +1,48 @@
+{% extends "dashboard_app/base.html" %}
+{% block titre %}Importer un fichier CSV {% endblock %}
+{% block content %}
+{% load static %}
+
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" style="background: #f8f9fa;">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-white border-bottom">
+            <h4 class="mb-0">Importer des activités depuis un fichier CSV</h4>
+          </div>
+          <div class="card-body">
+
+            {% if messages %}
+              <div class="mt-2">
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="mb-3">
+                {{ form.csv_file.label_tag }}
+                {{ form.csv_file }}
+                {% if form.csv_file.errors %}
+                  <div class="text-danger small">{{ form.csv_file.errors }}</div>
+                {% endif %}
+              </div>
+              <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #004600, #007a00); font-weight: 600;">Importer</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+{% endblock %}

@@ -1,0 +1,194 @@
+{% extends "dashboard_app/base.html" %}
+{% block titre%} Profil {% endblock %}
+{% block content %}
+
+{% load static %}
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" style="background: #f8f9fa;">
+
+<div class="container py-5">
+    <!-- Header du profil -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="profile-cover" style="background: linear-gradient(135deg, #004600, #007a00); font-weight: 600;; height: 200px;"></div>
+                    <div class="p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="me-4 mt-n5">
+                                <div class="avatar avatar-xxl border border-4 border-white rounded-circle shadow">
+                                    {% if user.profile.avatar %}
+                                        <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="rounded-circle">
+                                    {% else %}
+                                        <div class="avatar-initials bg-primary text-white display-4 rounded-circle d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;background: linear-gradient(135deg, #004600, #007a00); font-weight: 600;">
+                                            {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h2 class="mb-0">{{ user.get_full_name|default:user.username }}</h2>
+                                    <a href="{% url 'log_out' %}" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
+                                    </a>
+                                </div>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-envelope me-2"></i> {{ user.email }}
+                                </p>
+                                {% if user.profile.bio %}
+                                <p class="mb-0">{{ user.profile.bio }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section principale -->
+    <div class="row">
+        <!-- Colonne de gauche -->
+        <div class="col-lg-4">
+            <!-- Formulaire changement de mot de passe -->
+            <!-- Section Changement de mot de passe -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-0 pb-0">
+                    <h5 class="card-title">Changer le mot de passe</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'profile' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="change_password" value="true">
+                        
+                        <!-- Affichage des erreurs -->
+                        {% if password_form.errors %}
+                            <div class="alert alert-danger mb-3">
+                                {% for field, errors in password_form.errors.items %}
+                                    {% for error in errors %}
+                                        <p class="mb-1">{{ error }}</p>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Mot de passe actuel -->
+                        <div class="mb-3">
+                            <label for="id_old_password" class="form-label text-muted">Mot de passe actuel</label>
+                            <input type="password" name="old_password" class="form-control" 
+                                id="id_old_password" required>
+                        </div>
+                        
+                        <!-- Nouveau mot de passe -->
+                        <div class="mb-3">
+                            <label for="id_new_password1" class="form-label text-muted">Nouveau mot de passe</label>
+                            <input type="password" name="new_password1" class="form-control" 
+                                id="id_new_password1" required>
+                            <small class="text-muted">Minimum 8 caractères avec chiffres et lettres</small>
+                        </div>
+                        
+                        <!-- Confirmation -->
+                        <div class="mb-4">
+                            <label for="id_new_password2" class="form-label text-muted">Confirmation</label>
+                            <input type="password" name="new_password2" class="form-control" 
+                                id="id_new_password2" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #004600, #007a00); font-weight: 600;">
+                                <i class="fas fa-save me-1"></i> Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne de droite -->
+        <div class="col-lg-8">
+            <!-- Dernières activités -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-0 pb-0">
+                    <h5 class="card-title">Activités récentes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-badge bg-success"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">A terminé la tâche "Dashboard Design"</h6>
+                                <p class="text-muted small mb-0"><i class="far fa-clock me-1"></i> Il y a 2 heures</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-badge bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">A rejoint l'équipe "Frontend Developers"</h6>
+                                <p class="text-muted small mb-0"><i class="far fa-clock me-1"></i> Hier, 15:32</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-badge bg-info"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">A commenté le projet "E-commerce"</h6>
+                                <p class="text-muted small mb-0"><i class="far fa-clock me-1"></i> 12 Mars 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<main>
+
+<style>
+    .profile-cover {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+    
+    .avatar-initials {
+        font-weight: 600;
+        font-size: 2.5rem;
+    }
+    
+    .timeline {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+    
+    .timeline-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+        padding-left: 1.5rem;
+        border-left: 1px solid #e9ecef;
+    }
+    
+    .timeline-badge {
+        position: absolute;
+        left: -0.5rem;
+        top: 0;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+    }
+    
+    .card {
+        border-radius: 0.75rem;
+    }
+    
+    .form-label {
+        font-size: 0.875rem;
+    }
+    
+    .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+    
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+</style>
+{% endblock %}
