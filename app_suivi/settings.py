@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dashboard_app',  # Your app name here
-    'crispy_forms',  # Add crispy_forms to installed apps
+    #'crispy_forms',  # Add crispy_forms to installed apps
     'crispy_bootstrap5',  # Add crispy_bootstrap5 to installed apps
     'anymail',
     'import_export',
