@@ -9,9 +9,11 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.validators import validate_email
+from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 # Forms
-from .forms import ProjetForm, ActiviteForm, ProblemeForm, ComposanteForm, UploadCSVForm
+from .forms import ProjetForm, ActiviteForm, ProblemeForm, ComposanteForm, UploadCSVForm, MessageForm
 
 # Models
 from .models import Axe, Portefeuille, Programme, Projet, Composante, Activite, Probleme, Message
@@ -373,7 +375,8 @@ def generate_physique_graph(selected_composante):
     # Retourner le graphique sous forme de div HTML
     return plot(fig, include_plotlyjs=True, output_type='div')
 
-
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def dashboard_view(request):
     
     # Récupérer tous les ministères responsables distincts
@@ -575,7 +578,9 @@ def dashboard_view(request):
 
     return render(request, 'dashboard_app/dashboard.html', context)
 
+## viewer
 
+@login_required(login_url=reverse_lazy('sing_in'))
 def dashboard_coordo_view(request):
     context ={
         'active_page': 'dashboard_coordo',
@@ -606,6 +611,7 @@ def data_get_view(request):
             'tutelle': composante.tutelle,
             'agence_execution': composante.agence_execution,
             'date_lancement': composante.date_lancement.strftime('%Y-%m-%d') if composante.date_lancement else None,
+            'Fin_previsionnelle': composante.Fin_previsionnelle.strftime('%Y-%m-%d') if composante.Fin_previsionnelle else None,
             'duree_mois': composante.duree_mois,
             'cout': float(composante.cout) if composante.cout else None,
             'statut': composante.statut,
@@ -651,6 +657,8 @@ def data_get_view(request):
     })
 
 
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def create_map_for_region(region_name):
     """Crée une carte folium avec la région spécifiée mise en évidence"""
     # Créer une carte centrée sur le Sénégal
@@ -735,12 +743,17 @@ def table_view(request):
     return render(request, 'dashboard_app/tables.html', context)
 
 
+## viewer
+
+
 def notification_view(request):
     context = {
         'active_page': 'notifications'
     }
     return render(request, 'dashboard_app/notifications.html', context) 
 
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def profile_view(request):
     password_form = PasswordChangeForm(request.user)
     
@@ -756,11 +769,13 @@ def profile_view(request):
         'active_page': 'profile'
     }
     return render(request, 'authentification/profile.html', context)
-
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def base_view(request):
     return render(request, 'dashboard_app/base.html') # Render the base.html template
 
-
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def menu_view(request):
     return render(request, 'dashboard_app/menu.html') # Render the menu.html template
 
@@ -786,6 +801,9 @@ def get_changes_for_history(history_queryset):
             changes.append((current, field_changes))
     return changes
 
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def projets_data_view(request):
     programmes = Programme.objects.all()
     projets = Projet.objects.all().select_related('programme')
@@ -806,6 +824,10 @@ def projets_data_view(request):
         'historiques_prj' : historiques_prj
     })
 
+
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def composantes_data_view(request):
     projets = Projet.objects.all()
     composantes=Composante.objects.all().select_related('projet')
@@ -823,6 +845,9 @@ def composantes_data_view(request):
         'historiques_compo':historiques_compo,
     })
 
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def activites_data_view(request):
     
     composantes = Composante.objects.all()
@@ -840,6 +865,9 @@ def activites_data_view(request):
         'historiques_activite' : historiques_activite,
     })
 
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def problemes_data_view(request):
     
     composantes = Composante.objects.all()
@@ -861,6 +889,31 @@ def problemes_data_view(request):
     })
 
 
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
+def messages_data_view(request):
+    
+    composantes = Composante.objects.all()
+    messages=Message.objects.all().select_related('composante')
+
+    
+    # Récupérer les historiques triés
+    historiques_message_raw = list(Message.history.all().order_by('-history_date'))
+    
+    # Récupérer les changements
+    historiques_message = get_changes_for_history(historiques_message_raw)
+
+    return render(request, 'tables/message.html', {
+        'active_page': 'tables_sub5',
+        'Messages': messages,
+        'Composantes': composantes,
+        'historiques_probleme' : historiques_message,
+    })
+
+
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def import_csv_problem(request):
     if request.method == 'POST':
         form = UploadCSVForm(request.POST, request.FILES)
@@ -915,6 +968,9 @@ def import_csv_problem(request):
     
     return render(request, 'tables/import_problem.html', {'form': form})
 
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def import_csv_activite(request):
     if request.method == 'POST':
         form = UploadCSVForm(request.POST, request.FILES)
@@ -1005,6 +1061,8 @@ def parse_boolean(value):
         return False
     return value.lower() in ('true', 'oui', 'yes', '1')
 
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def import_csv_projets(request):
     """Importe toutes les données à partir d'un seul fichier CSV."""
     if request.method == 'POST':
@@ -1158,6 +1216,7 @@ def import_csv_projets(request):
                         tutelle = row.get('composante_tutelle', '').strip()
                         agence_execution = row.get('composante_agence_execution', '').strip()
                         date_lancement = parse_date(row.get('composante_date_lancement', ''))
+                        Fin_previsionnelle = parse_date(row.get('composante_fin_previsionnelle', ''))
                         duree_mois = int(row.get('composante_duree_mois', 0)) if row.get('composante_duree_mois') else None
                         cout = parse_decimal(row.get('composante_cout', ''))
                         statut = row.get('composante_statut', '').strip()
@@ -1212,7 +1271,8 @@ def import_csv_projets(request):
                                 'dec_reel_t3': dec_reel_t3,
                                 'dec_reel_t4': dec_reel_t4,
                                 'taux_decaissement': taux_decaissement,
-                                'facteurs_explication': facteurs_explication
+                                'facteurs_explication': facteurs_explication,
+                                'Fin_prévisionnelle': Fin_prévisionnelle,
                             }
                         )
                         
@@ -1241,6 +1301,7 @@ def import_csv_projets(request):
                             composante.dec_reel_t4 = dec_reel_t4
                             composante.taux_decaissement = taux_decaissement
                             composante.facteurs_explication = facteurs_explication
+                            composante.Fin_prévisionnelle = Fin_prévisionnelle
                             composante.save()
                             stats['composantes']['updated'] += 1
                         else:
@@ -1278,7 +1339,8 @@ def import_csv_projets(request):
     
     return render(request, 'tables/import_projet.html', {'form': form})
 
-
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def ajouter_projet(request):
     ajoutprojetform=ProjetForm()
     if request.method=='POST':
@@ -1289,7 +1351,8 @@ def ajouter_projet(request):
     context={'form': ajoutprojetform}
     return render(request, 'tables/Ajout_projet.html', context)
 
-
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def modifie_projet(request, pk):
     projet=Projet.objects.get(id=pk)
     modifieprojetform=ProjetForm(instance=projet)
@@ -1301,7 +1364,15 @@ def modifie_projet(request, pk):
     context={'form': modifieprojetform}
     return render(request, 'tables/Ajout_projet.html', context)
 
+def supprimer_projet(request, pk):
+    projet = get_object_or_404(Projet, pk=pk)
+    projet.delete()
+    messages.success(request, "Le projet a été supprimé avec succès.")
+    return redirect('tables_sub3')
 
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def ajouter_activite(request):
     ajoutactiviteform=ActiviteForm()
     if request.method=='POST':
@@ -1312,7 +1383,8 @@ def ajouter_activite(request):
     context={'form': ajoutactiviteform}
     return render(request, 'tables/Ajout_activite.html', context)
 
-
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def modifie_activite(request, rk):
     activite=Activite.objects.get(id=rk)
     modifieactiviteform=ActiviteForm(instance=activite)
@@ -1324,7 +1396,15 @@ def modifie_activite(request, rk):
     context={'form': modifieactiviteform}
     return render(request, 'tables/Ajout_activite.html', context)
 
+def supprimer_activite(request, pk):
+    activite = get_object_or_404(Activite, pk=pk)
+    activite.delete()
+    messages.success(request, "L'activité a été supprimée avec succès.")
+    return redirect('tables_sub3')
 
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def ajouter_probleme(request):
     ajoutproblemeform=ProblemeForm()
     if request.method=='POST':
@@ -1335,7 +1415,8 @@ def ajouter_probleme(request):
     context={'form': ajoutproblemeform}
     return render(request, 'tables/Ajout_probleme.html', context)
 
-
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def modifie_probleme(request, rk):
     probleme=Probleme.objects.get(id=rk)
     modifieproblemeform=ProblemeForm(instance=probleme)
@@ -1347,7 +1428,14 @@ def modifie_probleme(request, rk):
     context={'form': modifieproblemeform}
     return render(request, 'tables/Ajout_probleme.html', context)
 
+def supprimer_probleme(request, pk):
+    probleme = get_object_or_404(Probleme, pk=pk)
+    probleme.delete()
+    messages.success(request, "Le problème a été supprimé avec succès.")
+    return redirect('tables_sub4')
 
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def ajouter_composante(request):
     ajoutcomposanteform=ComposanteForm()
     if request.method=='POST':
@@ -1358,7 +1446,8 @@ def ajouter_composante(request):
     context={'form': ajoutcomposanteform}
     return render(request, 'tables/Ajout_composante.html', context)
 
-
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def modifie_composante(request, rk):
     composante=Composante.objects.get(id=rk)
     modifiecomposanteform=ComposanteForm(instance=composante)
@@ -1370,9 +1459,43 @@ def modifie_composante(request, rk):
     context={'form': modifiecomposanteform}
     return render(request, 'tables/Ajout_composante.html', context)
 
+def supprimer_composante(request, pk):
+    composante = get_object_or_404(Composante, pk=pk)
+    composante.delete()
+    messages.success(request, "La composante a été supprimée avec succès.")
+    return redirect('tables_sub2')
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
+def ajouter_message(request):
+    ajoutmessageform=MessageForm()
+    if request.method=='POST':
+        ajoutmessageform=MessageForm(request.POST)
+        if ajoutmessageform.is_valid():
+            ajoutmessageform.save()
+            return redirect('/tables/messages')
+    context={'form': ajoutmessageform}
+    return render(request, 'tables/Ajout_message.html', context)
 
 
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
+def modifie_message(request, rk):
+    message=Message.objects.get(id=rk)
+    modifiemessageform=MessageForm(instance=message)
+    if request.method=='POST':
+        modifiemessageform=MessageForm(request.POST, instance=message)
+        if modifiemessageform.is_valid():
+            modifiemessageform.save()
+            return redirect('/tables/messages')
+    context={'form': modifiemessageform}
+    return render(request, 'tables/Ajout_message.html', context)
 
+
+def supprimer_message(request, pk):
+    message = get_object_or_404(Message, pk=pk)
+    message.delete()
+    messages.success(request, "Le message a été supprimé avec succès.")
+    return redirect('tables_sub5')
 
 ## Vues pour le dashbooard_Coordoo
 
@@ -1430,7 +1553,8 @@ def get_stats(request):
     
     return JsonResponse(stats)
 
-
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
 def dashboard_coordo(request):
 
     # Récupérer les données pour les filtres
@@ -1649,6 +1773,31 @@ def get_messages(request):
     return JsonResponse(data, safe=False)
 
 
+def get_problemes(request):
+    composante_id = request.GET.get('composante')
+    problemes = Probleme.objects.filter(composante_id=composante_id)
+    
+    data = []
+    for pb in problemes:
+        data.append({
+            'titre': pb.titre if pb.titre else None,
+            'description': pb.description,
+            'date_identification': pb.date_identification.strftime('%d/%m/%Y %H:%M'),
+            'typologie': pb.typologie,
+            'source': pb.source,
+            'criticite': pb.criticite,
+            'remonter_tdb': pb.remonter_tdb,
+            'solution_proposee': pb.solution_proposee,
+            'porteur_solution': pb.porteur_solution,
+            'delai_mise_en_oeuvre': pb.delai_mise_en_oeuvre,
+            'statut_solution': pb.statut_solution,
+            'nombre_de_jours_retard': pb.nombre_de_jours_retard,
+
+        })
+    
+    return JsonResponse(data, safe=False)
+
+
 
 
 ## partie pour les composantes performantes ou non
@@ -1662,7 +1811,7 @@ def data_get_view_Coord(request):
     Composantes= Composante.objects.all()
     Activites= Activite.objects.all()
     Problemes= Probleme.objects.all()
-    Messages_week=Message.objects.all()
+    Messages_week=Message.objects.order_by('-date_creation')[:1]  # Uniquement le plus récent
     ministeres = Projet.objects.values_list('ministere_responsable', flat=True).distinct()
 
 

@@ -11,135 +11,112 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Filtres hiérarchiques</h4>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Filtres hiérarchiques</h4>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-3">
+                    <div class="row g-3">
+                        <!-- Niveau 1 -->
                         <div class="col-md-3">
-                            <label class="form-label">Niveau 1</label>
+                            <label class="form-label fw-bold">Niveau 1</label>
                             <div class="dropdown">
-                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" type="button" id="dropdownL1Button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span id="selectedL1">Tous</span>
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start py-2 d-flex justify-content-between align-items-center" 
+                                        type="button" id="PdropdownL1Button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span id="PselectedL1" class="text-wrap me-2" style="white-space: normal; text-align: left;">Tous</span>
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownL1Button" id="l1DropdownMenu">
-                                    <li><a class="dropdown-item" href="#" onclick="updateL1Filter('all', 'Tous'); return false;">Tous</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateL1Filter('axe', 'Axe'); return false;">Axe</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateL1Filter('portefeuille', 'Portefeuille'); return false;">Portefeuille</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateL1Filter('ministere', 'Ministère responsable'); return false;">Ministère responsable</a></li>
+                                <ul class="dropdown-menu w-100 p-2" style="min-width: 300px;" aria-labelledby="PdropdownL1Button" id="l1DropdownMenu">
+                                    <li><a class="dropdown-item py-2" href="#" onclick="PupdateL1Filter('all', 'Tous'); return false;" style="white-space: normal;">Tous</a></li>
+                                    <li><a class="dropdown-item py-2" href="#" onclick="PupdateL1Filter('axe', 'Axe'); return false;" style="white-space: normal;">Axe</a></li>
+                                    <li><a class="dropdown-item py-2" href="#" onclick="PupdateL1Filter('portefeuille', 'Portefeuille'); return false;" style="white-space: normal;">Portefeuille</a></li>
+                                    <li><a class="dropdown-item py-2" href="#" onclick="PupdateL1Filter('ministere', 'Ministère responsable'); return false;" style="white-space: normal;">Ministère responsable</a></li>
                                 </ul>
                             </div>
                         </div>
+                        
+                        <!-- Niveau 2 -->
                         <div class="col-md-3">
-                            <label class="form-label">Niveau 2</label>
+                            <label class="form-label fw-bold">Niveau 2</label>
                             <div class="dropdown">
-                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" type="button" id="dropdownL2Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
-                                    <span id="selectedL2">Sélectionnez d'abord le niveau 1</span>
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start py-2 d-flex justify-content-between align-items-center" 
+                                        type="button" id="PdropdownL2Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                                    <span id="PselectedL2" class="text-wrap me-2" style="white-space: normal; text-align: left;">Sélectionnez d'abord le niveau 1</span>
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownL2Button" id="l2DropdownMenu">
-                                    <li><a class="dropdown-item" href="#">Sélectionnez d'abord le niveau 1</a></li>
+                                <ul class="dropdown-menu w-100 p-2" style="min-width: 300px;" aria-labelledby="PdropdownL2Button" id="Pl2DropdownMenu">
+                                    <li><a class="dropdown-item py-2" href="#" style="white-space: normal;">Sélectionnez d'abord le niveau 1</a></li>
                                 </ul>
                             </div>
                         </div>
+                        
+                        <!-- Programme -->
                         <div class="col-md-3">
-                            <label class="form-label">Programme</label>
+                            <label class="form-label fw-bold">Programme</label>
                             <div class="dropdown">
-                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" 
-                                style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" 
-                                type="button" id="dropdownL3Button" data-bs-toggle="dropdown" 
-                                aria-expanded="false" disabled>
-                                    <span id="selectedL3">Sélectionnez d'abord le niveau 2</span>
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start py-2 d-flex justify-content-between align-items-center" 
+                                        type="button" id="PdropdownL3Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                                    <span id="PselectedL3" class="text-wrap me-2" style="white-space: normal; text-align: left;">Sélectionnez d'abord le niveau 2</span>
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownL3Button" id="l3DropdownMenu">
-                                    <li><a class="dropdown-item" href="#">Sélectionnez d'abord le niveau 2</a></li>
+                                <ul class="dropdown-menu w-100 p-2" style="min-width: 300px;" aria-labelledby="PdropdownL3Button" id="Pl3DropdownMenu">
+                                    <li><a class="dropdown-item py-2" href="#" style="white-space: normal;">Sélectionnez d'abord le niveau 2</a></li>
                                 </ul>
                             </div>
                         </div>
+                        
+                        <!-- Projet -->
                         <div class="col-md-3">
-                            <label class="form-label">Projet</label>
+                            <label class="form-label fw-bold">Projet</label>
                             <div class="dropdown">
-                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" type="button" id="dropdownL4Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
-                                    <span id="selectedL4">Sélectionnez d'abord le programme</span>
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start py-2 d-flex justify-content-between align-items-center" 
+                                        type="button" id="PdropdownL4Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                                    <span id="PselectedL4" class="text-wrap me-2" style="white-space: normal; text-align: left;">Sélectionnez d'abord le programme</span>
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownL4Button" id="l4DropdownMenu">
-                                    <li><a class="dropdown-item" href="#">Sélectionnez d'abord le programme</a></li>
+                                <ul class="dropdown-menu w-100 p-2" style="min-width: 300px;" aria-labelledby="PdropdownL4Button" id="Pl4DropdownMenu">
+                                    <li><a class="dropdown-item py-2" href="#" style="white-space: normal;">Sélectionnez d'abord le programme</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Composante -->
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Composante</label>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start py-2 d-flex justify-content-between align-items-center" 
+                                        type="button" id="PdropdownL5Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                                    <span id="PselectedL5" class="text-wrap me-2" style="white-space: normal; text-align: left;">Sélectionnez d'abord le projet</span>
+                                </button>
+                                <ul class="dropdown-menu w-100 p-2" style="min-width: 300px;" aria-labelledby="PdropdownL5Button" id="Pl5DropdownMenu">
+                                    <li><a class="dropdown-item py-2" href="#" style="white-space: normal;">Sélectionnez d'abord le projet</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label class="form-label">Composante</label>
-                            <div class="dropdown">
-                                <button class="btn btn-sm dropdown-toggle mb-0 fw-bold" style="color: #495057; background: #f8f9fa; border: 1px solid #ced4da; width: 100%; text-align: left;" type="button" id="dropdownL5Button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
-                                    <span id="selectedL5">Sélectionnez d'abord le projet</span>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownL5Button" id="l5DropdownMenu">
-                                    <li><a class="dropdown-item" href="#">Sélectionnez d'abord le projet</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Le reste de votre code reste inchangé -->
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Statistiques</h4>
-                </div>
-                <div class="card-body" id="stats-container">
-                    <p>Sélectionnez un filtre pour voir les statistiques</p>
-                </div>
-            </div>
-        </div>
+</div>
+    <br>
+<div class="row">
+    <div class="card">             
+    <div class="problem-text" id="problemes-container">
+      lecture du problème
     </div>
-
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Détails de la composante</h4>
-                </div>
-                <div class="card-body" id="composante-details">
-                    <p>Sélectionnez une composante pour voir les détails</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Messages associés</h4>
-                </div>
-                <div class="card-body" id="messages-container">
-                    <p>Sélectionnez une composante pour voir les messages associés</p>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Variables pour les dropdowns
-    const dropdownL1Button = document.getElementById('dropdownL1Button');
-    const dropdownL2Button = document.getElementById('dropdownL2Button');
-    const dropdownL3Button = document.getElementById('dropdownL3Button');
-    const dropdownL4Button = document.getElementById('dropdownL4Button');
-    const dropdownL5Button = document.getElementById('dropdownL5Button');
+    const PdropdownL1Button = document.getElementById('PdropdownL1Button');
+    const PdropdownL2Button = document.getElementById('PdropdownL2Button');
+    const PdropdownL3Button = document.getElementById('PdropdownL3Button');
+    const PdropdownL4Button = document.getElementById('PdropdownL4Button');
+    const PdropdownL5Button = document.getElementById('PdropdownL5Button');
     
-    const l2DropdownMenu = document.getElementById('l2DropdownMenu');
-    const l3DropdownMenu = document.getElementById('l3DropdownMenu');
-    const l4DropdownMenu = document.getElementById('l4DropdownMenu');
-    const l5DropdownMenu = document.getElementById('l5DropdownMenu');
+    const Pl2DropdownMenu = document.getElementById('Pl2DropdownMenu');
+    const Pl3DropdownMenu = document.getElementById('Pl3DropdownMenu');
+    const Pl4DropdownMenu = document.getElementById('Pl4DropdownMenu');
+    const Pl5DropdownMenu = document.getElementById('Pl5DropdownMenu');
     
     // Variables pour stocker les valeurs sélectionnées
     let l1Value = 'all';
@@ -149,10 +126,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let l5Value = null;
     
     // Fonction pour mettre à jour le filtre L1
-    window.updateL1Filter = function(value, displayText) {
+    window.PupdateL1Filter = function(value, displayText) {
         l1Value = value;
-        document.getElementById('selectedL1').textContent = displayText;
-        resetFilters([dropdownL2Button, dropdownL3Button, dropdownL4Button, dropdownL5Button]);
+        document.getElementById('PselectedL1').textContent = displayText;
+        PresetFilters([PdropdownL2Button, PdropdownL3Button, PdropdownL4Button, PdropdownL5Button]);
         
         if (value !== 'all') {
             fetchL2Options(value);
@@ -162,10 +139,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Fonction pour mettre à jour le filtre L2
-    window.updateL2Filter = function(value, displayText) {
+    window.PupdateL2Filter = function(value, displayText) {
         l2Value = value;
-        document.getElementById('selectedL2').textContent = displayText;
-        resetFilters([dropdownL3Button, dropdownL4Button, dropdownL5Button]);
+        document.getElementById('PselectedL2').textContent = displayText;
+        PresetFilters([PdropdownL3Button, PdropdownL4Button, PdropdownL5Button]);
         
         if (value) {
             fetchL3Options(l1Value, value);
@@ -174,10 +151,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Fonction pour mettre à jour le filtre L3
-    window.updateL3Filter = function(value, displayText) {
+    window.PupdateL3Filter = function(value, displayText) {
         l3Value = value;
-        document.getElementById('selectedL3').textContent = displayText;
-        resetFilters([dropdownL4Button, dropdownL5Button]);
+        document.getElementById('PselectedL3').textContent = displayText;
+        PresetFilters([PdropdownL4Button, PdropdownL5Button]);
         
         if (value) {
             fetchL4Options(value);
@@ -185,10 +162,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Fonction pour mettre à jour le filtre L4
-    window.updateL4Filter = function(value, displayText) {
+    window.PupdateL4Filter = function(value, displayText) {
         l4Value = value;
-        document.getElementById('selectedL4').textContent = displayText;
-        resetFilters([dropdownL5Button]);
+        document.getElementById('PselectedL4').textContent = displayText;
+        PresetFilters([PdropdownL5Button]);
         
         if (value) {
             fetchL5Options(value);
@@ -196,18 +173,18 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Fonction pour mettre à jour le filtre L5
-    window.updateL5Filter = function(value, displayText) {
+    window.PupdateL5Filter = function(value, displayText) {
         l5Value = value;
-        document.getElementById('selectedL5').textContent = displayText;
+        document.getElementById('PselectedL5').textContent = displayText;
         
         if (value) {
             fetchComposanteDetails(value);
-            fetchMessages(value);
+            fetchProblemes(value);
         }
     };
     
     // Fonctions utilitaires
-    function resetFilters(filters) {
+    function PresetFilters(filters) {
         filters.forEach(filter => {
             if (!filter) return; // Vérification si l'élément existe
             
@@ -232,11 +209,11 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                dropdownL2Button.disabled = false;
-                document.getElementById('selectedL2').textContent = 'Sélectionnez une option';
+                PdropdownL2Button.disabled = false;
+                document.getElementById('PselectedL2').textContent = 'Sélectionnez une option';
                 
-                if (l2DropdownMenu) {
-                    l2DropdownMenu.innerHTML = '';
+                if (Pl2DropdownMenu) {
+                    Pl2DropdownMenu.innerHTML = '';
                     data.options.forEach(option => {
                         const li = document.createElement('li');
                         const a = document.createElement('a');
@@ -244,11 +221,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         a.href = '#';
                         a.textContent = option.name;
                         a.onclick = function() {
-                            updateL2Filter(option.id, option.name);
+                            PupdateL2Filter(option.id, option.name);
                             return false;
                         };
                         li.appendChild(a);
-                        l2DropdownMenu.appendChild(li);
+                        Pl2DropdownMenu.appendChild(li);
                     });
                 }
             })
@@ -263,11 +240,11 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                dropdownL3Button.disabled = false;
-                document.getElementById('selectedL3').textContent = 'Sélectionnez un programme';
+                PdropdownL3Button.disabled = false;
+                document.getElementById('PselectedL3').textContent = 'Sélectionnez un programme';
                 
-                if (l3DropdownMenu) {
-                    l3DropdownMenu.innerHTML = '';
+                if (Pl3DropdownMenu) {
+                    Pl3DropdownMenu.innerHTML = '';
                     data.options.forEach(option => {
                         const li = document.createElement('li');
                         const a = document.createElement('a');
@@ -275,11 +252,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         a.href = '#';
                         a.textContent = option.name;
                         a.onclick = function() {
-                            updateL3Filter(option.id, option.name);
+                            PupdateL3Filter(option.id, option.name);
                             return false;
                         };
                         li.appendChild(a);
-                        l3DropdownMenu.appendChild(li);
+                        Pl3DropdownMenu.appendChild(li);
                     });
                 }
             })
@@ -294,11 +271,11 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                dropdownL4Button.disabled = false;
-                document.getElementById('selectedL4').textContent = 'Sélectionnez un projet';
+                PdropdownL4Button.disabled = false;
+                document.getElementById('PselectedL4').textContent = 'Sélectionnez un projet';
                 
-                if (l4DropdownMenu) {
-                    l4DropdownMenu.innerHTML = '';
+                if (Pl4DropdownMenu) {
+                    Pl4DropdownMenu.innerHTML = '';
                     data.options.forEach(option => {
                         const li = document.createElement('li');
                         const a = document.createElement('a');
@@ -306,11 +283,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         a.href = '#';
                         a.textContent = option.name;
                         a.onclick = function() {
-                            updateL4Filter(option.id, option.name);
+                            PupdateL4Filter(option.id, option.name);
                             return false;
                         };
                         li.appendChild(a);
-                        l4DropdownMenu.appendChild(li);
+                        Pl4DropdownMenu.appendChild(li);
                     });
                 }
             })
@@ -325,11 +302,11 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                dropdownL5Button.disabled = false;
-                document.getElementById('selectedL5').textContent = 'Sélectionnez une composante';
+                PdropdownL5Button.disabled = false;
+                document.getElementById('PselectedL5').textContent = 'Sélectionnez une composante';
                 
-                if (l5DropdownMenu) {
-                    l5DropdownMenu.innerHTML = '';
+                if (Pl5DropdownMenu) {
+                    Pl5DropdownMenu.innerHTML = '';
                     data.options.forEach(option => {
                         const li = document.createElement('li');
                         const a = document.createElement('a');
@@ -337,11 +314,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         a.href = '#';
                         a.textContent = option.name;
                         a.onclick = function() {
-                            updateL5Filter(option.id, option.name);
+                            PupdateL5Filter(option.id, option.name);
                             return false;
                         };
                         li.appendChild(a);
-                        l5DropdownMenu.appendChild(li);
+                        Pl5DropdownMenu.appendChild(li);
                     });
                 }
             })
@@ -350,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
     
-    // Les fonctions fetchStats, fetchGlobalStats, fetchComposanteDetails et fetchMessages restent inchangées
+    // Les fonctions fetchStats, fetchGlobalStats, fetchComposanteDetails et fetchProblemes restent inchangées
     function fetchStats(l1Value, l2Value) {
         const url = `/api/stats/?l1=${l1Value}&l2=${l2Value}`;
         
@@ -493,41 +470,300 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
     
-    function fetchMessages(composanteId) {
-        const url = `/api/messages/?composante=${composanteId}`;
+   
+            
+    function fetchProblemes(composanteId) {
+        const url = `/api/problemes/?composante=${composanteId}`;
         
         fetch(url)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error(`Erreur HTTP! statut: ${response.status}`);
+                return response.json();
+            })
             .then(data => {
-                const messagesContainer = document.getElementById('messages-container');
+                const container = document.getElementById('problemes-container');
                 
-                if (!messagesContainer) return;
-                
-                if (data.length === 0) {
-                    messagesContainer.innerHTML = '<p>Aucun message associé à cette composante</p>';
+                if (!container) {
+                    console.error('Element container introuvable');
                     return;
                 }
                 
-                let html = '<div class="list-group">';
-                data.forEach(message => {
-                    html += `
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">${message.probleme || 'Message général'}</h6>
-                                <small>${message.date_creation}</small>
+                if (data.length === 0) {
+                    container.innerHTML = '<p class="text-muted">Aucun problème associé à cette composante</p>';
+                    return;
+                }
+
+                // Calcul des statistiques
+                const stats = {
+                    total: data.length,
+                    clos: data.filter(p => p.statut_solution === 'Cloturé').length,
+                    enCours: data.filter(p => p.statut_solution === 'En cours').length,
+                    nonTraite: data.filter(p => !p.statut_solution || p.statut_solution === 'Non traité').length,
+                    delaiMoyen: calculerDelaiMoyen(data)
+                };
+
+                const typologieData = data.reduce((acc, probleme) => {
+                    const typologie = probleme.typologie || 'Non spécifié';
+                    acc[typologie] = (acc[typologie] || 0) + 1;
+                    return acc;
+                }, {});
+
+                const criticiteData = data.reduce((acc, probleme) => {
+                    const criticite = probleme.criticite || 'Non évaluée';
+                    acc[criticite] = (acc[criticite] || 0) + 1;
+                    return acc;
+                }, {});
+
+                // Construction du HTML avec design sobre
+                container.innerHTML = `
+                    <!-- Statistiques simplifiées -->
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Total problèmes</h6>
+                                    <h3 class="fw-bold" style="color: #004600">${stats.total}</h3>
+                                </div>
                             </div>
-                            <p class="mb-1">${message.contenu}</p>
-                            ${message.remonter_message_tdb ? '<span class="badge bg-warning">Tableau de bord</span>' : ''}
                         </div>
-                    `;
-                });
-                html += '</div>';
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Clôturés</h6>
+                                    <h3 class="fw-bold" style="color: #006600">${stats.clos} <small class="text-muted">(${Math.round((stats.clos/stats.total)*100)}%)</small></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">En cours</h6>
+                                    <h3 class="fw-bold" style="color: #003300">${stats.enCours}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Délai moyen</h6>
+                                    <h3 class="fw-bold" style="color: #004600">${stats.delaiMoyen ? stats.delaiMoyen + ' jours' : 'N/A'}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Graphiques compacts -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-white border-0">
+                                    <h6 class="mb-0">Répartition par typologie</h6>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="chart-container" style="height: 250px">
+                                        <canvas id="typologieChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-white border-0">
+                                    <h6 class="mb-0">Répartition par criticité</h6>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="chart-container" style="height: 250px">
+                                        <canvas id="criticiteChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tableau -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">Liste des problèmes</h6>
+                                    <div>
+                                        <span class="badge rounded-pill bg-success me-1">Clôturé: ${stats.clos}</span>
+                                        <span class="badge rounded-pill bg-warning me-1">En cours: ${stats.enCours}</span>
+                                        <span class="badge rounded-pill bg-secondary">Non traité: ${stats.nonTraite}</span>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Titre</th>
+                                                    <th>Typologie</th>
+                                                    <th>Criticité</th>
+                                                    <th>Statut</th>
+                                                    <th>Solution</th>
+                                                    <th>Délai</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${data.map(probleme => `
+                                                    <tr>
+                                                        <td>${probleme.titre || 'Non spécifié'}</td>
+                                                        <td>${probleme.typologie || '-'}</td>
+                                                        <td>
+                                                            <span class="badge ${getCriticiteClass(probleme.criticite)}">
+                                                                ${probleme.criticite || 'Non évaluée'}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge ${getStatutClass(probleme.statut_solution)}">
+                                                                ${probleme.statut_solution || 'Non traité'}
+                                                            </span>
+                                                        </td>
+                                                        <td>${probleme.solution_proposee || '-'}</td>
+                                                        <td class="fw-bold ${probleme.delai_mise_en_oeuvre ? 'text-dark' : 'text-muted'}">
+                                                            ${probleme.delai_mise_en_oeuvre || 'N/D'}
+                                                        </td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Création des graphiques avec palette sobre
+                createCompactChart('typologieChart', typologieData, [
+                    '#004600', '#006600', '#338033', '#66A366',
+                    '#003300', '#005500', '#007700', '#009900'
+                ]);
                 
-                messagesContainer.innerHTML = html;
+                createCompactChart('criticiteChart', criticiteData, [
+                    '#004600', // Haute criticité
+                    '#66A366', // Moyenne
+                    '#B3D9B3', // Faible
+                    '#E0E0E0'  // Non évaluée
+                ]);
             })
             .catch(error => {
-                console.error('Error fetching messages:', error);
+                console.error('Erreur:', error);
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        Erreur lors du chargement: ${error.message}
+                        <button onclick="fetchProblemes(${composanteId})" class="btn btn-sm btn-outline-secondary ms-2">
+                            <i class="fas fa-sync-alt"></i> Réessayer
+                        </button>
+                    </div>
+                `;
             });
+    }
+
+    function calculerDelaiMoyen(problemes) {
+        const delaisValides = problemes
+            .filter(p => p.delai_mise_en_oeuvre && !isNaN(parseInt(p.delai_mise_en_oeuvre)))
+            .map(p => parseInt(p.delai_mise_en_oeuvre));
+        
+        if (delaisValides.length === 0) return null;
+        
+        const somme = delaisValides.reduce((a, b) => a + b, 0);
+        return Math.round(somme / delaisValides.length);
+    }
+
+    function getStatutClass(statut) {
+        if (!statut) return 'bg-secondary';
+        statut = statut.toLowerCase();
+        
+        if (statut.includes('cloturé') || statut.includes('cloturé')) return 'bg-success';
+        if (statut.includes('en cours')) return 'bg-warning text-dark';
+        return 'bg-secondary';
+    }
+
+    function getCriticiteClass(criticite) {
+        if (!criticite) return 'bg-secondary';
+        criticite = criticite.toLowerCase();
+        
+        if (criticite.includes('haute')) return 'bg-dark text-white';
+        if (criticite.includes('moyenne')) return 'bg-success';
+        if (criticite.includes('faible')) return 'bg-light text-dark';
+        return 'bg-light text-muted';
+    }
+
+    function createCompactChart(elementId, data, colors) {
+        const ctx = document.getElementById(elementId);
+        const total = Object.values(data).reduce((a, b) => a + b, 0);
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    data: Object.values(data),
+                    backgroundColor: colors,
+                    borderWidth: 0,
+                    cutout: '65%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 16,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    },
+                    // Plugin pour les étiquettes directes sur le graphique
+                    datalabels: {
+                        formatter: (value, context) => {
+                            const percentage = Math.round((value / total) * 100);
+                            return `${percentage}%`;
+                        },
+                        color: '#fff',
+                        font: {
+                            weight: 'bold',
+                            size: 11
+                        },
+                        anchor: 'center',
+                        align: 'center',
+                        offset: 0,
+                        clip: false
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] // Nécessite le plugin chartjs-plugin-datalabels
+        });
+    } 
+
+    // Fonction helper pour les classes de criticité
+    function getCriticiteClass(criticite) {
+        if (!criticite) return 'bg-secondary';
+        const levels = {
+            'Faible': 'bg-success',
+            'Moyenne': 'bg-warning text-dark',
+            'Haute': 'bg-danger',
+            'eleve': 'bg-dark'
+        };
+        return levels[criticite] || 'bg-info';
     }
 });
 </script>

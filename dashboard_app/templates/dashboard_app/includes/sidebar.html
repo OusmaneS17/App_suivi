@@ -29,18 +29,18 @@
         <a class="nav-link d-flex justify-content-between align-items-center py-2 px-3 rounded transition-all" 
            data-bs-toggle="collapse" href="#tablesSubmenu" role="button" 
            aria-expanded="false" aria-controls="tablesSubmenu"
-           style="{% if active_page in 'tables_sub1 tables_sub2 tables_sub3 tables_sub4' %}background: linear-gradient(135deg, #004600, #007a00); font-weight: 600; color: white;{% else %}color: #212529;{% endif %}">
+           style="{% if active_page in 'tables_sub1 tables_sub2 tables_sub3 tables_sub4 tables_sub5' %}background: linear-gradient(135deg, #004600, #007a00); font-weight: 600; color: white;{% else %}color: #212529;{% endif %}">
           <span class="d-flex align-items-center">
             <i class="material-symbols-rounded me-2 opacity-6">table_view</i>
             <span>Tables</span>
           </span>
           <i class="" 
-             style="{% if active_page in 'tables_sub1 tables_sub2 tables_sub3' %}transform: rotate(180deg);{% endif %}">
+             style="{% if active_page in 'tables_sub1 tables_sub2 tables_sub3 tables_sub4 tables_sub5' %}transform: rotate(180deg);{% endif %}">
             
           </i>
         </a>
 
-        <div class="collapse {% if active_page in 'tables_sub1 tables_sub2 tables_sub3 tables_sub4' %}show{% endif %} ps-4 mt-1" id="tablesSubmenu">
+        <div class="collapse {% if active_page in 'tables_sub1 tables_sub2 tables_sub3 tables_sub4 tables_sub5' %}show{% endif %} ps-4 mt-1" id="tablesSubmenu">
           <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link rounded px-3 py-2 {% if active_page == 'tables_sub1' %}text-white bg-success{% else %}text-dark{% endif %}" href="{% url 'tables_sub1' %}">
@@ -60,6 +60,11 @@
             <li class="nav-item">
               <a class="nav-link rounded px-3 py-2 {% if active_page == 'tables_sub4' %}text-white bg-success{% else %}text-dark{% endif %}" href="{% url 'tables_sub4' %}">
                  Problèmes
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link rounded px-3 py-2 {% if active_page == 'tables_sub5' %}text-white bg-success{% else %}text-dark{% endif %}" href="{% url 'tables_sub5' %}">
+                 Message
               </a>
             </li>
           </ul>

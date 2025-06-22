@@ -1,0 +1,356 @@
+
+{% extends "dashboard_app/base.html" %}
+{% block titre%} Tables {% endblock %}
+{% block content %}
+
+{% load static %}
+
+<style>
+  :root {
+      --primary: #006400; /* Vert foncé pour correspondre à l'image */
+      --primary-light: #008000;
+      --secondary: #2c3e50;
+      --light: #ecf0f1;
+      --success: #2ecc71;
+      --error: #e74c3c;
+  }  
+  
+  /* Style pour la modal et formulaire */
+  .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+      padding: 20px;
+  }
+  
+  .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.3s forwards;
+  }
+  
+  .modal-container {
+      background-color: white;
+      border-radius: 8px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1001;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s forwards;
+  }
+  
+  .modal-header {
+      background-color: var(--primary);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  
+  .modal-header h2 {
+      color: white;
+      margin: 0;
+  }
+  
+  .modal-close {
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      background: none;
+      border: none;
+  }
+  
+  .modal-content {
+      padding: 30px;
+  }
+  
+  /* Style amélioré pour le formulaire */
+  .form-container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-title {
+      color: var(--primary);
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eaeaea;
+  }
+  
+  .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 24px;
+  }
+  
+  @media (max-width: 768px) {
+      .form-grid {
+          grid-template-columns: 1fr;
+      }
+  }
+  
+  .form-group {
+      margin-bottom: 24px;
+      position: relative;
+  }
+  
+  .form-group.full-width {
+      grid-column: 1 / -1;
+  }
+  
+  label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--secondary);
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.3s ease;
+  }
+  
+  input, select {
+      width: 100%;
+      padding: 10px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #eaeaea;
+      border-radius: 0;
+      font-size: 16px;
+      transition: all 0.3s ease;
+  }
+  
+  input:focus, select:focus {
+      outline: none;
+      border-bottom-color: var(--primary);
+      box-shadow: none;
+  }
+  
+  input::placeholder, select::placeholder {
+      color: #bbb;
+      opacity: 1;
+  }
+  
+  .checkbox-group {
+      display: flex;
+      align-items: center;
+      padding-top: 12px;
+  }
+  
+  .checkbox-group input {
+      width: auto;
+      margin-right: 10px;
+      cursor: pointer;
+  }
+  
+  .checkbox-group label {
+      margin-bottom: 0;
+      cursor: pointer;
+  }
+  
+  .required:after {
+      content: " *";
+      color: var(--error);
+  }
+  
+  .message {
+      padding: 16px 20px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      position: relative;
+      animation: fadeIn 0.5s ease;
+  }
+  
+  .message::before {
+      font-family: sans-serif;
+      margin-right: 12px;
+      font-size: 18px;
+  }
+  
+  .success {
+      background-color: rgba(46, 204, 113, 0.08);
+      color: #16a34a;
+      border-left: none;
+  }
+  
+  .success::before {
+      content: "✓";
+      color: #16a34a;
+  }
+  
+  .error {
+      background-color: rgba(231, 76, 60, 0.08);
+      color: #dc2626;
+      border-left: none;
+  }
+  
+  .error::before {
+      content: "!";
+      color: #dc2626;
+      font-weight: bold;
+  }
+  
+  /* Styles pour les boutons du formulaire */
+  .form-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+  }
+
+  .form-buttons .btn {
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+  }
+
+  .form-buttons .btn-secondary {
+      background-color: #e9ecef;
+      color: #495057;
+  }
+
+  .form-buttons .btn-secondary:hover {
+      background-color: #dee2e6;
+  }
+
+  .form-buttons #submit-btn {
+      background-color: var(--primary);
+      color: white;
+  }
+
+  .form-buttons #submit-btn:hover {
+      background-color: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+  }
+  
+  @media (max-width: 768px) {
+      .modal-container {
+          max-height: 100vh;
+          margin: 0;
+          border-radius: 0;
+      }
+  }
+
+  
+</style>
+
+<!-- Main content avec overflow scroll si nécessaire -->
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" style="background: #f8f9fa; overflow-x: hidden; overflow-y: auto; padding: 20px;">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-container">
+                    <h4 class="form-title">{% if form.instance.id %}Modifier un Message{% else %}Ajouter un nouveau Message{% endif %}</h4>
+                    
+                    <form id="message-form" action="" method="POST">
+                        {% csrf_token %}
+                        
+                        <div id="update-form-fields" style="display: none;" class="form-group full-width">
+                            <label for="message-select" class="required">Sélectionner un message</label>
+                            <select id="message-select" required disabled>
+                                <option value="">-- Choisir un message --</option>
+                                <!-- Les options seront chargées dynamiquement -->
+                            </select>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="{{ form.composante.id_for_label }}" class="required">Composante</label>
+                                {{ form.composante }}
+                                {% if form.composante.errors %}
+                                <div class="error">{{ form.composante.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="{{ form.portefeuille.id_for_label }}" class="required">composante</label>
+                                {{ form.portefeuille }}
+                                {% if form.portefeuille.errors %}
+                                <div class="error">{{ form.portefeuille.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="{{ form.contenu.id_for_label }}" class="required">Contenu du message</label>
+                                {{ form.contenu }}
+                                {% if form.contenu.errors %}
+                                <div class="error">{{ form.contenu.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="{{ form.probleme.id_for_label }}" class="required">Probleme</label>
+                                {{ form.probleme }}
+                                {% if form.probleme.errors %}
+                                <div class="error">{{ form.probleme.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="{{ form.remonter_message_tdb.id_for_label }}" class="required">Remonter le message</label>
+                                {{ form.remonter_message_tdb }}
+                                {% if form.remonter_message_tdb.errors %}
+                                <div class="error">{{ form.remonter_message_tdb.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                            <button type="submit" class="btn" id="submit-btn">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Fonction pour fermer la modal
+    function closeModal() {
+        // Rediriger vers la liste des messages ou autre page selon votre logique
+        window.location.href = "{% url 'tables_sub4' %}";
+    }
+
+    // Ajouter une validation côté client si nécessaire
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('message-form');
+        form.addEventListener('submit', function(event) {
+            // Votre logique de validation ici si nécessaire
+        });
+    });
+</script>
+
+{% endblock %}
+```

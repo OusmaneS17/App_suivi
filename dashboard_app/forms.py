@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Projet, Activite, Probleme, Composante
+from .models import Projet, Activite, Probleme, Composante, Message
 from django import forms
 
 from django import forms
@@ -14,7 +14,10 @@ class ProjetForm(ModelForm):
         model = Projet
         fields = '__all__'
         
-        
+class MessageForm(ModelForm):
+    class Meta:
+        model = Message
+        fields = '__all__'
 
 class ActiviteForm(ModelForm):
     class Meta:

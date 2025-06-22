@@ -22,7 +22,7 @@
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 justify-content-end" id="navbar">
           <ul class="navbar-nav d-flex align-items-center">
             
-            <!-- Notification Dropdown -->
+            <!-- Notification Dropdown
             <li class="nav-item dropdown pe-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0 position-relative" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="material-symbols-rounded cursor-pointer transition-all hover:text-primary">notifications</i>
@@ -96,7 +96,7 @@
                   </a>
                 </li>
               </ul>
-            </li>
+            </li> -->
             
             <!-- User Profile Dropdown -->
             <li class="nav-item dropdown d-flex align-items-center ps-2">
@@ -192,15 +192,15 @@
       <table class="table table-hover mb-0" id="projets-table">
         <thead style="background: linear-gradient(135deg, #004600, #007a00);">
           <tr>
-            <th scope="col" class="text-white py-3">Programme</th>
-            <th scope="col" class="text-white py-3">Identifiant</th>
-            <th scope="col" class="text-white py-3">Nom du Projet</th>
-            <th scope="col" class="text-white py-3 text-center">Statut</th>
-            <th scope="col" class="text-white py-3">Ministère</th>
-            <th scope="col" class="text-white py-3">Chef de Projet</th>
-            <th scope="col" class="text-white py-3">Email</th>
-            <th scope="col" class="text-white py-3">Téléphone</th>
-            <th scope="col" class="text-white py-3 text-center">Actions</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Programme</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Identifiant</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Nom du Projet</th>
+            <th scope="col" class="text-white py-3 text-center"  style="background: linear-gradient(135deg, #004600, #007a00);">Statut</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Ministère</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Chef de Projet</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Email</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Téléphone</th>
+            <th scope="col" class="text-white py-3 text-center"  style="background: linear-gradient(135deg, #004600, #007a00);">Actions</th>
           </tr>
           <tr id="filter-row" style="background-color: #e9ecef;">
             <td>
@@ -252,10 +252,10 @@
             <td class="align-middle">{{ projet.email }}</td>
             <td class="align-middle">{{ projet.tel }}</td>
             <td class="align-middle text-center">
-              <a href="{% url 'modifie_projet' projet.id %}" class="btn btn-sm btn-outline-primary me-1">
+              <a href="{% url 'modifie_projet' projet.id %}" class="btn btn-sm btn-outline-primary me-1" style="font-family: 'Arial';">
                 <i class="fas fa-edit"> Modifier</i>
               </a>
-              <a href="" class="btn btn-sm btn-outline-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce projet?');">
+              <a href="{% url 'supprimer_projet'  projet.id %}" class="btn btn-sm btn-outline-danger" style="font-family: 'Arial';" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce projet?');">
                 <i class="fas fa-trash"> Supprimer</i>
               </a>
             </td>
@@ -290,12 +290,12 @@
       <table class="table table-hover mb-0" id="projets-table">
         <thead style="background: linear-gradient(135deg, #004600, #007a00);">
           <tr>
-            <th scope="col" class="text-white py-3">Date</th>
-            <th scope="col" class="text-white py-3">Type</th>
-            <th scope="col" class="text-white py-3">Utilisateur</th>
-            <th scope="col" class="text-white py-3 text-center">Nom du projet</th>
-            <th scope="col" class="text-white py-3">Raison du changement</th>
-            <th scope="col" class="text-white py-3">changement</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Date</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Type</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Utilisateur</th>
+            <th scope="col" class="text-white py-3 text-center"  style="background: linear-gradient(135deg, #004600, #007a00);">Nom du projet</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Raison du changement</th>
+            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">changement</th>
           </tr>
         </thead>
         <tbody class="bg-white">
@@ -339,7 +339,8 @@
 <br>
 
 </main>
-
+<!-- Add this in the head section or before your script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function() {
     // Bouton de recherche

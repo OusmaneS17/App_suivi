@@ -67,6 +67,7 @@ class Composante(models.Model):
     date_lancement = models.DateField(null=True, blank=True)
     duree_mois = models.IntegerField(null=True, blank=True)
     cout = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    Fin_previsionnelle = models.DateField(null=True, blank=True)
     
     financement_public = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     financement_prive = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
@@ -214,15 +215,37 @@ class Probleme(models.Model):
     identifiant = models.CharField(max_length=100)
     titre = models.CharField(max_length=255)
     description = models.TextField()
-    date_identification = models.DateField()
+    date_identification = models.DateField(null=True, blank=True)
+    delai_mise_en_oeuvre = models.DateField(null=True, blank=True)
+
+    @property
+    def nombre_de_jours_retard(self):
+        if self.date_identification and self.delai_mise_en_oeuvre:
+            return (self.delai_mise_en_oeuvre - self.date_identification).days
+        return None
+    
     source = models.CharField(max_length=255)
-    typologie = models.CharField(max_length=255)
-    criticite = models.CharField(max_length=255)
+    typologie = models.CharField(max_length=255, choices=[
+            ('Financière', 'Financière'),
+            ('Administratif', 'Administratif'),
+            ('Contractuel', 'Contractuel'),
+            ('Foncier', 'Foncier'),
+            ('Opérationnel', 'Opérationnel'),
+            ('Règlementaire', 'Règlementaire'),
+        ])
+    criticite = models.CharField(max_length=255, choices=[
+            ('Moyenne', 'Moyenne'),
+            ('Elevée', 'Elevée'),
+            ('Faible', 'Faible'),
+        ])
     remonter_tdb = models.BooleanField(default=False)
     solution_proposee = models.TextField()
     porteur_solution = models.CharField(max_length=255)
-    delai_mise_en_oeuvre = models.CharField(max_length=255)
-    statut_solution = models.CharField(max_length=255)
+    statut_solution = models.CharField(max_length=255, choices=[
+            ('Cloturé', 'Cloturé'),
+            ('En cours', 'En cours'),
+            ('Ouvert', 'Ouvert'),
+        ])
     history = HistoricalRecords()
 
     def __str__(self):
