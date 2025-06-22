@@ -73,7 +73,7 @@ ROOT_URLCONF = 'app_suivi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [],
         # 'DIRS': [BASE_DIR / 'templates'],  # Uncomment this line if you have a templates directory
         'APP_DIRS': True,
         'OPTIONS': {
