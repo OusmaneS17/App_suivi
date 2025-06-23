@@ -850,7 +850,7 @@
                     transition: fill 0.3s ease;
                     cursor: pointer;
                     transform: scale(1.8);
-  transform-origin: center;
+                    transform-origin: center;
                   }
                   #map path:hover {
                     opacity: 0.8;
@@ -970,6 +970,15 @@
                 </div>
               </div>
               
+              <div class="mb-4">
+                
+                <h6 class="fw-bold text-success mb-3">
+                  <i class="bi bi-cash-coin me-2"></i>Typologie des problèmes rencontrés
+                </h6>
+                <div class="chart-container" style="position: relative; height:240px; width:100%">
+                    <canvas id="typologieChart"></canvas>
+                </div>
+              </div>
               <!-- Section Performance 
               <div class="mb-4">
                 <h6 class="fw-bold text-success mb-3">
@@ -1648,6 +1657,76 @@
               });
           }
 
+function createCompactChart(elementId, data, colors) {
+    const ctx = document.getElementById(elementId);
+    
+    // Détruire le graphique existant s'il y en a un
+    if (Chart.getChart(ctx)) {
+        Chart.getChart(ctx).destroy();
+    }
+    
+    const total = Object.values(data).reduce((a, b) => a + b, 0);
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(data).map(label => {
+                const value = data[label];
+                const percentage = Math.round((value / total) * 100);
+                return `${label} (${percentage}%)`; // Ajoute le pourcentage au label
+            }),
+            datasets: [{
+                data: Object.values(data), // Garde les valeurs absolues pour les données
+                backgroundColor: colors,
+                borderWidth: 0,
+                cutout: '65%'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 16,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const percentage = Math.round((value / total) * 100);
+                            return `${label.split(' (')[0]}: ${value} (${percentage}%)`;
+                        }
+                    }
+                },
+                // Configuration pour les labels dans le graphique
+                datalabels: {
+                    formatter: (value, context) => {
+                        const percentage = Math.round((value / total) * 100);
+                        return `${percentage}%`; // Affiche seulement le pourcentage
+                    },
+                    color: '#fff',
+                    font: {
+                        weight: 'bold',
+                        size: 11
+                    },
+                    anchor: 'center',
+                    align: 'center'
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+}
+
           function createGauge(containerId, value, maxValue, width = 200, height = 220) {
               var data = [{
                   type: "indicator",
@@ -2015,6 +2094,14 @@
               return probleme.composante_id === composanteId && probleme.remonter_tdb === true;
             });
 
+
+            // Compter les typologies
+            var typologieCounts = {};
+            problemesFiltres.forEach(function(probleme) {
+                var typologie = probleme.typologie || 'Non spécifié';
+                typologieCounts[typologie] = (typologieCounts[typologie] || 0) + 1;
+            });
+
             // Vider le tableau avant de le remplir
             var tbody = $("#liste_problemes");
             tbody.empty();
@@ -2036,6 +2123,22 @@
                 tbody.append(ligne);
               }
             }
+
+            // Mettre à jour le graphique
+            if (Object.keys(typologieCounts).length > 0) {
+                createCompactChart('typologieChart', typologieCounts, [
+                    '#004600', '#006600', '#338033', '#66A366',
+                    '#003300', '#005500', '#007700', '#009900'
+                ]);
+            } else {
+                var canvasContainer = document.getElementById('typologieChart').parentNode;
+                canvasContainer.innerHTML = '<p class="text-center">Aucune donnée de typologie disponible</p>';
+            }
+
+            createCompactChart('typologieChart', typologieCounts, [
+                '#004600', '#006600', '#338033', '#66A366',
+                '#003300', '#005500', '#007700', '#009900'
+            ]);
 
             // Filtrage des messages à afficher dans le tableau de bord
             const messagesFiltres = messages_week
@@ -2093,6 +2196,7 @@
               createDecaissementChart(selected_composante);
               createPhysiqueChart(selected_composante);
               createEvolutionChart(selected_composante);
+              
 
 
               
