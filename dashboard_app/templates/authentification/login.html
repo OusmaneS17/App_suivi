@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html> 
+<html lang="fr">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <!-- Google Fonts -->
@@ -11,67 +11,107 @@
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css" rel="stylesheet" />
     <title>Connexion</title>
+
+    <style>
+        body {
+            background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');
+            background-size: cover;
+            background-position: center;
+            font-family: 'Roboto', sans-serif;
+        }
+        .gradient-custom-3 {
+            background: rgba(0, 70, 0, 0.7); /* semi-transparent vert foncé */
+        }
+        .card {
+            background: #e6f0e6; /* vert très clair doux */
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 70, 0, 0.3);
+        }
+        h2 {
+            color: #004600;
+            font-weight: 700;
+        }
+        .btn-primary {
+            background-color: #004600 !important;
+            border-color: #004600 !important;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background-color: #003300 !important;
+            border-color: #003300 !important;
+        }
+        a {
+            color: #004600;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #002200;
+            text-decoration: underline;
+        }
+        .form-label {
+            color: #004600;
+            font-weight: 500;
+        }
+        .alert-danger {
+            background-color: #d9534f;
+            color: white;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
-    <section class="vh-100 bg-image" style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
-        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
-            <div class="container h-100">
-                <div class="row d-flex justify-content-center align-items-center h-100">
-                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-                        <!-- Messages d'erreur -->
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-danger alert-dismissible fade show mb-4">
-                                    <i class="fas fa-exclamation-circle me-2"></i>
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                        
-                        <div class="card" style="border-radius: 15px">
-                            <div class="card-body p-5">
-                                <h2 class="text-uppercase text-center mb-5">Connexion</h2>
+    <section class="vh-100 gradient-custom-3 d-flex align-items-center">
+        <div class="container h-100">
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
 
-                                <form action="{% url 'sing_in' %}" method="POST">
-                                    {% csrf_token %}
-                                    
-                                    <!-- Email input -->
-                                    <div class="form-outline mb-4">
-                                        <input type="email" id="form1Example1" class="form-control form-control-lg" name="email" required />
-                                        <label class="form-label" for="form1Example1">Adresse email</label>
-                                    </div>
-                          
-                                    <!-- Password input -->
-                                    <div class="form-outline mb-4">
-                                        <input type="password" id="form1Example2" class="form-control form-control-lg" name="password" required />
-                                        <label class="form-label" for="form1Example2">Mot de passe</label>
-                                    </div>
-                          
-                                    <!-- Options -->
-                                    <div class="d-flex justify-content-between mb-4">
-                                        <!-- Checkbox -->
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="form1Example3" checked />
-                                            <label class="form-check-label" for="form1Example3">Se souvenir de moi</label>
-                                        </div>
-                                        
-                                        <!-- Lien mot de passe oublié -->
-                                        <a href="{% url 'forgot_password' %}">Mot de passe oublié ?</a>
-                                    </div>
-                          
-                                    <!-- Bouton de soumission -->
-                                    <button type="submit" class="btn btn-primary btn-block btn-lg">
-                                        <i class="fas fa-sign-in-alt me-2"></i> Se connecter
-                                    </button>
-                                    
-                                    <!-- Lien vers inscription -->
-                                    <p class="text-center mt-4 mb-0">
-                                        Pas encore de compte ? <a href="{% url 'sing_up' %}" class="fw-bold">S'inscrire</a>
-                                    </p>
-                                </form>
+                    <!-- Messages d'erreur -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger alert-dismissible fade show mb-4">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
                             </div>
-                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="card p-4">
+                        <h2 class="text-center mb-4">Connexion</h2>
+                        <form action="{% url 'sing_in' %}" method="POST" novalidate>
+                            {% csrf_token %}
+                            <!-- Email input -->
+                            <div class="form-outline mb-4">
+                                <input type="email" id="email" class="form-control form-control-lg" name="email" required autofocus />
+                                <label class="form-label" for="email">Adresse email</label>
+                            </div>
+
+                            <!-- Password input -->
+                            <div class="form-outline mb-4">
+                                <input type="password" id="password" class="form-control form-control-lg" name="password" required />
+                                <label class="form-label" for="password">Mot de passe</label>
+                            </div>
+
+                            <!-- Options -->
+                            <div class="d-flex justify-content-between mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="remember_me" name="remember_me" />
+                                    <label class="form-check-label" for="remember_me">Se souvenir de moi</label>
+                                </div>
+                                <!-- <a href="{% url 'forgot_password' %}">Mot de passe oublié ?</a> -->
+                            </div>
+
+                            <!-- Bouton de soumission -->
+                            <button type="submit" class="btn btn-primary btn-block btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i> Se connecter
+                            </button>
+
+                            <!-- Lien vers inscription -->
+                            <p class="text-center mt-4 mb-0">
+                                Pas encore de compte ? <a href="{% url 'sing_up' %}" class="fw-bold">S'inscrire</a>
+                            </p>
+                        </form>
                     </div>
                 </div>
             </div>

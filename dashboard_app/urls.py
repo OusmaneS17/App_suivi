@@ -50,9 +50,7 @@ urlpatterns = [
     path('tables/problemes/import-csv/', views.import_csv_problem, name='import_problem'),
     path('tables/activites/import-csv/', views.import_csv_activite, name='import_activite'),
     path('tables/projets/import-csv/', views.import_csv_projets, name='import_projet'),
-
-    
-
+    path('tables/messages/import-csv/', views.import_csv_message, name='import_message'),
 
     path('dashboard_coordo2/', views.dashboard_coordo, name='dashboard_coordo2'),
     path('get-filter-options/', views.get_filter_options, name='get_filter_options'),

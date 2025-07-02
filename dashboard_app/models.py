@@ -5,16 +5,16 @@ from simple_history.models import HistoricalRecords
 from simple_history import register
 from django.contrib.auth.models import User
 # Create your models here.
+from django.contrib.auth.models import AbstractUser
 
-
-
-class User(models.Model):
-    username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.username
+class CustomUser(AbstractUser):
+    ROLE_CHOICES = [
+        ('lamda', 'lamda'),
+        ('coordonateur', 'Coordonateur'),
+        ('gestionnaire', 'Gestionnaire de portefeuille'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='lamda')
+    nom = models.CharField(max_length=150, blank=True)
 
 
 
@@ -26,7 +26,7 @@ class Axe(models.Model):
 
 class Portefeuille(models.Model):
     nom = models.CharField(max_length=255)
-    responsable = models.CharField(max_length=255)
+    responsable = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'gestionnaire'})
     axe = models.ForeignKey(Axe, on_delete=models.CASCADE, default=None)
     history_portefeuille = HistoricalRecords()
 

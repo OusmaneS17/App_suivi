@@ -304,43 +304,43 @@
 </main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const rows = document.querySelectorAll("#probleme-table tbody tr");
-  const rowsPerPage = 7;
-  const totalRows = rows.length;
-  const pageCount = Math.ceil(totalRows / rowsPerPage);
-  const footer = document.querySelector(".card-footer .d-flex");
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll("#probleme-table tbody tr");
+    const rowsPerPage = 7;
+    const totalRows = rows.length;
+    const pageCount = Math.ceil(totalRows / rowsPerPage);
+    const footer = document.querySelector(".card-footer .d-flex");
 
-  // Crée les boutons de pagination
-  const pagination = document.createElement("div");
-  pagination.classList.add("pagination");
+    // Crée les boutons de pagination
+    const pagination = document.createElement("div");
+    pagination.classList.add("pagination");
 
-  for (let i = 1; i <= pageCount; i++) {
-    const btn = document.createElement("button");
-    btn.innerText = i;
-    btn.className = "btn btn-sm btn-outline-secondary mx-1";
-    btn.addEventListener("click", () => showPage(i));
-    pagination.appendChild(btn);
-  }
+    for (let i = 1; i <= pageCount; i++) {
+      const btn = document.createElement("button");
+      btn.innerText = i;
+      btn.className = "btn btn-sm btn-outline-secondary mx-1";
+      btn.addEventListener("click", () => showPage(i));
+      pagination.appendChild(btn);
+    }
 
-  footer.appendChild(pagination);
+    footer.appendChild(pagination);
 
-  function showPage(page) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+    function showPage(page) {
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
 
-    rows.forEach((row, index) => {
-      row.style.display = index >= start && index < end ? "" : "none";
-    });
+      rows.forEach((row, index) => {
+        row.style.display = index >= start && index < end ? "" : "none";
+      });
 
-    // Met à jour le compteur de lignes affichées
-    document.getElementById("start-row").innerText = start + 1;
-    document.getElementById("end-row").innerText = Math.min(end, totalRows);
-  }
+      // Met à jour le compteur de lignes affichées
+      document.getElementById("start-row").innerText = start + 1;
+      document.getElementById("end-row").innerText = Math.min(end, totalRows);
+    }
 
-  // Affiche la première page par défaut
-  showPage(1);
-});
+    // Affiche la première page par défaut
+    showPage(1);
+  });
 </script>
 
 <script>

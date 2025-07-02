@@ -2115,6 +2115,7 @@
           }
         });
       </script>
+
       <footer class="footer py-4  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
@@ -3115,134 +3116,134 @@
   </script>
 
 
-<script>
-  $(document).ready(function() {
-    var projets = [];
-    var composantes = [];
-    let trimestreSelectionne = $('input[name="trimestre"]:checked').val();
+  <script>
+    $(document).ready(function() {
+      var projets = [];
+      var composantes = [];
+      let trimestreSelectionne = $('input[name="trimestre"]:checked').val();
 
-    // Charger les données des projets et composantes depuis le backend
-  function loadData() {
-    $.ajax({
-      url: "{% url 'data_get_view' %}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        projets = data.Projets;
-        composantes = data.Composantes;
+      // Charger les données des projets et composantes depuis le backend
+    function loadData() {
+      $.ajax({
+        url: "{% url 'data_get_view' %}",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          projets = data.Projets;
+          composantes = data.Composantes;
 
-        var nomsProjets = [];
-        for (var i = 0; i < projets.length; i++) {
-          if (projets[i].nom && !nomsProjets.includes(projets[i].nom)) {
-            nomsProjets.push(projets[i].nom);
+          var nomsProjets = [];
+          for (var i = 0; i < projets.length; i++) {
+            if (projets[i].nom && !nomsProjets.includes(projets[i].nom)) {
+              nomsProjets.push(projets[i].nom);
+            }
+          }
+          nomsProjets.sort();
+
+          for (let idx = 0; idx < 6; idx++) {
+            let listDeroulante1 = document.getElementById('listDeroulante1' + (idx === 0 ? '' : '_' + idx));
+            let listDeroulante2 = document.getElementById('listDeroulante2' + (idx === 0 ? '' : '_' + idx));
+            let selectionL1 = document.getElementById('selectionL1' + (idx === 0 ? '' : '_' + idx));
+            let selectionL2 = document.getElementById('selectionL2' + (idx === 0 ? '' : '_' + idx));
+
+            if (listDeroulante1 && listDeroulante2 && selectionL1 && selectionL2) {
+              listDeroulante1.innerHTML = '';
+              nomsProjets.forEach(function(nomProjet) {
+                var li = document.createElement('li');
+                var a = document.createElement('a');
+                a.className = 'dropdown-item';
+                a.href = '#';
+                a.textContent = nomProjet;
+
+                // Récupérer l'objet projet correspondant
+                var projetObj = projets.find(p => p.nom === nomProjet);
+
+                a.onclick = function(e) {
+                  e.preventDefault();
+
+                  // Affichage bouton projet
+                  selectionL1.querySelector('span') 
+                    ? selectionL1.querySelector('span').textContent = nomProjet 
+                    : selectionL1.textContent = nomProjet;
+
+                  var composantesProjet = composantes.filter(c => c.projet_id === projetObj.id);
+
+                  listDeroulante2.innerHTML = '';
+                  composantesProjet.forEach(function(comp) {
+                    var liComp = document.createElement('li');
+                    var aComp = document.createElement('a');
+                    aComp.className = 'dropdown-item';
+                    aComp.href = '#';
+                    aComp.textContent = comp.nom;
+
+                    aComp.onclick = function(e) {
+                      e.preventDefault();
+
+                      // Affichage bouton composante
+                      selectionL2.querySelector('span') 
+                        ? selectionL2.querySelector('span').textContent = comp.nom 
+                        : selectionL2.textContent = comp.nom;
+
+                      // Récupération des valeurs
+                      var decPrevT1 = comp.dec_prev_t1 || 'N/A';
+                      var decPrevT2 = comp.dec_prev_t2 || 'N/A';
+                      var facteursExplication = comp.facteurs_explication || 'N/A';
+
+                      updateTrimestreDisplay();
+
+                    };
+
+                    liComp.appendChild(aComp);
+                    listDeroulante2.appendChild(liComp);
+                  });
+
+                  // Réinitialisation du bouton composante
+                  selectionL2.querySelector('span') 
+                    ? selectionL2.querySelector('span').textContent = "Sélectionnez une composante"
+                    : selectionL2.textContent = "Sélectionnez une composante";
+                };
+                li.appendChild(a);
+                listDeroulante1.appendChild(li);
+              });
+            }
           }
         }
-        nomsProjets.sort();
+      });
+    }
 
-        for (let idx = 0; idx < 6; idx++) {
-          let listDeroulante1 = document.getElementById('listDeroulante1' + (idx === 0 ? '' : '_' + idx));
-          let listDeroulante2 = document.getElementById('listDeroulante2' + (idx === 0 ? '' : '_' + idx));
-          let selectionL1 = document.getElementById('selectionL1' + (idx === 0 ? '' : '_' + idx));
-          let selectionL2 = document.getElementById('selectionL2' + (idx === 0 ? '' : '_' + idx));
+    function updateTrimestreDisplay() {
+      for (let idx = 0; idx < 6; idx++) {
+        let compNom = $("#selectionL2" + (idx === 0 ? '' : '_' + idx)).text().trim();
 
-          if (listDeroulante1 && listDeroulante2 && selectionL1 && selectionL2) {
-            listDeroulante1.innerHTML = '';
-            nomsProjets.forEach(function(nomProjet) {
-              var li = document.createElement('li');
-              var a = document.createElement('a');
-              a.className = 'dropdown-item';
-              a.href = '#';
-              a.textContent = nomProjet;
-
-              // Récupérer l'objet projet correspondant
-              var projetObj = projets.find(p => p.nom === nomProjet);
-
-              a.onclick = function(e) {
-                e.preventDefault();
-
-                // Affichage bouton projet
-                selectionL1.querySelector('span') 
-                  ? selectionL1.querySelector('span').textContent = nomProjet 
-                  : selectionL1.textContent = nomProjet;
-
-                var composantesProjet = composantes.filter(c => c.projet_id === projetObj.id);
-
-                listDeroulante2.innerHTML = '';
-                composantesProjet.forEach(function(comp) {
-                  var liComp = document.createElement('li');
-                  var aComp = document.createElement('a');
-                  aComp.className = 'dropdown-item';
-                  aComp.href = '#';
-                  aComp.textContent = comp.nom;
-
-                  aComp.onclick = function(e) {
-                    e.preventDefault();
-
-                    // Affichage bouton composante
-                    selectionL2.querySelector('span') 
-                      ? selectionL2.querySelector('span').textContent = comp.nom 
-                      : selectionL2.textContent = comp.nom;
-
-                    // Récupération des valeurs
-                    var decPrevT1 = comp.dec_prev_t1 || 'N/A';
-                    var decPrevT2 = comp.dec_prev_t2 || 'N/A';
-                    var facteursExplication = comp.facteurs_explication || 'N/A';
-
-                    updateTrimestreDisplay();
-
-                  };
-
-                  liComp.appendChild(aComp);
-                  listDeroulante2.appendChild(liComp);
-                });
-
-                // Réinitialisation du bouton composante
-                selectionL2.querySelector('span') 
-                  ? selectionL2.querySelector('span').textContent = "Sélectionnez une composante"
-                  : selectionL2.textContent = "Sélectionnez une composante";
-              };
-              li.appendChild(a);
-              listDeroulante1.appendChild(li);
-            });
-          }
+        if (!compNom || compNom === "Composante" || compNom === "Sélectionnez une composante") {
+          continue; // si composante non sélectionnée
         }
-      }
-    });
-  }
 
-  function updateTrimestreDisplay() {
-    for (let idx = 0; idx < 6; idx++) {
-      let compNom = $("#selectionL2" + (idx === 0 ? '' : '_' + idx)).text().trim();
+        let comp = composantes.find(c => c.nom === compNom);
 
-      if (!compNom || compNom === "Composante" || compNom === "Sélectionnez une composante") {
-        continue; // si composante non sélectionnée
-      }
+        if (comp) {
+          let trimestre = trimestreSelectionne;
+          let decPrev = comp[`prev_t${trimestre}_total`] || 'N/A';
+          let realisePrec = comp[`realise_t${trimestre - 1}_total`] || 'N/A';
+          let realiseActu = comp[`realise_t${trimestre}_total`] || 'N/A';
+          let facteurs = comp.facteurs_explication || 'N/A';
 
-      let comp = composantes.find(c => c.nom === compNom);
-
-      if (comp) {
-        let trimestre = trimestreSelectionne;
-        let decPrev = comp[`prev_t${trimestre}_total`] || 'N/A';
-        let realisePrec = comp[`realise_t${trimestre - 1}_total`] || 'N/A';
-        let realiseActu = comp[`realise_t${trimestre}_total`] || 'N/A';
-        let facteurs = comp.facteurs_explication || 'N/A';
-
-        $("#prev_tn_total_" + idx).text(decPrev);
-        $("#realise_tn_1_total_" + idx).text(realisePrec);
-        $("#realise_tn_total_" + idx).text(realiseActu);
-        $("#facteurs_explication_value_" + idx).text(facteurs);
+          $("#prev_tn_total_" + idx).text(decPrev);
+          $("#realise_tn_1_total_" + idx).text(realisePrec);
+          $("#realise_tn_total_" + idx).text(realiseActu);
+          $("#facteurs_explication_value_" + idx).text(facteurs);
+        }
       }
     }
-  }
 
-    // Appel initial
-    loadData();
-    $('input[name="trim"]').on('change', function () {
-      trimestreSelectionne = $(this).val();
-      updateTrimestreDisplay(); // Met à jour l’affichage
+      // Appel initial
+      loadData();
+      $('input[name="trim"]').on('change', function () {
+        trimestreSelectionne = $(this).val();
+        updateTrimestreDisplay(); // Met à jour l’affichage
+      });
     });
-  });
 
-</script>
+  </script>
 
   {% endblock%}

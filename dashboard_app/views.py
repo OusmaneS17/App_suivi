@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import ProjetForm, ActiviteForm, ProblemeForm, ComposanteForm, UploadCSVForm, MessageForm
 
 # Models
-from .models import Axe, Portefeuille, Programme, Projet, Composante, Activite, Probleme, Message
+from .models import *
 
 # CSV + fichiers
 from io import TextIOWrapper
@@ -46,14 +46,18 @@ import folium
 
 # Create your views here.
 
+from dashboard_app.models import CustomUser  # Import de ton modèle utilisateur personnalisé
+
+
 def sing_in(request):
     if request.method == "POST":
-        email = request.POST.get('email', None)
-        password = request.POST.get('password', None)
+        email = request.POST.get('email')
+        password = request.POST.get('password')
 
-        user = User.objects.filter(email=email).first()
+        user = CustomUser.objects.filter(email=email).first()
         if user:
-            auth_user = authenticate(username=user.username, password=password)
+            # Ici on utilise username car authenticate attend username (ou modifié dans AUTHENTICATION_BACKENDS)
+            auth_user = authenticate(request, username=user.username, password=password)
             if auth_user:
                 login(request, auth_user)
                 return redirect('dashboard')
@@ -62,55 +66,55 @@ def sing_in(request):
         else:
             messages.error(request, "Aucun utilisateur avec cet email")
 
-    return render(request, 'authentification/login.html', {})
+    return render(request, 'authentification/login.html')
+
 
 def sing_up(request):
     error = False
     message = ""
     if request.method == "POST":
-        name = request.POST.get('name', None)
-        email = request.POST.get('email', None)
-        password = request.POST.get('password', None)
-        repassword = request.POST.get('repassword', None)
-        # Email
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        repassword = request.POST.get('repassword')
+
+        # Validation email
         try:
             validate_email(email)
         except:
             error = True
-            message = "Enter un email valide svp!"
-        # password
-        if error == False:
-            if password != repassword:
-                error = True
-                message = "Les deux mot de passe ne correspondent pas!"
-        # Exist
-        user = User.objects.filter(Q(email=email) | Q(username=name)).first()
-        if user:
+            message = "Veuillez entrer un email valide svp !"
+
+        # Vérifier mots de passe
+        if not error and password != repassword:
             error = True
-            message = f"Un utilisateur avec email {email} ou le nom d'utilisateur {name} exist déjà'!"
-        
-        # register
-        if error == False:
-            user = User(
-                username = name,
-                email = email,
+            message = "Les deux mots de passe ne correspondent pas !"
+
+        # Vérifier existence d'un utilisateur avec email ou username
+        if not error:
+            user = CustomUser.objects.filter(Q(email=email) | Q(username=name)).first()
+            if user:
+                error = True
+                message = f"Un utilisateur avec email {email} ou nom d'utilisateur {name} existe déjà !"
+
+        # Création utilisateur
+        if not error:
+            user = CustomUser(
+                username=name,
+                email=email,
+                nom=name  # si tu as un champ 'nom' dans CustomUser
             )
+            user.set_password(password)  # hash automatique
             user.save()
 
-            user.password = password
-            user.set_password(user.password)
-            user.save()
-
+            messages.success(request, "Inscription réussie ! Vous pouvez maintenant vous connecter.")
             return redirect('sing_in')
 
-            #print("=="*5, " NEW POST: ",name,email, password, repassword, "=="*5)
-
     context = {
-        'error':error,
-        'message':message
+        'error': error,
+        'message': message
     }
     return render(request, 'authentification/register.html', context)
-
 
 
 def log_out(request):
@@ -588,17 +592,30 @@ def dashboard_coordo_view(request):
     return render(request, 'dashboard_app/dashboard_coordo.html', context)
 
 def data_get_view(request):
-    Axes= Axe.objects.all()
-    Portefeuilles= Portefeuille.objects.all()
-    Programmes= Programme.objects.all()
-    Projets= Projet.objects.all()
-    Composantes= Composante.objects.all()
-    Activites= Activite.objects.all()
-    Problemes= Probleme.objects.all()
-    Messages_week=Message.objects.all()
+    
+    # user = request.user
+
+    #if user.is_authenticated and user.role == 'gestionnaire':
+    #    Portefeuilles= Portefeuille.objects.filter(responsable=user)
+    #    Programmes= Programme.objects.filter(portefeuille__responsable=user)
+    #    Projets= Projet.objects.filter(programme__portefeuille__responsable=user)
+    #    Composantes= Composante.objects.filter(projet__programme__portefeuille__responsable=user)
+    #    Activites= Activite.objects.filter(composante__projet__programme__portefeuille__responsable=user)
+    #    Problemes= Probleme.objects.filter(activite__composante__projet__programme__portefeuille__responsable=user)
+    #    Messages_week=Message.objects.filter(activite__composante__projet__programme__portefeuille__responsable=user)
+    #    Axes= Axe.objects.all()
+    #else:
+    Axes = Axe.objects.all()
+    Portefeuilles = Portefeuille.objects.all()
+    Programmes = Programme.objects.all()
+    Projets = Projet.objects.all()
+    Composantes = Composante.objects.all()
+    Activites = Activite.objects.all()
+    Problemes = Probleme.objects.all()
+    Messages_week = Message.objects.all()
+
+    
     ministeres = Projet.objects.values_list('ministere_responsable', flat=True).distinct()
-
-
     # Sérialiser les données en incluant les propriétés calculées pour les composantes
     composantes_data = []
     for composante in Composantes:
@@ -646,7 +663,15 @@ def data_get_view(request):
 
     return  JsonResponse({
         'Axes': list(Axes.values()),
-        'Portefeuilles': list(Portefeuilles.values()),
+        'Portefeuilles': [
+            {
+                'id': p.id,
+                'nom': p.nom,
+                'responsable': p.responsable.nom if p.responsable else None,
+                'axe_id': p.axe_id,
+            }
+            for p in Portefeuilles
+        ],
         'Programmes': list(Programmes.values()),
         'Projets': list(Projets.values()),
         'Composantes': composantes_data,
@@ -912,119 +937,6 @@ def messages_data_view(request):
 
 
 
-## viewer
-@login_required(login_url=reverse_lazy('sing_in'))
-def import_csv_problem(request):
-    if request.method == 'POST':
-        form = UploadCSVForm(request.POST, request.FILES)
-        if form.is_valid():
-            csv_file = TextIOWrapper(request.FILES['csv_file'].file, encoding='utf-8')
-            reader = csv.DictReader(csv_file)
-            
-            success_count = 0
-            errors = []
-            
-            for row_num, row in enumerate(reader, start=2):
-                try:
-                    # Récupérer la composante
-                    composante_nom = row.get('composante', '').strip()
-                    if not composante_nom:
-                        raise ValidationError("Le nom de la composante est requis")
-                    
-                    try:
-                        composante = Composante.objects.get(nom=composante_nom)
-                    except ObjectDoesNotExist:
-                        raise ValidationError(f"La composante '{composante_nom}' n'existe pas")
-                    
-                    # Créer le problème
-                    Probleme.objects.create(
-                        composante=composante,
-                        identifiant=row.get('identifiant', ''),
-                        titre=row.get('titre', ''),
-                        description=row.get('description', ''),
-                        date_identification=row.get('date_identification'),
-                        source=row.get('source', ''),
-                        typologie=row.get('typologie', ''),
-                        criticite=row.get('criticite', ''),
-                        remonter_tdb=row.get('remonter_tdb', 'False').lower() == 'true',
-                        solution_proposee=row.get('solution_proposee', ''),
-                        porteur_solution=row.get('porteur_solution', ''),
-                        delai_mise_en_oeuvre=row.get('delai_mise_en_oeuvre', ''),
-                        statut_solution=row.get('statut_solution', '')
-                    )
-                    success_count += 1
-                    
-                except Exception as e:
-                    errors.append(f"Ligne {row_num}: {str(e)}")
-            
-            if success_count > 0:
-                messages.success(request, f"{success_count} problèmes importés avec succès!")
-            if errors:
-                messages.error(request, f"Erreurs sur {len(errors)} lignes. {' | '.join(errors[:3])}" + ("..." if len(errors)>3 else ""))
-            
-            #return redirect('tables/problemes/import-csv/')
-    else:
-        form = UploadCSVForm()
-    
-    return render(request, 'tables/import_problem.html', {'form': form})
-
-
-## viewer
-@login_required(login_url=reverse_lazy('sing_in'))
-def import_csv_activite(request):
-    if request.method == 'POST':
-        form = UploadCSVForm(request.POST, request.FILES)
-        if form.is_valid():
-            csv_file = TextIOWrapper(request.FILES['csv_file'].file, encoding='utf-8')
-            reader = csv.DictReader(csv_file)
-            
-            success_count = 0
-            errors = []
-            
-            for row_num, row in enumerate(reader, start=2):
-                try:
-                    # Récupérer la composante
-                    composante_nom = row.get('composante', '').strip()
-                    if not composante_nom:
-                        raise ValidationError("Le nom de la composante est requis")
-                    
-                    try:
-                        composante = Composante.objects.get(nom=composante_nom)
-                    except ObjectDoesNotExist:
-                        raise ValidationError(f"La composante '{composante_nom}' n'existe pas")
-                    
-                    # Créer le problème
-                    Activite.objects.create(
-                        composante=composante,
-                        identifiant=row.get('identifiant', ''),
-                        nom=row.get('nom', ''),
-                        ponderation=row.get('ponderation', ''),
-                        prev_t1=row.get('prev_t1', ''),
-                        prev_t2=row.get('prev_t2', ''),
-                        prev_t3=row.get('prev_t3', ''),
-                        prev_t4=row.get('prev_t4', ''),
-                        cible_fin_annee=row.get('cible_fin_annee', ''),
-                        realise_t1=row.get('realise_t1', ''),
-                        realise_t2=row.get('realise_t2', ''),
-                        realise_t3=row.get('realise_t3', ''),
-                        realise_t4=row.get('realise_t4', ''),
-                        avancement_physique=row.get('avancement_physique', ''),
-                    )
-                    success_count += 1
-                    
-                except Exception as e:
-                    errors.append(f"Ligne {row_num}: {str(e)}")
-            
-            if success_count > 0:
-                messages.success(request, f"{success_count} activités importées avec succès!")
-            if errors:
-                messages.error(request, f"Erreurs sur {len(errors)} lignes. {' | '.join(errors[:3])}" + ("..." if len(errors)>3 else ""))
-            
-            #return redirect('tables/problemes/import-csv/')
-    else:
-        form = UploadCSVForm()
-    
-    return render(request, 'tables/import_activite.html', {'form': form})
 
 
 class UploadUnifiedCSVForm(Form):
@@ -1036,9 +948,11 @@ def parse_date(date_str):
         return None
     
     date_formats = [
-        '%Y-%m-%d',  # 2023-01-31
-        '%d/%m/%Y',  # 31/01/2023
-        '%d-%m-%Y',  # 31-01-2023
+        "%Y-%m-%d",  # Format ISO (standard)
+        "%d/%m/%Y",  # Format français
+        "%m/%d/%Y",  # Format américain (ton cas)
+        "%d-%m-%Y",  # Variante
+        "%m-%d-%Y",  # Variante américaine
     ]
     
     for date_format in date_formats:
@@ -1107,28 +1021,46 @@ def import_csv_projets(request):
                     # 2. Traiter le Portefeuille
                     portefeuille_nom = row.get('portefeuille_nom', '').strip()
                     portefeuille_responsable = row.get('portefeuille_responsable', '').strip()
-                    
+
                     if portefeuille_nom and axe:
                         if portefeuille_nom not in portefeuilles_dict:
-                            portefeuille, created = Portefeuille.objects.get_or_create(
-                                nom=portefeuille_nom,
-                                defaults={
-                                    'responsable': portefeuille_responsable,
-                                    'axe': axe
-                                }
-                            )
-                            
-                            if not created:
-                                portefeuille.responsable = portefeuille_responsable
-                                portefeuille.axe = axe
-                                portefeuille.save()
-                                stats['portefeuilles']['updated'] += 1
-                            else:
-                                stats['portefeuilles']['created'] += 1
-                                
-                            portefeuilles_dict[portefeuille_nom] = portefeuille
-                        
-                        portefeuille = portefeuilles_dict[portefeuille_nom]
+                            try:
+                                # Récupérer ou créer automatiquement un utilisateur gestionnaire
+                                user_responsable, user_created = CustomUser.objects.get_or_create(
+                                    nom=portefeuille_responsable,
+                                    defaults={
+                                        'username': portefeuille_responsable.lower().replace(' ', '_'),
+                                        'role': 'gestionnaire',
+                                        'password': CustomUser.objects.make_random_password()
+                                    }
+                                )
+
+                                portefeuille, created = Portefeuille.objects.get_or_create(
+                                    nom=portefeuille_nom,
+                                    defaults={
+                                        'responsable': user_responsable,
+                                        'axe': axe
+                                    }
+                                )
+
+                                if not created:
+                                    portefeuille.responsable = user_responsable
+                                    portefeuille.axe = axe
+                                    portefeuille.save()
+                                    stats['portefeuilles']['updated'] += 1
+                                else:
+                                    stats['portefeuilles']['created'] += 1
+
+                                if user_created:
+                                    messages.info(request, f"Utilisateur '{portefeuille_responsable}' créé automatiquement avec succès.")
+
+                                portefeuilles_dict[portefeuille_nom] = portefeuille
+
+                            except Exception as e:
+                                stats['portefeuilles']['errors'].append(f"Ligne {row_num}: Erreur portefeuille - {str(e)}")
+                                portefeuille = None
+                        else:
+                            portefeuille = portefeuilles_dict[portefeuille_nom]
                     else:
                         portefeuille = None
                     
@@ -1239,6 +1171,7 @@ def import_csv_projets(request):
                         dec_reel_t4 = parse_decimal(row.get('composante_dec_reel_t4', ''))
                         taux_decaissement = parse_decimal(row.get('composante_taux_decaissement', ''))
                         facteurs_explication = row.get('composante_facteurs_explication', '')
+                        partenariat_pad = row.get('composante_partenaire_pad', '').strip()
                         
                         # Vérifier que la somme des financements est égale à 100%
                         financement_total = (financement_public or 0) + (financement_prive or 0) + (financement_ppp or 0)
@@ -1272,7 +1205,8 @@ def import_csv_projets(request):
                                 'dec_reel_t4': dec_reel_t4,
                                 'taux_decaissement': taux_decaissement,
                                 'facteurs_explication': facteurs_explication,
-                                'Fin_prévisionnelle': Fin_prévisionnelle,
+                                'Fin_previsionnelle': Fin_previsionnelle,
+                                'partenariat_pad': partenariat_pad,
                             }
                         )
                         
@@ -1301,7 +1235,8 @@ def import_csv_projets(request):
                             composante.dec_reel_t4 = dec_reel_t4
                             composante.taux_decaissement = taux_decaissement
                             composante.facteurs_explication = facteurs_explication
-                            composante.Fin_prévisionnelle = Fin_prévisionnelle
+                            composante.Fin_previsionnelle = Fin_previsionnelle
+                            composante.partenaire_pad = partenariat_pad
                             composante.save()
                             stats['composantes']['updated'] += 1
                         else:
@@ -1368,7 +1303,65 @@ def supprimer_projet(request, pk):
     projet = get_object_or_404(Projet, pk=pk)
     projet.delete()
     messages.success(request, "Le projet a été supprimé avec succès.")
-    return redirect('tables_sub3')
+    return redirect('tables_sub1')
+
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
+def import_csv_activite(request):
+    if request.method == 'POST':
+        form = UploadCSVForm(request.POST, request.FILES)
+        if form.is_valid():
+            csv_file = TextIOWrapper(request.FILES['csv_file'].file, encoding='utf-8')
+            reader = csv.DictReader(csv_file)
+            
+            success_count = 0
+            errors = []
+            
+            for row_num, row in enumerate(reader, start=2):
+                try:
+                    # Récupérer la composante
+                    composante_nom = row.get('composante', '').strip()
+                    if not composante_nom:
+                        raise ValidationError("Le nom de la composante est requis")
+                    
+                    try:
+                        composante = Composante.objects.get(nom=composante_nom)
+                    except ObjectDoesNotExist:
+                        raise ValidationError(f"La composante '{composante_nom}' n'existe pas")
+                    
+                    # Créer le problème
+                    Activite.objects.create(
+                        composante=composante,
+                        identifiant=row.get('identifiant', ''),
+                        nom=row.get('nom', ''),
+                        ponderation=row.get('ponderation', ''),
+                        prev_t1=row.get('prev_t1', ''),
+                        prev_t2=row.get('prev_t2', ''),
+                        prev_t3=row.get('prev_t3', ''),
+                        prev_t4=row.get('prev_t4', ''),
+                        cible_fin_annee=row.get('cible_fin_annee', ''),
+                        realise_t1=row.get('realise_t1', ''),
+                        realise_t2=row.get('realise_t2', ''),
+                        realise_t3=row.get('realise_t3', ''),
+                        realise_t4=row.get('realise_t4', ''),
+                        avancement_physique=row.get('avancement_physique', ''),
+                    )
+                    success_count += 1
+                    
+                except Exception as e:
+                    errors.append(f"Ligne {row_num}: {str(e)}")
+            
+            if success_count > 0:
+                messages.success(request, f"{success_count} activités importées avec succès!")
+            if errors:
+                messages.error(request, f"Erreurs sur {len(errors)} lignes. {' | '.join(errors[:3])}" + ("..." if len(errors)>3 else ""))
+            
+            #return redirect('tables/problemes/import-csv/')
+    else:
+        form = UploadCSVForm()
+    
+    return render(request, 'tables/import_activite.html', {'form': form})
 
 
 ## viewer
@@ -1401,6 +1394,63 @@ def supprimer_activite(request, pk):
     activite.delete()
     messages.success(request, "L'activité a été supprimée avec succès.")
     return redirect('tables_sub3')
+
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
+def import_csv_problem(request):
+    if request.method == 'POST':
+        form = UploadCSVForm(request.POST, request.FILES)
+        if form.is_valid():
+            csv_file = TextIOWrapper(request.FILES['csv_file'].file, encoding='utf-8')
+            reader = csv.DictReader(csv_file)
+            
+            success_count = 0
+            errors = []
+            
+            for row_num, row in enumerate(reader, start=2):
+                try:
+                    # Récupérer la composante
+                    composante_nom = row.get('composante', '').strip()
+                    if not composante_nom:
+                        raise ValidationError("Le nom de la composante est requis")
+                    
+                    try:
+                        composante = Composante.objects.get(nom=composante_nom)
+                    except ObjectDoesNotExist:
+                        raise ValidationError(f"La composante '{composante_nom}' n'existe pas")
+                    
+                    # Créer le problème
+                    Probleme.objects.create(
+                        composante=composante,
+                        identifiant=row.get('identifiant', ''),
+                        titre=row.get('titre', ''),
+                        description=row.get('description', ''),
+                        date_identification=parse_date(row.get('date_identification')),
+                        source=row.get('source', ''),
+                        typologie=row.get('typologie', ''),
+                        criticite=row.get('criticite', ''),
+                        remonter_tdb=row.get('remonter_tdb', 'False').lower() == 'true',
+                        solution_proposee=row.get('solution_proposee', ''),
+                        porteur_solution=row.get('porteur_solution', ''),
+                        delai_mise_en_oeuvre=parse_date(row.get('delai_mise_en_oeuvre', '')),
+                        statut_solution=row.get('statut_solution', '')
+                    )
+                    success_count += 1
+                    
+                except Exception as e:
+                    errors.append(f"Ligne {row_num}: {str(e)}")
+            
+            if success_count > 0:
+                messages.success(request, f"{success_count} problèmes importés avec succès!")
+            if errors:
+                messages.error(request, f"Erreurs sur {len(errors)} lignes. {' | '.join(errors[:3])}" + ("..." if len(errors)>3 else ""))
+            
+            #return redirect('tables/problemes/import-csv/')
+    else:
+        form = UploadCSVForm()
+    
+    return render(request, 'tables/import_problem.html', {'form': form})
 
 
 ## viewer
@@ -1476,6 +1526,91 @@ def ajouter_message(request):
     context={'form': ajoutmessageform}
     return render(request, 'tables/Ajout_message.html', context)
 
+
+## viewer
+@login_required(login_url=reverse_lazy('sing_in'))
+def import_csv_message(request):
+    if request.method == 'POST':
+        form = UploadCSVForm(request.POST, request.FILES)
+        if form.is_valid():
+            csv_file = TextIOWrapper(request.FILES['csv_file'].file, encoding='utf-8')
+            reader = csv.DictReader(csv_file)
+
+            success_count = 0
+            errors = []
+
+            for row_num, row in enumerate(reader, start=2):
+                try:
+                    # Portefeuille
+                    portefeuille_nom = row.get('portefeuille', '').strip()
+                    if not portefeuille_nom:
+                        raise ValidationError("Le portefeuille est requis")
+                    try:
+                        portefeuille = Portefeuille.objects.get(nom=portefeuille_nom)
+                    except ObjectDoesNotExist:
+                        raise ValidationError(f"Le portefeuille '{portefeuille_nom}' n'existe pas")
+
+                    # Composante
+                    composante_nom = row.get('composante', '').strip()
+                    if not composante_nom:
+                        raise ValidationError("La composante est requise")
+                    try:
+                        composante = Composante.objects.get(nom=composante_nom)
+                    except ObjectDoesNotExist:
+                        raise ValidationError(f"La composante '{composante_nom}' n'existe pas")
+
+                    # Parsing de la date de création (avec heure par défaut si absente)
+                    def parse_date_with_default(date_str, default=datetime.min):
+                        formats = [
+                                "%Y-%m-%d",  # Format ISO (standard)
+                                "%d/%m/%Y",  # Format français
+                                "%m/%d/%Y",  # Format américain (ton cas)
+                                "%d-%m-%Y",  # Variante
+                                "%m-%d-%Y", 
+                            ]  # ajoute les formats nécessaires
+                        for fmt in formats:
+                            try:
+                                return datetime.strptime(date_str, fmt)
+                            except ValueError:
+                                continue
+                        return default
+
+                    date_creation_str = row.get('date_creation', '').strip()
+                    date_creation = None
+                    if date_creation_str:
+                        date_creation = parse_date_with_default(date_creation_str)
+                        
+                    # Problème (facultatif)
+                    probleme_titre = row.get('probleme', '').strip()
+                    if probleme_titre:
+                        try:
+                            probleme = Probleme.objects.get(titre=probleme_titre)
+                        except ObjectDoesNotExist:
+                            raise ValidationError(f"Le problème '{probleme_titre}' n'existe pas")
+
+                    # Création du message
+                    Message.objects.create(
+                        portefeuille=portefeuille,
+                        composante=composante,
+                        probleme=probleme,
+                        contenu=row.get('contenu', '').strip(),
+                        remonter_message_tdb=row.get('remonter_message_tdb', 'False').strip().lower() == 'true',
+                        date_creation=date_creation
+                    )
+                    success_count += 1
+
+                except Exception as e:
+                    errors.append(f"Ligne {row_num}: {str(e)}")
+
+            if success_count > 0:
+                messages.success(request, f"{success_count} messages importés avec succès !")
+            if errors:
+                messages.error(request, f"Erreurs sur {len(errors)} lignes. {' | '.join(errors[:3])}" + ("..." if len(errors) > 3 else ""))
+
+    else:
+        form = UploadCSVForm()
+
+    return render(request, 'tables/import_message.html', {'form': form})
 
 ## viewer
 @login_required(login_url=reverse_lazy('sing_in'))

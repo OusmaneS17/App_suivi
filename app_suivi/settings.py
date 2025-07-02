@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'anymail',
     'import_export',
     'simple_history',
+    'app_suivi',
 ]
 
 MIDDLEWARE = [
@@ -104,6 +105,8 @@ DATABASES = {
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+AUTH_USER_MODEL = 'dashboard_app.customuser'
 
 
 # Password validation
