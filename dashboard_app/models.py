@@ -9,28 +9,21 @@ from django.contrib.auth.models import AbstractUser, Permission, Group
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = [
-        ('lamda', 'lamda'),
+        ('lamda', 'Lamda'),  # Majuscule pour la lisibilité
         ('coordonateur', 'Coordonateur'),
         ('gestionnaire', 'Gestionnaire de portefeuille'),
+        ('admin', 'Administrateur système'),  # Ajout possible
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='lamda')
-    nom = models.CharField(max_length=150, blank=True)
-
-    groups = models.ManyToManyField(
-        Group,
-        related_name='customuser_groups',
-        blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups'
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='customuser_permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions'
-    )
-
+    nom = models.CharField(max_length=150, blank=True, verbose_name="Nom complet")
+    
+    # Ajout de méthodes utiles
+    def __str__(self):
+        return f"{self.get_full_name()} ({self.role})"
+    
+    class Meta:
+        verbose_name = "Utilisateur"
+        verbose_name_plural = "Utilisateurs"
 
 class Axe(models.Model):
     nom = models.CharField(max_length=255)

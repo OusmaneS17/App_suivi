@@ -975,7 +975,7 @@
                 <h6 class="fw-bold text-success mb-3">
                   <i class="bi bi-cash-coin me-2"></i>Typologie des problèmes rencontrés
                 </h6>
-                <div class="chart-container" style="position: relative; height:240px; width:100%">
+                <div id="typologieChartContainer" class="chart-container" style="position: relative; height:240px; width:100%">
                     <canvas id="typologieChart"></canvas>
                 </div>
               </div>
@@ -1249,62 +1249,62 @@
 
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script>
-function updatePagination() {
-  // Supprimer l'ancienne pagination s'il y en a une
-  const oldPagination = document.querySelector(".pagination");
-  if (oldPagination) {
-    oldPagination.remove();
-  }
+        function updatePagination() {
+          // Supprimer l'ancienne pagination s'il y en a une
+          const oldPagination = document.querySelector(".pagination");
+          if (oldPagination) {
+            oldPagination.remove();
+          }
 
-  // Ne sélectionnez que les lignes avec des données (ignorez la ligne de message)
-  const rows = document.querySelectorAll("#probleme-table tbody tr:not(:only-child)");
-  const rowsPerPage = 5;
-  const totalRows = rows.length;
-  
-  // Mettre à jour le compteur total
-  document.getElementById("total-rows").innerText = totalRows;
+          // Ne sélectionnez que les lignes avec des données (ignorez la ligne de message)
+          const rows = document.querySelectorAll("#probleme-table tbody tr:not(:only-child)");
+          const rowsPerPage = 5;
+          const totalRows = rows.length;
+          
+          // Mettre à jour le compteur total
+          document.getElementById("total-rows").innerText = totalRows;
 
-  // Si pas de données, ne faites rien
-  if (totalRows === 0) return;
+          // Si pas de données, ne faites rien
+          if (totalRows === 0) return;
 
-  const pageCount = Math.ceil(totalRows / rowsPerPage);
-  const footer = document.querySelector(".card-footer .d-flex");
+          const pageCount = Math.ceil(totalRows / rowsPerPage);
+          const footer = document.querySelector(".card-footer .d-flex");
 
-  // Crée les boutons de pagination seulement s'il y a plus d'une page
-  if (pageCount > 1) {
-    const pagination = document.createElement("div");
-    pagination.classList.add("pagination");
+          // Crée les boutons de pagination seulement s'il y a plus d'une page
+          if (pageCount > 1) {
+            const pagination = document.createElement("div");
+            pagination.classList.add("pagination");
 
-    for (let i = 1; i <= pageCount; i++) {
-      const btn = document.createElement("button");
-      btn.innerText = i;
-      btn.className = "btn btn-sm btn-outline-secondary mx-1";
-      btn.addEventListener("click", () => showPage(i));
-      pagination.appendChild(btn);
-    }
+            for (let i = 1; i <= pageCount; i++) {
+              const btn = document.createElement("button");
+              btn.innerText = i;
+              btn.className = "btn btn-sm btn-outline-secondary mx-1";
+              btn.addEventListener("click", () => showPage(i));
+              pagination.appendChild(btn);
+            }
 
-    footer.appendChild(pagination);
-  }
+            footer.appendChild(pagination);
+          }
 
-  function showPage(page) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+          function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
 
-    rows.forEach((row, index) => {
-      row.style.display = index >= start && index < end ? "" : "none";
-    });
+            rows.forEach((row, index) => {
+              row.style.display = index >= start && index < end ? "" : "none";
+            });
 
-    // Met à jour le compteur de lignes affichées
-    document.getElementById("start-row").innerText = start + 1;
-    document.getElementById("end-row").innerText = Math.min(end, totalRows);
-  }
+            // Met à jour le compteur de lignes affichées
+            document.getElementById("start-row").innerText = start + 1;
+            document.getElementById("end-row").innerText = Math.min(end, totalRows);
+          }
 
-  // Affiche la première page par défaut
-  showPage(1);
-}
+          // Affiche la première page par défaut
+          showPage(1);
+        }
 
-// Initialiser la pagination au chargement de la page
-document.addEventListener("DOMContentLoaded", updatePagination);
+        // Initialiser la pagination au chargement de la page
+        document.addEventListener("DOMContentLoaded", updatePagination);
       </script>
       <script>
         // Fonction pour initialiser la page
@@ -1428,6 +1428,56 @@ document.addEventListener("DOMContentLoaded", updatePagination);
               data: data,
               options: options
             });
+          }
+
+          // Fonction pour mettre à jour le graphique des typologies
+          function updateTypologieChart(typologieCounts) {
+              const container = document.getElementById('typologieChartContainer'); // Changez l'ID ici
+              if (!container) {
+                  console.error("Le conteneur du graphique des typologies n'a pas été trouvé");
+                  return;
+              }
+
+              const canvas = document.getElementById('typologieChart');
+              if (canvas && Chart.getChart(canvas)) {
+                  Chart.getChart(canvas).destroy();
+              }
+
+              // Nettoyer le conteneur
+              container.innerHTML = '<canvas id="typologieChart"></canvas>';
+
+              if (Object.keys(typologieCounts).length > 0) {
+                  createCompactChart('typologieChart', typologieCounts, [
+                      '#004600', '#006600', '#338033', '#66A366',
+                      '#003300', '#005500', '#007700', '#009900'
+                  ]);
+              } else {
+                  container.innerHTML = '<p class="text-center">Aucune donnée de typologie disponible</p>';
+              }
+          }
+
+          // Fonction pour mettre à jour le tableau des problèmes
+          function updateProblemesTable(problemesFiltres) {
+              var tbody = $("#liste_problemes");
+              tbody.empty();
+
+              if (problemesFiltres.length === 0) {
+                  tbody.append('<tr><td colspan="6" class="text-center">Aucun problème à remonter</td></tr>');
+              } else {
+                  problemesFiltres.forEach(function(probleme) {
+                      var ligne = `
+                          <tr>
+                              <td class="text-center">${probleme.titre}</td>
+                              <td class="text-center">${probleme.description}</td>
+                              <td class="text-center">${probleme.date_identification}</td>
+                              <td class="text-center">${probleme.typologie}</td>
+                              <td class="text-center">${probleme.delai_mise_en_oeuvre}</td>
+                              <td class="text-center">${probleme.solution_proposee}</td>
+                          </tr>
+                      `;
+                      tbody.append(ligne);
+                  });
+              }
           }
 
           function createPhysiqueChart(composante) {
@@ -2153,46 +2203,16 @@ document.addEventListener("DOMContentLoaded", updatePagination);
                 typologieCounts[typologie] = (typologieCounts[typologie] || 0) + 1;
             });
 
-            // Vider le tableau avant de le remplir
-            var tbody = $("#liste_problemes");
-            tbody.empty();
-
-            if (problemesFiltres.length === 0) {
-              tbody.append('<tr><td colspan="6" class="text-center">Aucun problème à remonter</td></tr>');
-            } else {
-              for (var i = 0; i < problemesFiltres.length; i++) {
-                var ligne = `
-                  <tr>
-                    <td class="text-center">${problemesFiltres[i].titre}</td>
-                    <td class="text-center">${problemesFiltres[i].description}</td>
-                    <td class="text-center">${problemesFiltres[i].date_identification}</td>
-                    <td class="text-center">${problemesFiltres[i].typologie}</td>
-                    <td class="text-center">${problemesFiltres[i].delai_mise_en_oeuvre}</td>
-                    <td class="text-center">${problemesFiltres[i].solution_proposee}</td>
-                  </tr>
-                `;
-                tbody.append(ligne);
-              }
-            }
+            // Mettre à jour le tableau et la pagination
+            updateProblemesTable(problemesFiltres);
+            updatePagination();
+            
+            // Mettre à jour le graphique des typologies
+            updateTypologieChart(typologieCounts);
 
             updatePagination();
             
-            // Mettre à jour le graphique
-            if (Object.keys(typologieCounts).length > 0) {
-                createCompactChart('typologieChart', typologieCounts, [
-                    '#004600', '#006600', '#338033', '#66A366',
-                    '#003300', '#005500', '#007700', '#009900'
-                ]);
-            } else {
-                var canvasContainer = document.getElementById('typologieChart').parentNode;
-                canvasContainer.innerHTML = '<p class="text-center">Aucune donnée de typologie disponible</p>';
-            }
-
-            createCompactChart('typologieChart', typologieCounts, [
-                '#004600', '#006600', '#338033', '#66A366',
-                '#003300', '#005500', '#007700', '#009900'
-            ]);
-
+            
             // Filtrage des messages à afficher dans le tableau de bord
             const messagesFiltres = messages_week
                     .filter(function(message) {
