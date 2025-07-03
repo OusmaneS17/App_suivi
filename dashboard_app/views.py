@@ -1171,7 +1171,7 @@ def import_csv_projets(request):
                         dec_reel_t4 = parse_decimal(row.get('composante_dec_reel_t4', ''))
                         taux_decaissement = parse_decimal(row.get('composante_taux_decaissement', ''))
                         facteurs_explication = row.get('composante_facteurs_explication', '')
-                        partenariat_pad = row.get('composante_partenaire_pad', '').strip()
+                        partenaire_pad = row.get('partenariat_pad', '').strip()
                         
                         # Vérifier que la somme des financements est égale à 100%
                         financement_total = (financement_public or 0) + (financement_prive or 0) + (financement_ppp or 0)
@@ -1206,7 +1206,7 @@ def import_csv_projets(request):
                                 'taux_decaissement': taux_decaissement,
                                 'facteurs_explication': facteurs_explication,
                                 'Fin_previsionnelle': Fin_previsionnelle,
-                                'partenariat_pad': partenariat_pad,
+                                'partenaire_pad': partenaire_pad,
                             }
                         )
                         

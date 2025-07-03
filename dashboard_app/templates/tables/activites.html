@@ -208,56 +208,6 @@
 <br>
 
 
-<div class="px-4">
-        <h2 class="mt-4 mb-4" style="font-weight: 600; color: #004600;">Historique de toutes les activités</h2>
-  <div class="card shadow-sm">
-    <div class="table-responsive">
-      <table class="table table-hover mb-0" id="projets-table">
-        <thead style="background: linear-gradient(135deg, #004600, #007a00);">
-          <tr>
-            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Date</th>
-            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Type</th>
-            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Utilisateur</th>
-            <th scope="col" class="text-white py-3 text-center"  style="background: linear-gradient(135deg, #004600, #007a00);">Nom de l'activité</th>
-            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">Raison du changement</th>
-            <th scope="col" class="text-white py-3"  style="background: linear-gradient(135deg, #004600, #007a00);">changement</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white">
-          {% for h, changements in historiques_activite %}
-          <tr>
-            <td class="align-middle">{{ h.history_date|date:"d/m/Y H:i" }}</td>
-            <td class="align-middle">
-              {% if h.history_type == '+' %} Création
-              {% elif h.history_type == '~' %} Modification
-              {% elif h.history_type == '-' %} Suppression
-              {% endif %}
-            </td>
-            <td class="align-middle">{{ h.history_user|default:"Système" }}</td>
-            <td class="align-middle text-center">{{ h.nom }} </td>
-            <td class="align-middle">{{ h.history_change_reason }}</td>
-            <td>
-              {% if changements %}
-                <ul>
-                  {% for c in changements %}
-                    <li><strong>{{ c.field }}</strong> : {{ c.old }} → {{ c.new }}</li>
-                  {% endfor %}
-                </ul>
-              {% else %}
-                Aucun changement détecté
-              {% endif %}
-            </td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="9" class="text-center py-4">Aucune historique pour le moment</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
 
 <br>
 <br>

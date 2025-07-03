@@ -3,9 +3,9 @@ from django.db.models import Sum, FloatField, ExpressionWrapper
 from django.db.models import F, Sum, ExpressionWrapper, FloatField
 from simple_history.models import HistoricalRecords
 from simple_history import register
-from django.contrib.auth.models import User
+
 # Create your models here.
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Permission, Group
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = [
@@ -16,6 +16,20 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='lamda')
     nom = models.CharField(max_length=150, blank=True)
 
+    groups = models.ManyToManyField(
+        Group,
+        related_name='customuser_groups',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups'
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='customuser_permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions'
+    )
 
 
 class Axe(models.Model):
